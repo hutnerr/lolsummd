@@ -29,7 +29,7 @@ def get_champion_ids(save: bool = True) -> dict:
         champ_id_to_name[champ_id] = champ_name
     
     if save:
-        with open("data/champion_ids.json", "w") as f:
+        with open("data/champ.json", "w") as f:
             json.dump(champ_id_to_name, f, indent=4)
     
     return champ_id_to_name

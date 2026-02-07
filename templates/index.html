@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}lolsummd - Home{% endblock %}
+{% block content %}
+<h2>Welcome to lolsummd</h2>
+<form method="POST" action="/">
+    <div class="input-box">
+        <input type="text" name="username1" placeholder="Enter your username">
+        <input type="text" name="tag1" placeholder="Enter your tag">
+    </div>
+    <div class="input-box">
+        <input type="text" name="username2" placeholder="Enter your username">
+        <input type="text" name="tag2" placeholder="Enter your tag">
+    </div>
+    <div class="input-box">
+        <input type="text" name="username3" placeholder="Enter your username">
+        <input type="text" name="tag3" placeholder="Enter your tag">
+    </div>
+    <div class="input-box">
+        <input type="text" name="username4" placeholder="Enter your username">
+        <input type="text" name="tag4" placeholder="Enter your tag">
+    </div>
+    <div class="input-box">
+        <input type="text" name="username5" placeholder="Enter your username">
+        <input type="text" name="tag5" placeholder="Enter your tag">
+    </div>
+    <button type="submit">Submit</button>
+</form>
+
+{% if result %}
+<div id="output">
+    <h3>Combined Mastery Summary</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Champion</th>
+                <th>Mastery Level</th>
+                <th>Mastery Points</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for champ_name, mastery_data in result %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ champ_name }}</td>
+                <td>{{ mastery_data['level'] }}</td>
+                <td>{{ "{:,}".format(mastery_data['points']) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div id="output">
+    <h3>Summary</h3>
+    <p>Enter account information above to see combined mastery results...</p>
+</div>
+{% endif %}
+{% endblock %}
