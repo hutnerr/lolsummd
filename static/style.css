@@ -6,7 +6,6 @@ html, body {
 }
 
 body {
-    font-family: Arial, sans-serif;
     background-color: hsl(0, 0%, 96%);
 
     display: flex;
@@ -33,12 +32,11 @@ footer {
 }
 
 a {
-    color: #ffffff;
+    color: #c28f2c;
     text-decoration: none;
 }
 
 a:hover {
-    color: #c28f2c;
     text-decoration: underline;
 }
 

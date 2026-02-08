@@ -73,11 +73,6 @@ def home():
     
     return render_template("index.html", accounts=session.get('accounts', []))
 
-@app.route("/about")
-def about():
-    Clogger.action("About page requested")
-    return render_template("about.html")
-
 @app.route("/help")
 def help():
     Clogger.action("Help page requested")
