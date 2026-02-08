@@ -6,23 +6,22 @@
     <title>{% block title %}lolsummd{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <header>
+<body class="background-white">
+    <header class="background-black text-white">
         <nav>
-            <h1>lolsummd</h1>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/how-to-use">How To Use</a></li>
+            <h1 id="title"><a href="/">lolsummd</a></h1>
+            <ul id="header-navbar-ul">
+                <li><a href="/help">Help</a></li>
                 <li><a href="/about">About</a></li>
             </ul>
         </nav>
     </header>
 
-    <main>
+    <main class="container background-white text-black">
         {% block content %}{% endblock %}
     </main>
 
-    <footer>
+    <footer class="background-black text-white">
         <p>&copy; 2026 lolsummd. All rights reserved.</p>
     </footer>
 </body>

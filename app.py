@@ -45,9 +45,9 @@ def home():
 def about():
     return render_template("about.html")
 
-@app.route("/how-to-use")
-def how_to_use():
-    return render_template("how_to_use.html")
+@app.route("/help")
+def help():
+    return render_template("help.html")
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

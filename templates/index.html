@@ -1,29 +1,30 @@
 {% extends "base.html" %}
 {% block title %}lolsummd - Home{% endblock %}
 {% block content %}
-<h2>Welcome to lolsummd</h2>
 <form method="POST" action="/">
-    <div class="input-box">
+    <div class="input-box centered">
         <input type="text" name="username1" placeholder="Enter your username">
         <input type="text" name="tag1" placeholder="Enter your tag">
     </div>
-    <div class="input-box">
+    <div class="input-box centered">
         <input type="text" name="username2" placeholder="Enter your username">
         <input type="text" name="tag2" placeholder="Enter your tag">
     </div>
-    <div class="input-box">
+    <div class="input-box centered">
         <input type="text" name="username3" placeholder="Enter your username">
         <input type="text" name="tag3" placeholder="Enter your tag">
     </div>
-    <div class="input-box">
+    <div class="input-box centered">
         <input type="text" name="username4" placeholder="Enter your username">
         <input type="text" name="tag4" placeholder="Enter your tag">
     </div>
-    <div class="input-box">
+    <div class="input-box centered">
         <input type="text" name="username5" placeholder="Enter your username">
         <input type="text" name="tag5" placeholder="Enter your tag">
     </div>
-    <button type="submit">Submit</button>
+    <div class="centered">
+        <button type="submit">Submit</button>
+    </div>
 </form>
 
 {% if result %}
@@ -52,8 +53,6 @@
 </div>
 {% else %}
 <div id="output">
-    <h3>Summary</h3>
-    <p>Enter account information above to see combined mastery results...</p>
 </div>
 {% endif %}
 {% endblock %}
