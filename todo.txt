@@ -1,0 +1,14 @@
+add region dropdown
+add a update all regions button/base region
+update the backend to account for the region instead of only using NA
+scrape the champion pictures so i can display those
+finish styling the rest of the website, especially the result and input
+make it so that they boxes stay full on submit, maybe the page doesn't refresh,
+and instead it just updates whats there
+add a clear button
+make it so there is only input and hitting enter and stuff adds to the list
+then the search button uses the list
+error handling if a user couldn't be found
+ensure i cant add duplicate accounts?
+on account submit, go back to the input
+maybe i can set the tag to the default of the region like #NA1

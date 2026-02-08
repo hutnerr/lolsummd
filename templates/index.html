@@ -1,31 +1,48 @@
 {% extends "base.html" %}
 {% block title %}lolsummd - Home{% endblock %}
 {% block content %}
-<form method="POST" action="/">
-    <div class="input-box centered">
-        <input type="text" name="username1" placeholder="Enter your username">
-        <input type="text" name="tag1" placeholder="Enter your tag">
+<!-- <div id="overview">
+    <h2>Overview</h2>
+    <p>lolsummd allows you to combine the champion mastery data of multiple League of Legends accounts into one big summary.</p>
+</div> -->
+
+<form method="POST" action="/" id="addAccountForm" class="centered">
+    <div class="input-box">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="text" name="tag" placeholder="Tag" required>
     </div>
-    <div class="input-box centered">
-        <input type="text" name="username2" placeholder="Enter your username">
-        <input type="text" name="tag2" placeholder="Enter your tag">
-    </div>
-    <div class="input-box centered">
-        <input type="text" name="username3" placeholder="Enter your username">
-        <input type="text" name="tag3" placeholder="Enter your tag">
-    </div>
-    <div class="input-box centered">
-        <input type="text" name="username4" placeholder="Enter your username">
-        <input type="text" name="tag4" placeholder="Enter your tag">
-    </div>
-    <div class="input-box centered">
-        <input type="text" name="username5" placeholder="Enter your username">
-        <input type="text" name="tag5" placeholder="Enter your tag">
-    </div>
-    <div class="centered">
-        <button type="submit">Submit</button>
-    </div>
+    <button type="submit">Add Account</button>
+    <input type="hidden" name="action" value="add">
 </form>
+
+<div id="accounts">
+    {% if accounts %}
+    <div class="centered">
+        <form method="POST" action="/">
+            <input type="hidden" name="action" value="submit_all">
+            <button type="submit">Submit All Accounts</button>
+        </form>
+    
+        <form method="POST" action="/">
+            <input type="hidden" name="action" value="clear">
+            <button type="submit">Clear All</button>
+        </form>
+    </div>
+    
+    <ul>
+        {% for username, tag in accounts %}
+        <li class="centered">
+            {{ username }}#{{ tag }}
+            <form method="POST" action="/" class="centered">
+                <input type="hidden" name="action" value="remove">
+                <input type="hidden" name="remove_index" value="{{ loop.index0 }}">
+                <button type="submit">Remove</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
 
 {% if result %}
 <div id="output">
