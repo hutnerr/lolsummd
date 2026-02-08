@@ -1,21 +1,13 @@
 /* SPECIFIC ITEMS */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-
-    display: flex;
-    flex-direction: column;
-}
-
 html, body {
     width: 100%;
+    height: 100%;
     margin: 0;
-    margin-bottom: 10%;
 }
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: hsl(0, 0%, 96%);
 
     display: flex;
     flex-direction: column;
@@ -28,14 +20,16 @@ header {
     text-align: center;
 }
 
+
+main {
+    flex: 1;
+}
+
 footer {
     background-color: #333;
     color: #fff;
     padding: 10px;
     text-align: center;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
 }
 
 a {
@@ -78,6 +72,180 @@ nav ul {
 
 #title a:hover {
     text-decoration: none;
+}
+
+/* ADD ACCOUNT FORM!! */
+#addAccountForm {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+#addAccountForm .input-box {
+    display: flex;
+    flex: 1;
+    gap: 8px;
+}
+
+#addAccountForm input {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#addAccountForm #username {
+    flex: 3;
+}
+
+#addAccountForm #tag {
+    flex: 1;
+    text-transform: uppercase;
+}
+
+#addAccountForm button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+#addAccountForm button:hover {
+    background-color: #444;
+}
+
+/* ACCOUNTS DISPLAY */
+#accounts {
+    margin-top: 30px;
+}
+
+#accounts > .centered {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+#accounts > .centered form {
+    margin: 0;
+}
+
+#accounts > .centered button {
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+}
+
+#accounts > .centered button:hover {
+    background: #f0f0f0;
+}
+
+#accounts ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-width: 500px;
+    margin-inline: auto;
+}
+
+#accounts li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 8px;
+
+    font-size: 14px;
+    background: #fff;
+}
+
+#accounts li form {
+    margin: 0;
+}
+
+#accounts li button {
+    padding: 6px 10px;
+    font-size: 12px;
+
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fafafa;
+    cursor: pointer;
+}
+
+#accounts li button:hover {
+    background: #ffecec;
+    border-color: #e0b4b4;
+}
+
+#output {
+    max-width: 800px;
+    margin: 30px auto;
+    font-family: Arial, sans-serif;
+}
+
+#output h3 {
+    text-align: center;
+    margin-bottom: 16px;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Table basics */
+#output table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+/* Header */
+#output table thead {
+    background-color: #333;
+    color: #fff;
+}
+
+#output table thead th {
+    padding: 10px 12px;
+    text-align: left;
+}
+
+/* Rows */
+#output table tbody tr {
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#output table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Cells */
+#output table tbody td {
+    padding: 10px 12px;
+    vertical-align: middle;
+}
+
+/* Images inside cells */
+#output table tbody td img {
+    height: 24px;   /* small icons/images */
+    width: 24px;
+    object-fit: contain;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* Hover effect for rows */
+#output table tbody tr:hover {
+    background-color: #f0f0f0;
 }
 
 /* BACKGROUND */

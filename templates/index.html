@@ -6,26 +6,28 @@
     <p>lolsummd allows you to combine the champion mastery data of multiple League of Legends accounts into one big summary.</p>
 </div> -->
 
-<form method="POST" action="/" id="addAccountForm" class="centered">
+<form method="POST" action="/" id="addAccountForm">
     <div class="input-box">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="text" name="tag" placeholder="Tag" required>
+        <input id="username" type="text" name="username" placeholder="Username" required>
+        <input id="tag" type="text" name="tag" placeholder="Tag" required>
     </div>
+
     <button type="submit">Add Account</button>
     <input type="hidden" name="action" value="add">
 </form>
+
 
 <div id="accounts">
     {% if accounts %}
     <div class="centered">
         <form method="POST" action="/">
             <input type="hidden" name="action" value="submit_all">
-            <button type="submit">Submit All Accounts</button>
+            <button type="submit">Get Combined Mastery</button>
         </form>
     
         <form method="POST" action="/">
             <input type="hidden" name="action" value="clear">
-            <button type="submit">Clear All</button>
+            <button type="submit">Clear</button>
         </form>
     </div>
     
