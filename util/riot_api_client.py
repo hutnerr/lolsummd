@@ -2,6 +2,7 @@ import enum
 import requests
 import json
 
+from typing import Optional
 from util.cache_interface import CacheInterface
 from util.json_cache import JsonCache
 from util.clogger import Clogger
@@ -57,11 +58,11 @@ class RiotAPIClient:
         Clogger.info(f"Default region set to {region.value}")
         return True
     
-    def get_account_by_puuid(self, puuid: str) -> Account | None:
+    def get_account_by_puuid(self, puuid: str) -> Optional[Account]:
         Clogger.warn("get_account_by_puuid is not implemented yet")
         pass
     
-    def get_account_by_summoner_name(self, username: str, tag: str) -> Account | None:
+    def get_account_by_summoner_name(self, username: str, tag: str) -> Optional[Account]:
         cached_data = self.cache.get_by_name(username, tag)
         if cached_data:
             Clogger.debug(f"Cache hit for {username}#{tag}")
@@ -145,7 +146,7 @@ class RiotAPIClient:
             Clogger.error(f"Error fetching mastery data: {e}")
             return {}
 
-    def get_champion_name_by_id(self, champ_id: int | str) -> str | None:
+    def get_champion_name_by_id(self, champ_id: int | str) -> Optional[str]:
         if champ_id is None:
             Clogger.error("Champion ID is None")
             return None
