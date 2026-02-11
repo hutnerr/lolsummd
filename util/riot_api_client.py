@@ -6,9 +6,9 @@ from typing import Optional
 from util.cache_interface import CacheInterface
 from util.json_cache import JsonCache
 from util.clogger import Clogger
+from util.response_helper import check_response
 from models.account import Account
 from util.ddragon_helper import CHAMP_ID_FILEPATH
-from util.response_helper import *
 
 class Endpoints(enum.Enum):
     ACCOUNT_BY_ID = "https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id"
@@ -146,7 +146,7 @@ class RiotAPIClient:
             Clogger.error(f"Error fetching mastery data: {e}")
             return {}
 
-    def get_champion_name_by_id(self, champ_id: int | str) -> Optional[str]:
+    def get_champion_name_by_id(self, champ_id) -> Optional[str]:
         if champ_id is None:
             Clogger.error("Champion ID is None")
             return None
