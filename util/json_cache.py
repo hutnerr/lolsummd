@@ -39,10 +39,10 @@ class JsonCache(CacheInterface):
         except Exception as e:
             Clogger.error(f"Failed to save cache to disk: {e}")
     
-    def get(self, key: str) -> Dict[str, Any] | None:
+    def get(self, key: str) -> Optional[Dict[str, Any]]:
         return self._puuid_cache.get(key)
     
-    def get_by_name(self, username: str, tag: str) -> Dict[str, Any] | None:
+    def get_by_name(self, username: str, tag: str) -> Optional[Dict[str, Any]]:
         name_key = f"{username}#{tag}"
         puuid = self._name_to_puuid.get(name_key)
         if puuid:
