@@ -7,18 +7,18 @@ def check_response(response: requests.Response) -> bool:
             Clogger.error("Invalid response object")
             return False
         
-        match response.status_code:
-            case 200:
-                return True
-            case 404:
-                Clogger.warn("Resource not found (404)")
-            case 403:
-                Clogger.error("Forbidden (403) - check your API key permissions")
-            case 429:
-                Clogger.error("Rate limit exceeded (429) - slow down your requests")
-            case _:
-                Clogger.error(f"Unexpected error: {response.status_code}")
-
+        c = response.status_code
+        if c == 200:
+            return True
+        elif c == 404:
+            Clogger.warn("Resource not found (404)")
+        elif c == 403:
+            Clogger.error("Forbidden (403) - check your API key permissions")
+        elif c == 429:
+            Clogger.error("Rate limit exceeded (429) - slow down your requests")
+        else:
+            Clogger.error(f"Unexpected error: {c}")
+        
         data = response.json() if response.content else {}
         if "status" in data and "message" in data["status"]:
             Clogger.warn(f"{data['status']['message']}")
