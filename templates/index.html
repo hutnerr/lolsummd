@@ -1,77 +1,88 @@
 {% extends "base.html" %}
-{% block title %}lolsummd - Home{% endblock %}
+{% block title %}lolsummd — Champion Mastery{% endblock %}
 {% block content %}
-<!-- <div id="overview">
-    <h2>Overview</h2>
-    <p>lolsummd allows you to combine the champion mastery data of multiple League of Legends accounts into one big summary.</p>
-</div> -->
+
+<div class="page-heading">
+  <h2>Champion Mastery Aggregator</h2>
+  <p>Combine mastery data across multiple League of Legends accounts</p>
+</div>
 
 <form method="POST" action="/" id="addAccountForm">
-    <div class="input-box">
-        <input id="username" type="text" name="username" placeholder="Username" required>
-        <input id="tag" type="text" name="tag" placeholder="Tag" required>
-    </div>
-
-    <button type="submit">Add Account</button>
-    <input type="hidden" name="action" value="add">
+  <div class="input-box">
+    <input id="username" type="text" name="username" placeholder="Summoner Name" required>
+    <input id="tag" type="text" name="tag" placeholder="TAG" required maxlength="5">
+  </div>
+  <button type="submit" class="btn btn-primary">Add Account</button>
+  <input type="hidden" name="action" value="add">
 </form>
 
-
 <div id="accounts">
-    {% if accounts %}
-    <div class="centered">
-        <form method="POST" action="/">
-            <input type="hidden" name="action" value="submit_all">
-            <button type="submit">Get Combined Mastery</button>
-        </form>
-    
-        <form method="POST" action="/">
-            <input type="hidden" name="action" value="clear">
-            <button type="submit">Clear</button>
-        </form>
-    </div>
-    
-    <ul>
-        {% for username, tag in accounts %}
-        <li class="centered">
-            {{ username }}#{{ tag }}
-            <form method="POST" action="/" class="centered">
-                <input type="hidden" name="action" value="remove">
-                <input type="hidden" name="remove_index" value="{{ loop.index0 }}">
-                <button type="submit">Remove</button>
-            </form>
-        </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+  {% if accounts %}
+  <div class="divider"><span>✦</span></div>
+
+  <div class="centered" style="gap:10px; margin-bottom:18px;">
+    <form method="POST" action="/">
+      <input type="hidden" name="action" value="submit_all">
+      <button type="submit" class="btn btn-primary">Get Combined Mastery</button>
+    </form>
+    <form method="POST" action="/">
+      <input type="hidden" name="action" value="clear">
+      <button type="submit" class="btn btn-secondary">Clear All</button>
+    </form>
+  </div>
+
+  <ul>
+    {% for username, tag in accounts %}
+    <li>
+      <span class="account-name">
+        {{ username }}<span class="hash">#</span><span class="tag">{{ tag }}</span>
+      </span>
+      <form method="POST" action="/">
+        <input type="hidden" name="action" value="remove">
+        <input type="hidden" name="remove_index" value="{{ loop.index0 }}">
+        <button type="submit" class="btn btn-danger">Remove</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
 </div>
 
 {% if result %}
 <div id="output">
-    <h3>Combined Mastery Summary</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Champion</th>
-                <th>Mastery Level</th>
-                <th>Mastery Points</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for champ_name, mastery_data in result %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ champ_name }}</td>
-                <td>{{ mastery_data['level'] }}</td>
-                <td>{{ "{:,}".format(mastery_data['points']) }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+  <div class="divider"><span>✦</span></div>
+  <h3>Combined Mastery</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Champion</th>
+        <th>Level</th>
+        <th style="text-align:right">Points</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for champ_name, mastery_data in result %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ champ_name }}</td>
+        <td>
+          {% if mastery_data['level'] >= 7 %}
+            <span class="mastery-badge mastery-level-7">{{ mastery_data['level'] }}</span>
+          {% elif mastery_data['level'] >= 5 %}
+            <span class="mastery-badge mastery-level-5">{{ mastery_data['level'] }}</span>
+          {% else %}
+            <span class="mastery-badge mastery-level-lo">{{ mastery_data['level'] }}</span>
+          {% endif %}
+        </td>
+        <td>{{ "{:,}".format(mastery_data['points']) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% else %}
-<div id="output">
-</div>
+<div id="output"></div>
 {% endif %}
+
 {% endblock %}

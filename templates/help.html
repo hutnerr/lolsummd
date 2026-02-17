@@ -1,41 +1,37 @@
 {% extends "base.html" %}
-{% block title %}lolsummd - Help{% endblock %}
+{% block title %}lolsummd — Help{% endblock %}
 {% block content %}
-<div>
-    <h2>Overview</h2>
-    <p>
-        lolsummd allows you to combine the champion mastery data of multiple League of Legends accounts into one big summary.
-    </p>
-    <p>
-        You can add up to 10 accounts at a time from any region.
-    </p>
+
+<div class="page-heading">
+  <h2>Help</h2>
+  <p>Everything you need to get started</p>
 </div>
 
-<div>
-    <h2>Instructions</h2>
-    <p>On the home page, add up to 10 accounts by entering their username and tag (e.g., SummonerName#NA1 -> SummonerName and NA1).</p>
-    <p>After adding the accounts, click "Get Combined Mastery" to retrieve the combined champion mastery data.</p>
-    <p>You can remove individual accounts by clicking the "Remove" button next to each account
-        or clear all accounts by clicking the "Clear" button.</p>
+<div class="help-section">
+  <h3>Overview</h3>
+  <p>lolsummd lets you combine the champion mastery data of multiple League of Legends accounts into one unified summary.</p>
+  <p>You can add up to 10 accounts at a time from any region.</p>
 </div>
 
-<!-- <div>
-    <h2>FAQ</h2>
-</div> -->
+<div class="divider"><span>✦</span></div>
 
-<div>
-    <h2>Other</h2>
-    <p>
-        If there are any errors that you encounter, please report them on 
-        the <a href="https://github.com/hutnerr/lolsummd/issues">GitHub issues page</a>.
-    </p>
-    <p>
-        If you have any suggestions for new features or improvements, please also share them with me
-        <a href="https://www.hunter-baker.com/pages/other/contact.html">here</a>.
-    </p>
-    <p>
-        If you've found this product useful and would like to support its development, you can support me on Ko-fi.
-    </p>
-    <a href="https://ko-fi.com/S6S71TM9XT" target="_blank" rel="noopener noreferrer"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Buy Me a Coffee"></a>
+<div class="help-section">
+  <h3>Instructions</h3>
+  <p>On the home page, add accounts by entering a username and tag — for example, <span class="inline-code">SummonerName#NA1</span> becomes <span class="inline-code">SummonerName</span> and <span class="inline-code">NA1</span>.</p>
+  <p>Once you've added your accounts, click <span class="inline-label">Get Combined Mastery</span> to retrieve the aggregated data.</p>
+  <p>Remove individual accounts with the <span class="inline-label">Remove</span> button, or wipe the whole list with <span class="inline-label">Clear All</span>.</p>
 </div>
+
+<div class="divider"><span>✦</span></div>
+
+<div class="help-section">
+  <h3>Other</h3>
+  <p>Found a bug? Report it on the <a href="https://github.com/hutnerr/lolsummd/issues">GitHub issues page</a>.</p>
+  <p>Have a suggestion? Send it <a href="https://www.hunter-baker.com/pages/other/contact.html">here</a>.</p>
+  <p>If you've found lolsummd useful and want to support its development, you can buy me a coffee on Ko-fi.</p>
+  <a href="https://ko-fi.com/S6S71TM9XT" target="_blank" rel="noopener noreferrer">
+    <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support on Ko-fi" class="kofi-btn">
+  </a>
+</div>
+
 {% endblock %}

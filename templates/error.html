@@ -1,14 +1,12 @@
 {% extends "base.html" %}
-
-{% block title %}
-lolsummd - {{ code }} {{ name }}
-{% endblock %}
-
+{% block title %}lolsummd — {{ code }} {{ name }}{% endblock %}
 {% block content %}
-<div class="error-page">
-    <h2>{{ code }} – {{ name }}</h2>
-    <p>{{ description }}</p>
 
-    <a href="/">← Back to home</a>
+<div class="error-page">
+  <div class="error-code">{{ code }}</div>
+  <h2 class="error-name">{{ name }}</h2>
+  <p class="error-desc">{{ description }}</p>
+  <a href="/" class="btn btn-primary">← Back to Home</a>
 </div>
+
 {% endblock %}
