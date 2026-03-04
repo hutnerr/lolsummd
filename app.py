@@ -9,8 +9,9 @@ from core.mastery_summarizer import summarize_mastery
 KEY_FILEPATH = os.path.join("data", "key.txt")
 Clogger.debugEnabled = False
 
-with open(KEY_FILEPATH, 'r') as f:
-    key = f.read().strip()
+key = os.environ.get("KEY_VALUE")
+if not key:
+    Clogger.error("ENV NOT SET: RiotAPIClient cannot be initialized without API key.")
 
 try:
     client: RiotAPIClient = RiotAPIClient(key)
