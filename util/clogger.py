@@ -2,50 +2,52 @@ import sys
 import time
 from colorama import Fore, Style, Back, init
 from functools import wraps
+import os
 
-init(autoreset=True) # initalize colorama
+init(autoreset=True)
 
 class Clogger:
     debugEnabled = True
     disabled = False
     useTimestamps = True
-    
+    force_flush = True
+
     @staticmethod
     def _getTimestamp():
         """Get formatted timestamp."""
         if Clogger.useTimestamps:
-            return Back.BLACK + Fore.GREEN + time.strftime("%Y-%m-%d %H:%M:%S EST", time.localtime()) + Back.RESET + " "
+            return f"{Back.BLACK}{Fore.GREEN}{time.strftime('%Y-%m-%d %H:%M:%S EST', time.localtime())}{Back.RESET} "
         return ""
-    
+
     @staticmethod
     def _log(tag: str, msg: str, color: str = ""):
         """Internal logging method."""
         if not Clogger.disabled:
             timestamp = Clogger._getTimestamp()
-            print(f"{timestamp}{color}{tag:<8}{Style.RESET_ALL} | {msg}")
-    
+            print(f"{timestamp}{color}{tag:<8}{Style.RESET_ALL} | {msg}", flush=Clogger.force_flush)
+
     @staticmethod
     def log(tag: str, msg: str):
         """Log with custom tag."""
         formattedTag = f"[{tag.upper()}]"
         Clogger._log(formattedTag, msg, Fore.CYAN)
-    
+
     @staticmethod
     def error(msg: str):
         """Log error message."""
         Clogger._log("[ERROR]", msg, Fore.RED)
-    
+
     @staticmethod
     def debug(msg: str):
         """Log debug message (only if debugEnabled)."""
         if Clogger.debugEnabled:
             Clogger._log("[DEBUG]", msg, Fore.MAGENTA)
-    
+
     @staticmethod
     def action(msg: str):
         """Log action message."""
         Clogger._log("[ACTION]", msg, Fore.GREEN)
-    
+
     @staticmethod
     def info(msg: str):
         """Log info message."""
@@ -67,6 +69,10 @@ class Clogger:
                 Clogger.error(f"{func.__name__} failed: {e}")
                 raise
         return wrapper
+
+# disable colors automatically if not in a TTY
+if not sys.stdout.isatty():
+    Fore.GREEN = Fore.RED = Fore.CYAN = Fore.BLUE = Fore.MAGENTA = Fore.YELLOW = Back.BLACK = Style.RESET_ALL = ""
 
 # USAGE EXAMPLE
 if __name__ == "__main__":
