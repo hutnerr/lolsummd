@@ -19,7 +19,8 @@ except Exception as e:
 
 app = Flask(
     __name__,
-    template_folder=os.path.join(os.path.dirname(__file__), "../templates")
+    template_folder=os.path.join(os.path.dirname(__file__), "../templates"),
+    static_folder=os.path.join(os.path.dirname(__file__), "../static")
 )
 app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 

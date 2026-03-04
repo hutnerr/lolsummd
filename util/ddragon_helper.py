@@ -3,7 +3,7 @@ import json
 import requests
 from util.response_helper import *
 
-CHAMP_ID_FILEPATH = os.path.join("data", "champ_ids.json")
+CHAMP_ID_FILEPATH = os.path.join("static", "champ_ids.json")
 
 def get_champion_ids(save: bool = True) -> dict:
     latest_version_response = requests.get("https://ddragon.leagueoflegends.com/api/versions.json")
@@ -29,7 +29,7 @@ def get_champion_ids(save: bool = True) -> dict:
         champ_id_to_name[champ_id] = champ_name
     
     if save:
-        with open("data/champ.json", "w") as f:
+        with open(CHAMP_ID_FILEPATH, "w") as f:
             json.dump(champ_id_to_name, f, indent=4)
     
     return champ_id_to_name
