@@ -100,3 +100,6 @@ def internal_server_error(e):
         ),
         500,
     )
+    
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
