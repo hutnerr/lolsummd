@@ -13,6 +13,9 @@ key = os.environ.get("KEY_VALUE")
 if not key:
     Clogger.error("ENV NOT SET: RiotAPIClient cannot be initialized without API key.")
 
+# with open(KEY_FILEPATH, 'r') as f:
+    # key = f.read().strip()
+
 try:
     client: RiotAPIClient = RiotAPIClient(key)
 except Exception as e:
