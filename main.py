@@ -11,7 +11,7 @@ from util.ddragon_helper import get_champion_ids
 KEY_FILEPATH = os.path.join("data", "key.txt")
 Clogger.debugEnabled = False
 
-# get_champion_ids()  # run this if you don't have data/champ_ids.json
+get_champion_ids()  # run this if you don't have data/champ_ids.json
 
 with open(KEY_FILEPATH, 'r') as f:
     key = f.read().strip()
