@@ -1,6 +1,6 @@
 from util.clogger import Clogger
 from models.account import Account
-from util.riot_api_client import RiotAPIClient
+from core.riot_api_client import RiotAPIClient
 
 def summarize_mastery(accounts: list[Account], client: RiotAPIClient) -> list[tuple[str, dict]]:
 

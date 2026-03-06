@@ -1,9 +1,9 @@
 import os
 from pprint import pprint
 from util.clogger import Clogger
-from util.riot_api_client import RiotAPIClient
+from core.riot_api_client import RiotAPIClient
 from core.mastery_summarizer import summarize_mastery
-from util.ddragon_helper import get_champion_ids
+from core.ddragon_helper import get_champion_ids
 
 # this file exists for testing and debugging purposes
 # the flask website is ran through app.py

@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, session
 from werkzeug.exceptions import HTTPException
-from util.riot_api_client import RiotAPIClient
+from core.riot_api_client import RiotAPIClient
 from util.clogger import Clogger
 from core.mastery_summarizer import summarize_mastery
 

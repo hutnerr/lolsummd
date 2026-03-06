@@ -1,7 +1,7 @@
 import json
 import os
 from typing import Optional, Dict, Any
-from util.cache_interface import CacheInterface
+from util.cache.cache_interface import CacheInterface
 from util.clogger import Clogger
 
 DEFAULT_FILEPATH = os.path.join("data", "cache.json")

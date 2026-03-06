@@ -3,12 +3,12 @@ import requests
 import json
 
 from typing import Optional
-from util.cache_interface import CacheInterface
-from util.json_cache import JsonCache
+from util.cache.cache_interface import CacheInterface
+from util.cache.json_cache import JsonCache
 from util.clogger import Clogger
 from util.response_helper import check_response
 from models.account import Account
-from util.ddragon_helper import CHAMP_ID_FILEPATH
+from core.ddragon_helper import CHAMP_ID_FILEPATH
 
 class Endpoints(enum.Enum):
     ACCOUNT_BY_ID = "https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id"
