@@ -212,7 +212,19 @@ footer {
   padding: 18px 24px;
   text-align: center;
 }
-footer p { font-size: 12px; color: var(--fg3); letter-spacing: 0.04em; }
+footer p { font-size: 13px; color: var(--fg3); letter-spacing: 0.04em; }
+
+footer .footer-links {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+footer .footer-links li p { margin: 0; }
+footer .footer-links li a { color: var(--yellow); }
+footer .footer-links li a:hover { color: var(--fg); }
+footer .footer-links li a:active { color: var(--yellow-d); }
 
 /* Utility */
 .centered { display: flex; justify-content: center; align-items: center; }
@@ -235,3 +247,5 @@ footer p { font-size: 12px; color: var(--fg3); letter-spacing: 0.04em; }
 
 .kofi-btn { display: inline-block; margin-top: 6px; border-radius: 8px; transition: opacity 0.15s; }
 .kofi-btn:hover { opacity: 0.85; }
+
+

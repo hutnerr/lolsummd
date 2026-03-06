@@ -1,9 +1,87 @@
 {% extends "base.html" %}
-{% block title %}lolsummd — Champion Mastery{% endblock %}
+{% block title %}lolsummd{% endblock %}
 {% block content %}
 
+<style>
+  /* Help Button */
+  .help-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .help-btn:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+
+  /* Modal Overlay */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+
+  /* Modal Box */
+  .modal {
+    background: var(--bg, #1a1a2e);
+    border: 1px solid var(--border, rgba(255,255,255,0.12));
+    border-radius: 12px;
+    padding: 32px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    animation: modalIn 0.2s ease;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    opacity: 0.5;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: opacity 0.15s;
+  }
+  .modal-close:hover { opacity: 1; }
+
+  .modal .page-heading { margin-top: 0; }
+  .modal .help-section { margin-bottom: 20px; }
+  .modal .divider { margin: 18px 0; }
+</style>
+
 <div class="page-heading">
-  <h2>Champion Mastery Aggregator</h2>
+  <h2>lolsummd</h2>
   <p>Combine mastery data across multiple League of Legends accounts</p>
 </div>
 
@@ -84,5 +162,50 @@
 {% else %}
 <div id="output"></div>
 {% endif %}
+
+<button class="help-btn btn btn-secondary" onclick="openHelp()" aria-label="Help">?</button>
+
+<div class="modal-overlay" id="helpModal" onclick="closeOnBackdrop(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Help">
+    <button class="modal-close" onclick="closeHelp()" aria-label="Close">✕</button>
+
+    <div class="page-heading">
+      <h2>Help</h2>
+      <p>Everything you need to get started</p>
+    </div>
+
+    <div class="help-section">
+      <h3>Overview</h3>
+      <p>lolsummd lets you combine the champion mastery data of multiple League of Legends accounts into one unified summary.</p>
+      <p>You can add up to 10 accounts at a time from any region.</p>
+    </div>
+
+    <div class="divider"><span>✦</span></div>
+
+    <div class="help-section">
+      <h3>Instructions</h3>
+      <p>Add accounts by entering a username and tag — for example, <span class="inline-code">SummonerName#NA1</span> becomes <span class="inline-code">SummonerName</span> and <span class="inline-code">NA1</span>.</p>
+      <p>Once you've added your accounts, click <span class="inline-label">Get Combined Mastery</span> to retrieve the aggregated data.</p>
+      <p>Remove individual accounts with the <span class="inline-label">Remove</span> button, or wipe the whole list with <span class="inline-label">Clear All</span>.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openHelp() {
+    document.getElementById('helpModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeHelp() {
+    document.getElementById('helpModal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  function closeOnBackdrop(e) {
+    if (e.target === document.getElementById('helpModal')) closeHelp();
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeHelp();
+  });
+</script>
 
 {% endblock %}

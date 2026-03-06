@@ -7,16 +7,6 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <header>
-    <nav>
-      <h1 id="title"><a href="/">lolsummd</a></h1>
-      <ul id="header-navbar-ul">
-        <li><a href="/">Home</a></li>
-        <li><a href="/help">Help</a></li>
-      </ul>
-    </nav>
-  </header>
-
   <main>
     <div class="container">
       {% block content %}{% endblock %}
@@ -24,7 +14,12 @@
   </main>
 
   <footer>
-    <p>&copy; 2026 lolsummd — All rights reserved.</p>
+    <p style="margin-bottom: 8px;">&copy; 2026 lolsummd — All rights reserved.</p>
+    <ul class="footer-links">
+      <li><p><a href="https://github.com/hutnerr/lolsummd/issues">Report Bug</a></p></li>
+      <li><p><a href="https://www.hunter-baker.com/pages/nav/contact.html">Contact Me</a></p></li>
+      <li><p><a href="https://ko-fi.com/S6S71TM9XT" target="_blank" rel="noopener noreferrer">Buy Me a Coffee on Ko-fi</a></p></li>
+    </ul>
   </footer>
 </body>
 </html>
