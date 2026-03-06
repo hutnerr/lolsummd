@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from models.region import Region
+from core.endpoint_builder import Region
 
 @dataclass
 class Account:

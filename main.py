@@ -1,17 +1,19 @@
 import os
 from pprint import pprint
+from core.endpoint_builder import Region
 from util.clogger import Clogger
 from core.riot_api_client import RiotAPIClient
 from core.mastery_summarizer import summarize_mastery
-from core.ddragon_helper import get_champion_ids
+from core.ddragon_helper import get_champion_ids, get_champion_images
 
 # this file exists for testing and debugging purposes
 # the flask website is ran through app.py
 
 KEY_FILEPATH = os.path.join("data", "key.txt")
-Clogger.debugEnabled = False
+Clogger.debugEnabled = True
 
-get_champion_ids()  # run this if you don't have data/champ_ids.json
+# get_champion_ids() # run this if you don't have data/champ_ids.json
+# get_champion_images(true, true)  # run this if you don't have the icons and splashes
 
 with open(KEY_FILEPATH, 'r') as f:
     key = f.read().strip()
@@ -21,9 +23,15 @@ with open(KEY_FILEPATH, 'r') as f:
         Clogger.error(f"Failed to initialize RiotAPIClient: {e}")
 
 account_info = [
-    # ("username", "tag")
+    # ("username", "tag", Region.XXX)
+    # ("wizwizwizz", "1256", Region.NA1),
+    ("the inescapable", "RAT", Region.EUW1),
+    ("KC NEXT ADKING", "EUW", Region.EUW1),
+    ("TFBlade", "122", Region.NA1),
+    ("DK ShowMaker", "KR1", Region.KR)
 ]
 
 accounts = client.get_accounts_by_names(account_info)
 summarized_mastery = summarize_mastery(accounts, client)
-pprint(summarized_mastery)
+# pprint(summarized_mastery)
+Clogger.info("Success!")

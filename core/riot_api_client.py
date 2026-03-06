@@ -1,6 +1,5 @@
-import enum
-import requests
 import json
+import requests
 
 from typing import Optional
 from util.cache.cache_interface import CacheInterface
@@ -8,128 +7,120 @@ from util.cache.json_cache import JsonCache
 from util.clogger import Clogger
 from util.response_helper import check_response
 from models.account import Account
-from models.region import Region
+from core.endpoint_builder import Region, ApiPath, build_regional_url, build_platform_url_from_region
 from core.ddragon_helper import CHAMP_ID_FILEPATH
 
 class RiotAPIClient:
 
     @Clogger.log_errors
-    def __init__(self, key: str, default_region: Region = Region.NA1, cache: CacheInterface = None):
+    def __init__(self, key: str, cache: CacheInterface = None):
         if not key:
             raise ValueError("API key must be provided")
-        
         if not isinstance(key, str):
             raise TypeError("API key must be a string")
-        
         if key.strip() == "":
             raise ValueError("API key cannot be empty or whitespace")
-        
         if len(key) < 10:
-            raise ValueError("API key is too short")    
+            raise ValueError("API key is too short")
 
         self.key: str = key
-        self.default_region: Region = default_region
         self.cache: CacheInterface = cache or JsonCache()
         self.championIDs: dict[str, str] = {}
 
         with open(CHAMP_ID_FILEPATH, 'r') as f:
-            self.championIDs = json.load(f)
+            raw = json.load(f)
+            self.championIDs = {k: v["name"] for k, v in raw.items()}
 
         Clogger.info("RiotAPIClient initialized")
-    
-    def set_default_region(self, region: Region) -> bool:
-        if not isinstance(region, Region):
-            Clogger.error("Invalid region type, could not set default region")
-            return False
-        
-        self.default_region = region
-        Clogger.info(f"Default region set to {region.value}")
-        return True
-    
+
     def get_account_by_puuid(self, puuid: str) -> Optional[Account]:
         Clogger.warn("get_account_by_puuid is not implemented yet")
         pass
-    
-    def get_account_by_summoner_name(self, username: str, tag: str) -> Optional[Account]:
+
+    def get_account_by_summoner_name(self, username: str, tag: str, region: Region) -> Optional[Account]:
         cached_data = self.cache.get_by_name(username, tag)
         if cached_data:
             Clogger.debug(f"Cache hit for {username}#{tag}")
+            cached_data['region'] = Region(cached_data['region'])
             return Account(**cached_data)
-        
+
         try:
-            url = f"{Endpoints.ACCOUNT_BY_ID.value}/{username}/{tag}?api_key={self.key}"
-            resp = requests.get(url, timeout=5)
+            url = build_platform_url_from_region(
+                region,
+                ApiPath.ACCOUNT_BY_ID,
+                username=username,
+                tag=tag
+            )
+            resp = requests.get(url, params={"api_key": self.key}, timeout=5)
 
             if not check_response(resp):
                 return None
-            
+
             data = resp.json()
 
             if "puuid" not in data:
                 Clogger.warn(f"Account not found: {username}#{tag}")
                 return None
-            
-            account = Account(
-                puuid=data["puuid"],
-                username=username,
-                tag=tag
-            )
-            
+
+            account = Account(puuid=data["puuid"], username=username, tag=tag, region=region)
             self.cache.set(data["puuid"], account.__dict__)
             return account
-            
+
         except Exception as e:
             Clogger.error(f"Error fetching account by name: {e}")
             return None
 
-    def get_accounts_by_names(self, names: list[tuple[str, str]]) -> list[Account]:
-        accounts = []
-
-        if names is None or len(names) == 0:
+    def get_accounts_by_names(self, names: list[tuple[str, str, Region]]) -> list[Account]:
+        if not names:
             Clogger.error("No names provided to fetch accounts")
-            return accounts
-        
+            return []
+
         if not isinstance(names, list):
             Clogger.error("Names parameter must be a list of tuples")
-            return accounts
-        
-        for item in names:
-            if not isinstance(item, tuple) or len(item) != 2:
-                Clogger.error("Each item in names list must be a tuple of (username, tag)")
-                return accounts
+            return []
 
-        for name, tag in names:
-            account = self.get_account_by_summoner_name(name, tag)
+        for item in names:
+            if not isinstance(item, tuple) or len(item) != 3:
+                Clogger.error("Each item in names list must be a tuple of (username, tag, region)")
+                return []
+
+        accounts = []
+        for name, tag, region in names:
+            account = self.get_account_by_summoner_name(name, tag, region)
             if account:
                 accounts.append(account)
             else:
                 Clogger.warn(f"Account {name}#{tag} failed to fetch.")
-        
+
         if not accounts:
             Clogger.error("No accounts were fetched.")
 
         return accounts
 
     def get_mastery_all_champions(self, account: Account) -> dict[int, dict[str, int]]:
-        url = f"{Endpoints.MASTERY_BY_PUID.value}/{account.puuid}?api_key={self.key}"
+        url = build_regional_url(
+            account.region,
+            ApiPath.MASTERY_BY_PUUID,
+            puuid=account.puuid
+        )
 
         try:
-            response = requests.get(url, timeout=5)
+            response = requests.get(url, params={"api_key": self.key}, timeout=5)
 
             if not check_response(response):
                 return {}
-                
+
             data = {}
             for item in response.json():
-                temp = {}
-                temp["id"] = item.get("championId")
-                temp["level"] = item.get("championLevel")
-                temp["points"] = item.get("championPoints")
-                temp["last_played"] = item.get("lastPlayTime")
-                data[item.get("championId")] = temp
-
+                champ_id = item.get("championId")
+                data[champ_id] = {
+                    "id":          champ_id,
+                    "level":       item.get("championLevel"),
+                    "points":      item.get("championPoints"),
+                    "last_played": item.get("lastPlayTime"),
+                }
             return data
-            
+
         except Exception as e:
             Clogger.error(f"Error fetching mastery data: {e}")
             return {}
@@ -138,10 +129,10 @@ class RiotAPIClient:
         if champ_id is None:
             Clogger.error("Champion ID is None")
             return None
-        
+
         cid = self.championIDs.get(str(champ_id))
 
         if cid is None:
             Clogger.warn(f"Champion ID {champ_id} not found in mapping")
-        
+
         return cid
