@@ -1,174 +1,690 @@
 {
-    "266": "Aatrox",
-    "103": "Ahri",
-    "84": "Akali",
-    "166": "Akshan",
-    "12": "Alistar",
-    "799": "Ambessa",
-    "32": "Amumu",
-    "34": "Anivia",
-    "1": "Annie",
-    "523": "Aphelios",
-    "22": "Ashe",
-    "136": "Aurelion Sol",
-    "893": "Aurora",
-    "268": "Azir",
-    "432": "Bard",
-    "200": "Bel'Veth",
-    "53": "Blitzcrank",
-    "63": "Brand",
-    "201": "Braum",
-    "233": "Briar",
-    "51": "Caitlyn",
-    "164": "Camille",
-    "69": "Cassiopeia",
-    "31": "Cho'Gath",
-    "42": "Corki",
-    "122": "Darius",
-    "131": "Diana",
-    "119": "Draven",
-    "36": "Dr. Mundo",
-    "245": "Ekko",
-    "60": "Elise",
-    "28": "Evelynn",
-    "81": "Ezreal",
-    "9": "Fiddlesticks",
-    "114": "Fiora",
-    "105": "Fizz",
-    "3": "Galio",
-    "41": "Gangplank",
-    "86": "Garen",
-    "150": "Gnar",
-    "79": "Gragas",
-    "104": "Graves",
-    "887": "Gwen",
-    "120": "Hecarim",
-    "74": "Heimerdinger",
-    "910": "Hwei",
-    "420": "Illaoi",
-    "39": "Irelia",
-    "427": "Ivern",
-    "40": "Janna",
-    "59": "Jarvan IV",
-    "24": "Jax",
-    "126": "Jayce",
-    "202": "Jhin",
-    "222": "Jinx",
-    "145": "Kai'Sa",
-    "429": "Kalista",
-    "43": "Karma",
-    "30": "Karthus",
-    "38": "Kassadin",
-    "55": "Katarina",
-    "10": "Kayle",
-    "141": "Kayn",
-    "85": "Kennen",
-    "121": "Kha'Zix",
-    "203": "Kindred",
-    "240": "Kled",
-    "96": "Kog'Maw",
-    "897": "K'Sante",
-    "7": "LeBlanc",
-    "64": "Lee Sin",
-    "89": "Leona",
-    "876": "Lillia",
-    "127": "Lissandra",
-    "236": "Lucian",
-    "117": "Lulu",
-    "99": "Lux",
-    "54": "Malphite",
-    "90": "Malzahar",
-    "57": "Maokai",
-    "11": "Master Yi",
-    "800": "Mel",
-    "902": "Milio",
-    "21": "Miss Fortune",
-    "62": "Wukong",
-    "82": "Mordekaiser",
-    "25": "Morgana",
-    "950": "Naafiri",
-    "267": "Nami",
-    "75": "Nasus",
-    "111": "Nautilus",
-    "518": "Neeko",
-    "76": "Nidalee",
-    "895": "Nilah",
-    "56": "Nocturne",
-    "20": "Nunu & Willump",
-    "2": "Olaf",
-    "61": "Orianna",
-    "516": "Ornn",
-    "80": "Pantheon",
-    "78": "Poppy",
-    "555": "Pyke",
-    "246": "Qiyana",
-    "133": "Quinn",
-    "497": "Rakan",
-    "33": "Rammus",
-    "421": "Rek'Sai",
-    "526": "Rell",
-    "888": "Renata Glasc",
-    "58": "Renekton",
-    "107": "Rengar",
-    "92": "Riven",
-    "68": "Rumble",
-    "13": "Ryze",
-    "360": "Samira",
-    "113": "Sejuani",
-    "235": "Senna",
-    "147": "Seraphine",
-    "875": "Sett",
-    "35": "Shaco",
-    "98": "Shen",
-    "102": "Shyvana",
-    "27": "Singed",
-    "14": "Sion",
-    "15": "Sivir",
-    "72": "Skarner",
-    "901": "Smolder",
-    "37": "Sona",
-    "16": "Soraka",
-    "50": "Swain",
-    "517": "Sylas",
-    "134": "Syndra",
-    "223": "Tahm Kench",
-    "163": "Taliyah",
-    "91": "Talon",
-    "44": "Taric",
-    "17": "Teemo",
-    "412": "Thresh",
-    "18": "Tristana",
-    "48": "Trundle",
-    "23": "Tryndamere",
-    "4": "Twisted Fate",
-    "29": "Twitch",
-    "77": "Udyr",
-    "6": "Urgot",
-    "110": "Varus",
-    "67": "Vayne",
-    "45": "Veigar",
-    "161": "Vel'Koz",
-    "711": "Vex",
-    "254": "Vi",
-    "234": "Viego",
-    "112": "Viktor",
-    "8": "Vladimir",
-    "106": "Volibear",
-    "19": "Warwick",
-    "498": "Xayah",
-    "101": "Xerath",
-    "5": "Xin Zhao",
-    "157": "Yasuo",
-    "777": "Yone",
-    "83": "Yorick",
-    "804": "Yunara",
-    "350": "Yuumi",
-    "904": "Zaahen",
-    "154": "Zac",
-    "238": "Zed",
-    "221": "Zeri",
-    "115": "Ziggs",
-    "26": "Zilean",
-    "142": "Zoe",
-    "143": "Zyra"
+    "266": {
+        "name": "Aatrox",
+        "file_key": "Aatrox"
+    },
+    "103": {
+        "name": "Ahri",
+        "file_key": "Ahri"
+    },
+    "84": {
+        "name": "Akali",
+        "file_key": "Akali"
+    },
+    "166": {
+        "name": "Akshan",
+        "file_key": "Akshan"
+    },
+    "12": {
+        "name": "Alistar",
+        "file_key": "Alistar"
+    },
+    "799": {
+        "name": "Ambessa",
+        "file_key": "Ambessa"
+    },
+    "32": {
+        "name": "Amumu",
+        "file_key": "Amumu"
+    },
+    "34": {
+        "name": "Anivia",
+        "file_key": "Anivia"
+    },
+    "1": {
+        "name": "Annie",
+        "file_key": "Annie"
+    },
+    "523": {
+        "name": "Aphelios",
+        "file_key": "Aphelios"
+    },
+    "22": {
+        "name": "Ashe",
+        "file_key": "Ashe"
+    },
+    "136": {
+        "name": "Aurelion Sol",
+        "file_key": "AurelionSol"
+    },
+    "893": {
+        "name": "Aurora",
+        "file_key": "Aurora"
+    },
+    "268": {
+        "name": "Azir",
+        "file_key": "Azir"
+    },
+    "432": {
+        "name": "Bard",
+        "file_key": "Bard"
+    },
+    "200": {
+        "name": "Bel'Veth",
+        "file_key": "Belveth"
+    },
+    "53": {
+        "name": "Blitzcrank",
+        "file_key": "Blitzcrank"
+    },
+    "63": {
+        "name": "Brand",
+        "file_key": "Brand"
+    },
+    "201": {
+        "name": "Braum",
+        "file_key": "Braum"
+    },
+    "233": {
+        "name": "Briar",
+        "file_key": "Briar"
+    },
+    "51": {
+        "name": "Caitlyn",
+        "file_key": "Caitlyn"
+    },
+    "164": {
+        "name": "Camille",
+        "file_key": "Camille"
+    },
+    "69": {
+        "name": "Cassiopeia",
+        "file_key": "Cassiopeia"
+    },
+    "31": {
+        "name": "Cho'Gath",
+        "file_key": "Chogath"
+    },
+    "42": {
+        "name": "Corki",
+        "file_key": "Corki"
+    },
+    "122": {
+        "name": "Darius",
+        "file_key": "Darius"
+    },
+    "131": {
+        "name": "Diana",
+        "file_key": "Diana"
+    },
+    "119": {
+        "name": "Draven",
+        "file_key": "Draven"
+    },
+    "36": {
+        "name": "Dr. Mundo",
+        "file_key": "DrMundo"
+    },
+    "245": {
+        "name": "Ekko",
+        "file_key": "Ekko"
+    },
+    "60": {
+        "name": "Elise",
+        "file_key": "Elise"
+    },
+    "28": {
+        "name": "Evelynn",
+        "file_key": "Evelynn"
+    },
+    "81": {
+        "name": "Ezreal",
+        "file_key": "Ezreal"
+    },
+    "9": {
+        "name": "Fiddlesticks",
+        "file_key": "Fiddlesticks"
+    },
+    "114": {
+        "name": "Fiora",
+        "file_key": "Fiora"
+    },
+    "105": {
+        "name": "Fizz",
+        "file_key": "Fizz"
+    },
+    "3": {
+        "name": "Galio",
+        "file_key": "Galio"
+    },
+    "41": {
+        "name": "Gangplank",
+        "file_key": "Gangplank"
+    },
+    "86": {
+        "name": "Garen",
+        "file_key": "Garen"
+    },
+    "150": {
+        "name": "Gnar",
+        "file_key": "Gnar"
+    },
+    "79": {
+        "name": "Gragas",
+        "file_key": "Gragas"
+    },
+    "104": {
+        "name": "Graves",
+        "file_key": "Graves"
+    },
+    "887": {
+        "name": "Gwen",
+        "file_key": "Gwen"
+    },
+    "120": {
+        "name": "Hecarim",
+        "file_key": "Hecarim"
+    },
+    "74": {
+        "name": "Heimerdinger",
+        "file_key": "Heimerdinger"
+    },
+    "910": {
+        "name": "Hwei",
+        "file_key": "Hwei"
+    },
+    "420": {
+        "name": "Illaoi",
+        "file_key": "Illaoi"
+    },
+    "39": {
+        "name": "Irelia",
+        "file_key": "Irelia"
+    },
+    "427": {
+        "name": "Ivern",
+        "file_key": "Ivern"
+    },
+    "40": {
+        "name": "Janna",
+        "file_key": "Janna"
+    },
+    "59": {
+        "name": "Jarvan IV",
+        "file_key": "JarvanIV"
+    },
+    "24": {
+        "name": "Jax",
+        "file_key": "Jax"
+    },
+    "126": {
+        "name": "Jayce",
+        "file_key": "Jayce"
+    },
+    "202": {
+        "name": "Jhin",
+        "file_key": "Jhin"
+    },
+    "222": {
+        "name": "Jinx",
+        "file_key": "Jinx"
+    },
+    "145": {
+        "name": "Kai'Sa",
+        "file_key": "Kaisa"
+    },
+    "429": {
+        "name": "Kalista",
+        "file_key": "Kalista"
+    },
+    "43": {
+        "name": "Karma",
+        "file_key": "Karma"
+    },
+    "30": {
+        "name": "Karthus",
+        "file_key": "Karthus"
+    },
+    "38": {
+        "name": "Kassadin",
+        "file_key": "Kassadin"
+    },
+    "55": {
+        "name": "Katarina",
+        "file_key": "Katarina"
+    },
+    "10": {
+        "name": "Kayle",
+        "file_key": "Kayle"
+    },
+    "141": {
+        "name": "Kayn",
+        "file_key": "Kayn"
+    },
+    "85": {
+        "name": "Kennen",
+        "file_key": "Kennen"
+    },
+    "121": {
+        "name": "Kha'Zix",
+        "file_key": "Khazix"
+    },
+    "203": {
+        "name": "Kindred",
+        "file_key": "Kindred"
+    },
+    "240": {
+        "name": "Kled",
+        "file_key": "Kled"
+    },
+    "96": {
+        "name": "Kog'Maw",
+        "file_key": "KogMaw"
+    },
+    "897": {
+        "name": "K'Sante",
+        "file_key": "KSante"
+    },
+    "7": {
+        "name": "LeBlanc",
+        "file_key": "Leblanc"
+    },
+    "64": {
+        "name": "Lee Sin",
+        "file_key": "LeeSin"
+    },
+    "89": {
+        "name": "Leona",
+        "file_key": "Leona"
+    },
+    "876": {
+        "name": "Lillia",
+        "file_key": "Lillia"
+    },
+    "127": {
+        "name": "Lissandra",
+        "file_key": "Lissandra"
+    },
+    "236": {
+        "name": "Lucian",
+        "file_key": "Lucian"
+    },
+    "117": {
+        "name": "Lulu",
+        "file_key": "Lulu"
+    },
+    "99": {
+        "name": "Lux",
+        "file_key": "Lux"
+    },
+    "54": {
+        "name": "Malphite",
+        "file_key": "Malphite"
+    },
+    "90": {
+        "name": "Malzahar",
+        "file_key": "Malzahar"
+    },
+    "57": {
+        "name": "Maokai",
+        "file_key": "Maokai"
+    },
+    "11": {
+        "name": "Master Yi",
+        "file_key": "MasterYi"
+    },
+    "800": {
+        "name": "Mel",
+        "file_key": "Mel"
+    },
+    "902": {
+        "name": "Milio",
+        "file_key": "Milio"
+    },
+    "21": {
+        "name": "Miss Fortune",
+        "file_key": "MissFortune"
+    },
+    "62": {
+        "name": "Wukong",
+        "file_key": "MonkeyKing"
+    },
+    "82": {
+        "name": "Mordekaiser",
+        "file_key": "Mordekaiser"
+    },
+    "25": {
+        "name": "Morgana",
+        "file_key": "Morgana"
+    },
+    "950": {
+        "name": "Naafiri",
+        "file_key": "Naafiri"
+    },
+    "267": {
+        "name": "Nami",
+        "file_key": "Nami"
+    },
+    "75": {
+        "name": "Nasus",
+        "file_key": "Nasus"
+    },
+    "111": {
+        "name": "Nautilus",
+        "file_key": "Nautilus"
+    },
+    "518": {
+        "name": "Neeko",
+        "file_key": "Neeko"
+    },
+    "76": {
+        "name": "Nidalee",
+        "file_key": "Nidalee"
+    },
+    "895": {
+        "name": "Nilah",
+        "file_key": "Nilah"
+    },
+    "56": {
+        "name": "Nocturne",
+        "file_key": "Nocturne"
+    },
+    "20": {
+        "name": "Nunu & Willump",
+        "file_key": "Nunu"
+    },
+    "2": {
+        "name": "Olaf",
+        "file_key": "Olaf"
+    },
+    "61": {
+        "name": "Orianna",
+        "file_key": "Orianna"
+    },
+    "516": {
+        "name": "Ornn",
+        "file_key": "Ornn"
+    },
+    "80": {
+        "name": "Pantheon",
+        "file_key": "Pantheon"
+    },
+    "78": {
+        "name": "Poppy",
+        "file_key": "Poppy"
+    },
+    "555": {
+        "name": "Pyke",
+        "file_key": "Pyke"
+    },
+    "246": {
+        "name": "Qiyana",
+        "file_key": "Qiyana"
+    },
+    "133": {
+        "name": "Quinn",
+        "file_key": "Quinn"
+    },
+    "497": {
+        "name": "Rakan",
+        "file_key": "Rakan"
+    },
+    "33": {
+        "name": "Rammus",
+        "file_key": "Rammus"
+    },
+    "421": {
+        "name": "Rek'Sai",
+        "file_key": "RekSai"
+    },
+    "526": {
+        "name": "Rell",
+        "file_key": "Rell"
+    },
+    "888": {
+        "name": "Renata Glasc",
+        "file_key": "Renata"
+    },
+    "58": {
+        "name": "Renekton",
+        "file_key": "Renekton"
+    },
+    "107": {
+        "name": "Rengar",
+        "file_key": "Rengar"
+    },
+    "92": {
+        "name": "Riven",
+        "file_key": "Riven"
+    },
+    "68": {
+        "name": "Rumble",
+        "file_key": "Rumble"
+    },
+    "13": {
+        "name": "Ryze",
+        "file_key": "Ryze"
+    },
+    "360": {
+        "name": "Samira",
+        "file_key": "Samira"
+    },
+    "113": {
+        "name": "Sejuani",
+        "file_key": "Sejuani"
+    },
+    "235": {
+        "name": "Senna",
+        "file_key": "Senna"
+    },
+    "147": {
+        "name": "Seraphine",
+        "file_key": "Seraphine"
+    },
+    "875": {
+        "name": "Sett",
+        "file_key": "Sett"
+    },
+    "35": {
+        "name": "Shaco",
+        "file_key": "Shaco"
+    },
+    "98": {
+        "name": "Shen",
+        "file_key": "Shen"
+    },
+    "102": {
+        "name": "Shyvana",
+        "file_key": "Shyvana"
+    },
+    "27": {
+        "name": "Singed",
+        "file_key": "Singed"
+    },
+    "14": {
+        "name": "Sion",
+        "file_key": "Sion"
+    },
+    "15": {
+        "name": "Sivir",
+        "file_key": "Sivir"
+    },
+    "72": {
+        "name": "Skarner",
+        "file_key": "Skarner"
+    },
+    "901": {
+        "name": "Smolder",
+        "file_key": "Smolder"
+    },
+    "37": {
+        "name": "Sona",
+        "file_key": "Sona"
+    },
+    "16": {
+        "name": "Soraka",
+        "file_key": "Soraka"
+    },
+    "50": {
+        "name": "Swain",
+        "file_key": "Swain"
+    },
+    "517": {
+        "name": "Sylas",
+        "file_key": "Sylas"
+    },
+    "134": {
+        "name": "Syndra",
+        "file_key": "Syndra"
+    },
+    "223": {
+        "name": "Tahm Kench",
+        "file_key": "TahmKench"
+    },
+    "163": {
+        "name": "Taliyah",
+        "file_key": "Taliyah"
+    },
+    "91": {
+        "name": "Talon",
+        "file_key": "Talon"
+    },
+    "44": {
+        "name": "Taric",
+        "file_key": "Taric"
+    },
+    "17": {
+        "name": "Teemo",
+        "file_key": "Teemo"
+    },
+    "412": {
+        "name": "Thresh",
+        "file_key": "Thresh"
+    },
+    "18": {
+        "name": "Tristana",
+        "file_key": "Tristana"
+    },
+    "48": {
+        "name": "Trundle",
+        "file_key": "Trundle"
+    },
+    "23": {
+        "name": "Tryndamere",
+        "file_key": "Tryndamere"
+    },
+    "4": {
+        "name": "Twisted Fate",
+        "file_key": "TwistedFate"
+    },
+    "29": {
+        "name": "Twitch",
+        "file_key": "Twitch"
+    },
+    "77": {
+        "name": "Udyr",
+        "file_key": "Udyr"
+    },
+    "6": {
+        "name": "Urgot",
+        "file_key": "Urgot"
+    },
+    "110": {
+        "name": "Varus",
+        "file_key": "Varus"
+    },
+    "67": {
+        "name": "Vayne",
+        "file_key": "Vayne"
+    },
+    "45": {
+        "name": "Veigar",
+        "file_key": "Veigar"
+    },
+    "161": {
+        "name": "Vel'Koz",
+        "file_key": "Velkoz"
+    },
+    "711": {
+        "name": "Vex",
+        "file_key": "Vex"
+    },
+    "254": {
+        "name": "Vi",
+        "file_key": "Vi"
+    },
+    "234": {
+        "name": "Viego",
+        "file_key": "Viego"
+    },
+    "112": {
+        "name": "Viktor",
+        "file_key": "Viktor"
+    },
+    "8": {
+        "name": "Vladimir",
+        "file_key": "Vladimir"
+    },
+    "106": {
+        "name": "Volibear",
+        "file_key": "Volibear"
+    },
+    "19": {
+        "name": "Warwick",
+        "file_key": "Warwick"
+    },
+    "498": {
+        "name": "Xayah",
+        "file_key": "Xayah"
+    },
+    "101": {
+        "name": "Xerath",
+        "file_key": "Xerath"
+    },
+    "5": {
+        "name": "Xin Zhao",
+        "file_key": "XinZhao"
+    },
+    "157": {
+        "name": "Yasuo",
+        "file_key": "Yasuo"
+    },
+    "777": {
+        "name": "Yone",
+        "file_key": "Yone"
+    },
+    "83": {
+        "name": "Yorick",
+        "file_key": "Yorick"
+    },
+    "804": {
+        "name": "Yunara",
+        "file_key": "Yunara"
+    },
+    "350": {
+        "name": "Yuumi",
+        "file_key": "Yuumi"
+    },
+    "904": {
+        "name": "Zaahen",
+        "file_key": "Zaahen"
+    },
+    "154": {
+        "name": "Zac",
+        "file_key": "Zac"
+    },
+    "238": {
+        "name": "Zed",
+        "file_key": "Zed"
+    },
+    "221": {
+        "name": "Zeri",
+        "file_key": "Zeri"
+    },
+    "115": {
+        "name": "Ziggs",
+        "file_key": "Ziggs"
+    },
+    "26": {
+        "name": "Zilean",
+        "file_key": "Zilean"
+    },
+    "142": {
+        "name": "Zoe",
+        "file_key": "Zoe"
+    },
+    "143": {
+        "name": "Zyra",
+        "file_key": "Zyra"
+    }
 }

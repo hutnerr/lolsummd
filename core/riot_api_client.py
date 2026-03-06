@@ -8,20 +8,8 @@ from util.cache.json_cache import JsonCache
 from util.clogger import Clogger
 from util.response_helper import check_response
 from models.account import Account
+from models.region import Region
 from core.ddragon_helper import CHAMP_ID_FILEPATH
-
-class Endpoints(enum.Enum):
-    ACCOUNT_BY_ID = "https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id"
-    MASTERY_BY_PUID = "https://na1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid"
-
-# TODO: implement region handling properly
-# likely going to have to implement a endpoint builder that takes region into account
-class Region(enum.Enum):
-    NA1 = "na1"
-    EUW1 = "euw1"
-    EUN1 = "eun1"
-    KR = "kr"
-    JP1 = "jp1"
 
 class RiotAPIClient:
 

@@ -1,7 +1,7 @@
 import enum
 
-class Region(enum):
-    NA = "NA"
+class Region(enum.Enum):
+    NA1 = "NA1"
     EUW = "EUW"
     EUNE = "EUNE"
     KR = "KR"

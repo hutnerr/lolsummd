@@ -4,14 +4,24 @@ import requests
 from util.response_helper import *
 
 CHAMP_ID_FILEPATH = os.path.join("static", "champ_ids.json")
+CHAMP_ICON_DIRPATH = os.path.join("static", "champion_icons")
+CHAMP_SPLASH_DIRPATH = os.path.join("static", "champion_splashes")
 
-def get_champion_ids(save: bool = True) -> dict:
+def _get_latest_version() -> str:
     latest_version_response = requests.get("https://ddragon.leagueoflegends.com/api/versions.json")
     if not check_response(latest_version_response):
         Clogger.error("Failed to fetch latest version from DDragon")
-        return {}
+        return ""
     
     latest_version = latest_version_response.json()[0]
+    return latest_version
+
+# returns a dict mapping champion ID to champion name, and optionally saves it to a JSON file
+def get_champion_ids(save: bool = True) -> dict:
+    latest_version = _get_latest_version()
+    if not latest_version:
+        Clogger.error("Failed to fetch latest version from DDragon")
+        return {}
 
     ddragon_url = f"https://ddragon.leagueoflegends.com/cdn/{latest_version}/data/en_US/champion.json"
     champions_response = requests.get(ddragon_url)
@@ -24,12 +34,47 @@ def get_champion_ids(save: bool = True) -> dict:
 
     champ_id_to_name = {}
     for champion_key, champion_info in champions_data.items():
-        champ_id = champion_info["key"]
-        champ_name = champion_info["name"]
-        champ_id_to_name[champ_id] = champ_name
+        champ_id = champion_info["key"]      # numeric ID, e.g. "200"
+        champ_name = champion_info["name"]   # display name, e.g. "Bel'Veth"
+        champ_file_key = champion_info["id"] # DDragon key, e.g. "Belveth"
+        champ_id_to_name[champ_id] = {"name": champ_name, "file_key": champ_file_key}
     
     if save:
         with open(CHAMP_ID_FILEPATH, "w") as f:
             json.dump(champ_id_to_name, f, indent=4)
     
     return champ_id_to_name
+
+
+def get_champion_images():
+    latest_version = _get_latest_version()
+    if not latest_version:
+        Clogger.error("Failed to fetch latest version from DDragon")
+        return
+    
+    champ_id_to_name = get_champion_ids(save=True)
+    
+    os.makedirs(CHAMP_ICON_DIRPATH, exist_ok=True)
+    os.makedirs(CHAMP_SPLASH_DIRPATH, exist_ok=True)
+
+    for champ_id, champ_info in champ_id_to_name.items():
+        champ_name = champ_info["name"]
+        champ_file_key = champ_info["file_key"]
+        icon_url = f"https://ddragon.leagueoflegends.com/cdn/{latest_version}/img/champion/{champ_file_key}.png"
+        splash_url = f"https://ddragon.leagueoflegends.com/cdn/img/champion/splash/{champ_file_key}_0.jpg"
+        
+        icon_response = requests.get(icon_url)
+        if icon_response.status_code == 200:
+            with open(os.path.join(CHAMP_ICON_DIRPATH, f"{champ_id}.png"), "wb") as f:
+                f.write(icon_response.content)
+        else:
+            Clogger.error(f"Failed to fetch icon for {champ_name} (ID: {champ_id}): {icon_response.status_code}")
+
+        splash_response = requests.get(splash_url)
+        if splash_response.status_code == 200:
+            with open(os.path.join(CHAMP_SPLASH_DIRPATH, f"{champ_id}.jpg"), "wb") as f:
+                f.write(splash_response.content)
+        else:
+            Clogger.error(f"Failed to fetch splash for {champ_name} (ID: {champ_id}): {splash_response.status_code}")
+            
+    Clogger.info("Finished fetching champion images")

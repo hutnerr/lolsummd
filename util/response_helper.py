@@ -2,7 +2,7 @@ import requests
 from util.clogger import Clogger
 
 def check_response(response: requests.Response) -> bool:
-        Clogger.debug(response.text)
+        # Clogger.debug(response.text)
         if not isinstance(response, requests.Response):
             Clogger.error("Invalid response object")
             return False
