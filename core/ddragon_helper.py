@@ -46,7 +46,11 @@ def get_champion_ids(save: bool = True) -> dict:
     return champ_id_to_name
 
 
-def get_champion_images():
+def get_champion_images(getsplash: bool = True, geticon: bool = True):
+    if not getsplash and not geticon:
+        Clogger.warning("No images requested in get_champion_images()")
+        return
+    
     latest_version = _get_latest_version()
     if not latest_version:
         Clogger.error("Failed to fetch latest version from DDragon")
@@ -63,18 +67,20 @@ def get_champion_images():
         icon_url = f"https://ddragon.leagueoflegends.com/cdn/{latest_version}/img/champion/{champ_file_key}.png"
         splash_url = f"https://ddragon.leagueoflegends.com/cdn/img/champion/splash/{champ_file_key}_0.jpg"
         
-        icon_response = requests.get(icon_url)
-        if icon_response.status_code == 200:
-            with open(os.path.join(CHAMP_ICON_DIRPATH, f"{champ_id}.png"), "wb") as f:
-                f.write(icon_response.content)
-        else:
-            Clogger.error(f"Failed to fetch icon for {champ_name} (ID: {champ_id}): {icon_response.status_code}")
+        if geticon:
+            icon_response = requests.get(icon_url)
+            if icon_response.status_code == 200:
+                with open(os.path.join(CHAMP_ICON_DIRPATH, f"{champ_id}.png"), "wb") as f:
+                    f.write(icon_response.content)
+            else:
+                Clogger.error(f"Failed to fetch icon for {champ_name} (ID: {champ_id}): {icon_response.status_code}")
 
-        splash_response = requests.get(splash_url)
-        if splash_response.status_code == 200:
-            with open(os.path.join(CHAMP_SPLASH_DIRPATH, f"{champ_id}.jpg"), "wb") as f:
-                f.write(splash_response.content)
-        else:
-            Clogger.error(f"Failed to fetch splash for {champ_name} (ID: {champ_id}): {splash_response.status_code}")
-            
+        if getsplash:
+            splash_response = requests.get(splash_url)
+            if splash_response.status_code == 200:
+                with open(os.path.join(CHAMP_SPLASH_DIRPATH, f"{champ_id}.jpg"), "wb") as f:
+                    f.write(splash_response.content)
+            else:
+                Clogger.error(f"Failed to fetch splash for {champ_name} (ID: {champ_id}): {splash_response.status_code}")
+
     Clogger.info("Finished fetching champion images")
