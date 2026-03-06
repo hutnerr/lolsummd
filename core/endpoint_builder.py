@@ -1,10 +1,10 @@
 from enum import Enum
 
 class ApiPath(str, Enum):
-    SUMMONER_BY_NAME       = "/lol/summoner/v4/summoners/by-name/{summonerName}"
-    SUMMONER_BY_PUUID      = "/lol/summoner/v4/summoners/by-puuid/{puuid}"
-    SUMMONER_BY_ID         = "/lol/summoner/v4/summoners/{summonerId}"
-    SUMMONER_BY_ACCOUNT_ID = "/lol/summoner/v4/summoners/by-account/{accountId}"
+    # SUMMONER_BY_NAME       = "/lol/summoner/v4/summoners/by-name/{summonerName}"
+    # SUMMONER_BY_PUUID      = "/lol/summoner/v4/summoners/by-puuid/{puuid}"
+    # SUMMONER_BY_ID         = "/lol/summoner/v4/summoners/{summonerId}"
+    # SUMMONER_BY_ACCOUNT_ID = "/lol/summoner/v4/summoners/by-account/{accountId}"
     ACCOUNT_BY_ID          = "/riot/account/v1/accounts/by-riot-id/{username}/{tag}"
     MASTERY_BY_PUUID       = "/lol/champion-mastery/v4/champion-masteries/by-puuid/{puuid}"
 
