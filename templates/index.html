@@ -89,6 +89,15 @@
   <div class="input-box">
     <input id="username" type="text" name="username" placeholder="Summoner Name" required>
     <input id="tag" type="text" name="tag" placeholder="TAG" required maxlength="5">
+
+    <select name="region" id="region" required>
+      <option value="" disabled selected>Select Region</option>
+
+      {% for region in regions %}
+        <option value="{{ region.value }}">{{ region.name }}</option>
+      {% endfor %}
+
+    </select>
   </div>
   <button type="submit" class="btn btn-primary">Add Account</button>
   <input type="hidden" name="action" value="add">
@@ -110,10 +119,10 @@
   </div>
 
   <ul>
-    {% for username, tag in accounts %}
+    {% for username, tag, region in accounts %}
     <li>
       <span class="account-name">
-        {{ username }}<span class="hash">#</span><span class="tag">{{ tag }}</span>
+        {{ username }}<span class="hash">#</span><span class="tag">{{ tag }}</span><span class="region"> ({{ region }})</span>
       </span>
       <form method="POST" action="/">
         <input type="hidden" name="action" value="remove">
