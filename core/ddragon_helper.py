@@ -16,6 +16,16 @@ def _get_latest_version() -> str:
     latest_version = latest_version_response.json()[0]
     return latest_version
 
+# gets the champion ids from the saved file and not api
+def get_champion_ids_saved() -> dict:
+    if not os.path.exists(CHAMP_ID_FILEPATH):
+        Clogger.error(f"Champion ID file not found at {CHAMP_ID_FILEPATH}")
+        return {}
+
+    with open(CHAMP_ID_FILEPATH, 'r') as f:
+        raw = json.load(f)
+        return {k: v["name"] for k, v in raw.items()}
+
 # returns a dict mapping champion ID to champion name, and optionally saves it to a JSON file
 def get_champion_ids(save: bool = True) -> dict:
     latest_version = _get_latest_version()
@@ -45,6 +55,16 @@ def get_champion_ids(save: bool = True) -> dict:
     
     return champ_id_to_name
 
+def get_champion_icons_saved() -> dict:
+    ids = get_champion_ids_saved()
+    icons = {}
+    for champ_id, champ_name in ids.items():
+        filepath = os.path.join(CHAMP_ICON_DIRPATH, f"{champ_id}.png")
+        if os.path.exists(filepath):
+            icons[champ_id] = filepath
+        else:
+            Clogger.warn(f"Icon for champion ID {champ_id} not found in {CHAMP_ICON_DIRPATH}")
+    return icons
 
 def get_champion_images(getsplash: bool = True, geticon: bool = True):
     if not getsplash and not geticon:

@@ -152,6 +152,11 @@
       {% for champ_name, mastery_data in result %}
       <tr>
         <td>{{ loop.index }}</td>
+        <td>
+          {% if mastery_data['icon'] %}
+            <img src="{{ mastery_data['icon'] }}" alt="{{ champ_name }}">
+          {% endif %}
+        </td>
         <td>{{ champ_name }}</td>
         <td>
           {% if mastery_data['level'] >= 7 %}

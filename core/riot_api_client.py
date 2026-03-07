@@ -8,7 +8,7 @@ from util.clogger import Clogger
 from util.response_helper import check_response
 from models.account import Account
 from core.endpoint_builder import Region, ApiPath, build_regional_url, build_platform_url_from_region
-from core.ddragon_helper import CHAMP_ID_FILEPATH
+from core.ddragon_helper import get_champion_ids_saved, get_champion_icons_saved
 
 class RiotAPIClient:
 
@@ -25,11 +25,8 @@ class RiotAPIClient:
 
         self.key: str = key
         self.cache: CacheInterface = cache or JsonCache()
-        self.championIDs: dict[str, str] = {}
-
-        with open(CHAMP_ID_FILEPATH, 'r') as f:
-            raw = json.load(f)
-            self.championIDs = {k: v["name"] for k, v in raw.items()}
+        self.championIDs: dict[str, str] = get_champion_ids_saved()
+        self.championIDsToIcons: dict[str, str] = get_champion_icons_saved()
 
         Clogger.info("RiotAPIClient initialized")
 
@@ -136,3 +133,15 @@ class RiotAPIClient:
             Clogger.warn(f"Champion ID {champ_id} not found in mapping")
 
         return cid
+    
+    def get_champion_icon_by_id(self, champ_id) -> Optional[str]:
+        if champ_id is None:
+            Clogger.error("Champion ID is None")
+            return None
+
+        icon_path = self.championIDsToIcons.get(str(champ_id))
+
+        if icon_path is None:
+            Clogger.warn(f"Champion icon for ID {champ_id} not found in mapping")
+
+        return icon_path

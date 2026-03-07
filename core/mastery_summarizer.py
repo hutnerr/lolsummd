@@ -2,7 +2,7 @@ from util.clogger import Clogger
 from models.account import Account
 from core.riot_api_client import RiotAPIClient
 
-def summarize_mastery(accounts: list[Account], client: RiotAPIClient) -> list[tuple[str, dict]]:
+def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMetadata: bool = False) -> list[tuple[str, dict]]:
 
     # combine the mastery points and levels
     calculated_mastery = {}
@@ -17,12 +17,27 @@ def summarize_mastery(accounts: list[Account], client: RiotAPIClient) -> list[tu
             calculated_mastery[id]["level"] += total_mastery[id]['level']
             calculated_mastery[id]["points"] += total_mastery[id]['points']
 
+
+    if includeMetadata:
+        for champ_id in calculated_mastery:
+            champ_name = client.get_champion_name_by_id(champ_id)
+            if champ_name:
+                calculated_mastery[champ_id]['title'] = champ_name
+            else:
+                Clogger.warn(f"Could not find champion info for ID {champ_id}, skipping metadata.")
+
+            champ_icon_filepath = client.get_champion_icon_by_id(champ_id)
+            if champ_icon_filepath:
+                calculated_mastery[champ_id]['icon'] = champ_icon_filepath
+            else:
+                Clogger.warn(f"Could not find champion icon for ID {champ_id}, skipping icon metadata.")
+
     # convert champion IDs to names
     calculated_mastery_with_names = {}
     for champ_id in calculated_mastery:
         champ_name = client.get_champion_name_by_id(champ_id)
         if champ_name:
-            calculated_mastery_with_names[champ_name] = calculated_mastery[champ_id]
+            calculated_mastery_with_names[f"{champ_name}"] = calculated_mastery[champ_id]
         else:
             Clogger.warn(f"Could not find name for champion ID {champ_id}, using ID as key.")
             calculated_mastery_with_names[f"ID_{champ_id}"] = calculated_mastery[champ_id]

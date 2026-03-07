@@ -6,6 +6,7 @@ from core.riot_api_client import RiotAPIClient
 from util.clogger import Clogger
 from core.mastery_summarizer import summarize_mastery
 from core.endpoint_builder import Region
+from core.ddragon_helper import get_champion_icons_saved
 
 Clogger.debugEnabled = True
 
@@ -90,7 +91,9 @@ def home():
 
             deserialized_accounts = [(a[0], a[1], Region(a[2])) for a in accounts]
             riot_accounts = client.get_accounts_by_names(deserialized_accounts)
-            result = summarize_mastery(riot_accounts, client)
+            result = summarize_mastery(riot_accounts, client, True)
+            Clogger.debug(result)
+
             return render_template("index.html", accounts=accounts, result=result, regions=Region)
 
     return render_template("index.html", accounts=session.get('accounts', []), regions=Region)
