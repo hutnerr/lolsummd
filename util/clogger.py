@@ -2,35 +2,62 @@ import sys
 import time
 from colorama import Fore, Style, Back, init
 from functools import wraps
+import inspect
 import os
-
 init(autoreset=True)
 
 class Clogger:
-    debugEnabled = True
-    disabled = False
+    debugEnabled  = True
+    disabled      = False
     useTimestamps = True
-    force_flush = True
+    simpleTimestamp = True
+    showSource    = True
+    force_flush   = True
 
     @staticmethod
     def _getTimestamp():
         """Get formatted timestamp."""
-        if Clogger.useTimestamps:
-            return f"{Back.BLACK}{Fore.GREEN}{time.strftime('%Y-%m-%d %H:%M:%S EST', time.localtime())}{Back.RESET} "
-        return ""
+        if not Clogger.useTimestamps:
+            return ""
+        if Clogger.simpleTimestamp:
+            ts = time.strftime('%H:%M:%S', time.localtime())
+        else:
+            ts = time.strftime('%Y-%m-%d %H:%M:%S EST', time.localtime())
+        return f"{Back.BLACK}{Fore.GREEN}{ts}{Style.RESET_ALL} "
+
+    @staticmethod
+    def _getCaller() -> str:
+        """Walk up the stack to find the first frame outside of Clogger."""
+        frame = inspect.currentframe()
+        while frame:
+            filename = os.path.basename(frame.f_code.co_filename)
+            if filename != "clogger.py":
+                return f"{filename}:{frame.f_lineno}"
+            frame = frame.f_back
+        return "unknown"
 
     @staticmethod
     def _log(tag: str, msg: str, color: str = ""):
-        """Internal logging method."""
-        if not Clogger.disabled:
-            timestamp = Clogger._getTimestamp()
-            print(f"{timestamp}{color}{tag:<8}{Style.RESET_ALL} | {msg}", flush=Clogger.force_flush)
+        if Clogger.disabled:
+            return
+
+        timestamp = Clogger._getTimestamp()
+
+        if Clogger.showSource:
+            caller = Clogger._getCaller()
+            source = f" {Fore.WHITE}{Style.DIM}{caller}{Style.RESET_ALL} |"
+        else:
+            source = ""
+
+        print(
+            f"{timestamp}{color}{tag:<8}{Style.RESET_ALL} |{source} {msg}",
+            flush=Clogger.force_flush
+        )
 
     @staticmethod
     def log(tag: str, msg: str):
         """Log with custom tag."""
-        formattedTag = f"[{tag.upper()}]"
-        Clogger._log(formattedTag, msg, Fore.CYAN)
+        Clogger._log(f"[{tag.upper()}]", msg, Fore.CYAN)
 
     @staticmethod
     def error(msg: str):
@@ -70,15 +97,8 @@ class Clogger:
                 raise
         return wrapper
 
+
 # disable colors automatically if not in a TTY
 if not sys.stdout.isatty():
-    Fore.GREEN = Fore.RED = Fore.CYAN = Fore.BLUE = Fore.MAGENTA = Fore.YELLOW = Back.BLACK = Style.RESET_ALL = ""
-
-# USAGE EXAMPLE
-if __name__ == "__main__":
-    Clogger.info("Initialized Clogger")
-    Clogger.log("state", "Player changed state")
-    Clogger.error("X went wrong")
-    Clogger.debug("This is a debug message")
-    Clogger.action("User clicked button")
-    Clogger.warn("This is a warning message")
+    Fore.GREEN = Fore.RED = Fore.CYAN = Fore.BLUE = Fore.MAGENTA = Fore.YELLOW = ""
+    Back.BLACK = Back.RESET = Style.RESET_ALL = Style.DIM = ""

@@ -3,7 +3,7 @@ import requests
 
 from typing import Optional
 from util.cache.cache_interface import CacheInterface
-from util.cache.json_cache import JsonCache
+from util.cache.redis_cache import RedisCache
 from util.clogger import Clogger
 from util.response_helper import check_response
 from models.account import Account
@@ -24,7 +24,7 @@ class RiotAPIClient:
             raise ValueError("API key is too short")
 
         self.key: str = key
-        self.cache: CacheInterface = cache or JsonCache()
+        self.cache: CacheInterface = cache or RedisCache()
         self.championIDs: dict[str, str] = get_champion_ids_saved()
         self.championIDsToIcons: dict[str, str] = get_champion_icons_saved()
 
@@ -35,7 +35,7 @@ class RiotAPIClient:
         pass
 
     def get_account_by_summoner_name(self, username: str, tag: str, region: Region) -> Optional[Account]:
-        cached_data = self.cache.get_by_name(username, tag)
+        cached_data = self.cache.get_by_name(username, tag, region)
         if cached_data:
             Clogger.debug(f"Cache hit for {username}#{tag}")
             cached_data['region'] = Region(cached_data['region'])
