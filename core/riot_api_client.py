@@ -3,6 +3,7 @@ import requests
 
 from typing import Optional
 from util.cache.cache_interface import CacheInterface
+from util.time_helper import *
 from util.cache.redis_cache import RedisCache
 from util.clogger import Clogger
 from util.response_helper import check_response
@@ -27,6 +28,7 @@ class RiotAPIClient:
         self.cache: CacheInterface = cache or RedisCache()
         self.championIDs: dict[str, str] = get_champion_ids_saved()
         self.championIDsToIcons: dict[str, str] = get_champion_icons_saved()
+        self.masteryCacheDuration = TimeUnit.DAY1
 
         Clogger.info("RiotAPIClient initialized")
 
@@ -39,7 +41,12 @@ class RiotAPIClient:
         if cached_data:
             Clogger.debug(f"Cache hit for {username}#{tag}")
             cached_data['region'] = Region(cached_data['region'])
-            return Account(**cached_data)
+            return Account(
+                puuid=cached_data["puuid"],
+                username=cached_data["username"],
+                tag=cached_data["tag"],
+                region=cached_data["region"]
+            )
 
         try:
             url = build_platform_url_from_region(
@@ -60,7 +67,7 @@ class RiotAPIClient:
                 return None
 
             account = Account(puuid=data["puuid"], username=username, tag=tag, region=region)
-            self.cache.set(data["puuid"], account.__dict__)
+            self.cache.set(data["puuid"], {**account.__dict__, "region": region.value})
             return account
 
         except Exception as e:
@@ -94,29 +101,54 @@ class RiotAPIClient:
 
         return accounts
 
+    def _get_cached_mastery(self, puuid: str) -> Optional[dict]:
+        if not self.cache.has(puuid):
+            return None
+        
+        cached_data = self.cache.get(puuid)
+        mastery_cache = (cached_data or {}).get("masterydata", {})
+
+        if not mastery_cache.get("cached_at"):
+            return None
+        if not is_cache_valid(mastery_cache["cached_at"], self.masteryCacheDuration):
+            return None
+
+        return mastery_cache.get("champions") or None
+
+
     def get_mastery_all_champions(self, account: Account) -> dict[int, dict[str, int]]:
-        url = build_regional_url(
-            account.region,
-            ApiPath.MASTERY_BY_PUUID,
-            puuid=account.puuid
-        )
+        if not account or not account.puuid:
+            Clogger.error("Invalid account provided for mastery fetch")
+            return {}
+
+        cached = self._get_cached_mastery(account.puuid)
+        if cached:
+            Clogger.debug(f"Cache hit for mastery: {account.username}#{account.tag}")
+            return cached
+
+        url = build_regional_url(account.region, ApiPath.MASTERY_BY_PUUID, puuid=account.puuid)
 
         try:
             response = requests.get(url, params={"api_key": self.key}, timeout=5)
-
             if not check_response(response):
                 return {}
 
-            data = {}
-            for item in response.json():
-                champ_id = item.get("championId")
-                data[champ_id] = {
-                    "id":          champ_id,
+            champions = {
+                item["championId"]: {
+                    "id":          item.get("championId"),
                     "level":       item.get("championLevel"),
                     "points":      item.get("championPoints"),
                     "last_played": item.get("lastPlayTime"),
                 }
-            return data
+                for item in response.json()
+                if "championId" in item
+            }
+
+            cached_account = self.cache.get(account.puuid) or {}
+            cached_account["masterydata"] = {"cached_at": get_linux_timestamp(), "champions": champions}
+            self.cache.set(account.puuid, cached_account)
+
+            return champions
 
         except Exception as e:
             Clogger.error(f"Error fetching mastery data: {e}")

@@ -4,7 +4,8 @@ from colorama import Fore, Style, Back, init
 from functools import wraps
 import inspect
 import os
-init(autoreset=True)
+
+init(autoreset=True) # this is for colorama
 
 class Clogger:
     debugEnabled  = True

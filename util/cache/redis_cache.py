@@ -4,15 +4,14 @@ import redis
 from typing import Optional, Dict, Any
 from util.cache.cache_interface import CacheInterface
 from util.clogger import Clogger
+from util.env_loader import get_env
 
 
 class RedisCache(CacheInterface):
     def __init__(self, host: str = "localhost", port: int = 6379, db: int = 0,
         password: Optional[str] = None, ttl: Optional[int] = None, key_prefix: str = "cache:"):
-        redis_url = os.environ.get("REDIS_URL")
-        if not redis_url:
-            Clogger.error("REDIS_URL ENV NOT SET!!")
-
+        redis_url = get_env("REDIS_URL")
+        
         self._client = (
             redis.Redis.from_url(redis_url, decode_responses=True)
             if redis_url
@@ -36,9 +35,11 @@ class RedisCache(CacheInterface):
         return f"{self._prefix}accounts:{puuid}"
 
     def _name_key(self, username: str, tag: str, region: str) -> str:
-        """Redis key for a name-index entry. Region included to support
-        accounts with identical username#tag across different regions.
-        """
+        # normalize Region enums or "Region.NA1"-style strings to their raw value
+        if hasattr(region, 'value'):
+            region = region.value
+        elif isinstance(region, str) and region.startswith("Region."):
+            region = region.split(".")[-1].lower()
         return f"{self._prefix}name_index:{username}#{tag}#{region}"
 
     def _serialize(self, value: Dict[str, Any]) -> str:

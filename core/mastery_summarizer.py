@@ -7,7 +7,6 @@ def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMet
     # combine the mastery points and levels
     calculated_mastery = {}
     for acc in accounts:
-        Clogger.debug(acc)
         total_mastery = client.get_mastery_all_champions(acc)
 
         for id in total_mastery:
