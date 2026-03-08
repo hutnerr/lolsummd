@@ -51,6 +51,26 @@ REGION_TO_PLATFORM: dict[Region, Platform] = {
     Region.VN2:   Platform.SEA,
 }
 
+# warning: these might be wrong lol
+REGION_TO_DEFAULT_TAG = {
+    Region.NA1:   "NA1",
+    Region.BR1:   "BR1",
+    Region.LA1:   "LA1",
+    Region.LA2:   "LA2",
+    Region.EUW1:  "EUW1",
+    Region.EUNE1: "EUN1",
+    Region.TR1:   "TR1",
+    Region.RU:    "RU",
+    Region.KR:    "KR",
+    Region.JP1:   "JP1",
+    Region.OC1:   "OC1",
+    Region.PH2:   "PH2",
+    Region.SG2:   "SG2",
+    Region.TH2:   "TH2",
+    Region.TW2:   "TW2",
+    Region.VN2:   "VN2",
+}
+
 BASE_URL = "https://{host}.api.riotgames.com"
 
 # For endpoints tied to a single server: summoner, mastery, league, etc.

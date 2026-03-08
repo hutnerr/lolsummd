@@ -61,7 +61,7 @@ def get_champion_icons_saved() -> dict:
     for champ_id, champ_name in ids.items():
         filepath = os.path.join(CHAMP_ICON_DIRPATH, f"{champ_id}.png")
         if os.path.exists(filepath):
-            icons[champ_id] = filepath
+            icons[champ_id] = "/" + filepath
         else:
             Clogger.warn(f"Icon for champion ID {champ_id} not found in {CHAMP_ICON_DIRPATH}")
     return icons

@@ -25,10 +25,10 @@ except Exception as e:
 account_info = [
     # ("username", "tag", Region.XXX)
     ("wizwizwizz", "1256", Region.NA1),
-    ("the inescapable", "RAT", Region.EUW1),
-    ("KC NEXT ADKING", "EUW", Region.EUW1),
-    ("TFBlade", "122", Region.NA1),
-    ("DK ShowMaker", "KR1", Region.KR)
+    # ("the inescapable", "RAT", Region.EUW1),
+    # ("KC NEXT ADKING", "EUW", Region.EUW1),
+    # ("TFBlade", "122", Region.NA1),
+    # ("DK ShowMaker", "KR1", Region.KR)
 ]
 
 accounts = client.get_accounts_by_names(account_info)
