@@ -110,6 +110,7 @@ main { flex: 1; }
   padding: 9px 14px;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
+  min-width: 0;
 }
 #addAccountForm input[type="text"]::placeholder { color: var(--bg3); font-style: italic; }
 #addAccountForm input[type="text"]:focus {
@@ -119,6 +120,35 @@ main { flex: 1; }
 
 #addAccountForm #username { flex: 3; }
 #addAccountForm #tag { flex: 1; text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* Region select */
+#addAccountForm select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a89984' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  border: 1px solid var(--bg3);
+  border-radius: 8px;
+  color: var(--fg);
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  padding: 9px 34px 9px 14px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  flex: 1.2;
+  min-width: 0;
+}
+#addAccountForm select:focus {
+  border-color: var(--yellow-d);
+  box-shadow: 0 0 0 3px #d7992130;
+}
+#addAccountForm select option {
+  background-color: var(--bg1);
+  color: var(--fg);
+}
 
 /* Buttons */
 .btn {
@@ -142,7 +172,7 @@ main { flex: 1; }
 
 /* Accounts list */
 #accounts { margin-top: 20px; }
-#accounts > .centered { display: flex; justify-content: center; gap: 10px; margin-bottom: 18px; }
+#accounts > .centered { display: flex; justify-content: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
 #accounts ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 #accounts li {
   display: flex;
@@ -153,12 +183,14 @@ main { flex: 1; }
   border: 1px solid var(--bg2);
   border-radius: 10px;
   transition: background 0.15s, box-shadow 0.15s;
+  gap: 10px;
 }
 #accounts li:hover { background: var(--bg2); box-shadow: 0 2px 8px #0004; }
 
-.account-name { display: flex; align-items: center; gap: 4px; font-size: 14px; }
-.account-name .hash { color: var(--bg3); font-size: 12px; }
-.account-name .tag  { color: var(--yellow); font-size: 12px; letter-spacing: 0.08em; }
+.account-name { display: flex; align-items: center; gap: 4px; font-size: 14px; flex-wrap: wrap; }
+.account-name .hash   { color: var(--bg3); font-size: 12px; }
+.account-name .tag    { color: var(--yellow); font-size: 12px; letter-spacing: 0.08em; }
+.account-name .region { color: var(--fg3); font-size: 11px; letter-spacing: 0.06em; margin-left: 2px; }
 
 /* Output table */
 #output { margin-top: 36px; }
@@ -170,7 +202,15 @@ main { flex: 1; }
   color: var(--yellow);
   margin-bottom: 20px;
 }
-#output table { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 14px; }
+
+#output table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 6px;
+  font-size: 14px;
+  table-layout: fixed;
+}
+
 #output thead th {
   font-family: 'Syne', sans-serif;
   font-size: 10px;
@@ -178,19 +218,58 @@ main { flex: 1; }
   text-transform: uppercase;
   color: var(--fg3);
   padding: 8px 14px;
-  text-align: left;
 }
+
+/* # column is narrow; champion/level/points each get an equal third of the rest */
+#output thead th:nth-child(1),
+#output tbody td:nth-child(1) { width: 44px; text-align: left; }
+
+#output thead th:nth-child(2),
+#output tbody td:nth-child(2) { width: calc((100% - 44px) / 3); text-align: left; }
+
+#output thead th:nth-child(3),
+#output tbody td:nth-child(3) { width: calc((100% - 44px) / 3); text-align: center; }
+
+#output thead th:nth-child(4),
+#output tbody td:nth-child(4) { width: calc((100% - 44px) / 3); text-align: right; }
+
 #output tbody tr {
   background: var(--bg1);
   border-radius: 10px;
   transition: background 0.1s, box-shadow 0.1s;
 }
 #output tbody tr:hover { background: var(--bg2); box-shadow: 0 2px 8px #0004; }
-#output tbody td { padding: 10px 14px; color: var(--fg); }
-#output tbody td:first-child { color: var(--fg3); font-style: italic; font-size: 12px; width: 44px; border-radius: 10px 0 0 10px; }
-#output tbody td:nth-child(2) { font-weight: 700; }
-#output tbody td:last-child { color: var(--yellow); text-align: right; border-radius: 0 10px 10px 0; }
-#output tbody td img { height: 30px; width: 30px; border-radius: 50%; border: 2px solid var(--bg3); margin-right: 10px; vertical-align: middle; }
+
+#output tbody td {
+  padding: 10px 14px;
+  color: var(--fg);
+  vertical-align: middle;
+}
+#output tbody td:first-child {
+  color: var(--fg3);
+  font-style: italic;
+  font-size: 12px;
+  border-radius: 10px 0 0 10px;
+}
+#output tbody td:last-child {
+  color: var(--yellow);
+  border-radius: 0 10px 10px 0;
+}
+
+/* Champion cell: icon + name inline */
+.champion-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+.champion-cell img {
+  flex-shrink: 0;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--bg3);
+}
 
 /* Mastery badges */
 .mastery-badge {
@@ -207,8 +286,6 @@ main { flex: 1; }
 
 /* Footer */
 footer {
-  background: var(--bg1);
-  border-top: 2px solid var(--yellow-d);
   padding: 18px 24px;
   text-align: center;
 }
@@ -248,4 +325,48 @@ footer .footer-links li a:active { color: var(--yellow-d); }
 .kofi-btn { display: inline-block; margin-top: 6px; border-radius: 8px; transition: opacity 0.15s; }
 .kofi-btn:hover { opacity: 0.85; }
 
+/* =====================
+   Mobile responsiveness
+   ===================== */
+@media (max-width: 600px) {
+  /* Nav */
+  nav { padding: 0 16px; height: 54px; }
+  #title a { font-size: 18px; }
+  nav ul { gap: 16px; }
 
+  /* Container */
+  .container { padding: 28px 16px 48px; }
+
+  /* Form: stack inputs vertically */
+  #addAccountForm {
+    flex-direction: column;
+    padding: 16px;
+  }
+  #addAccountForm .input-box {
+    flex-wrap: wrap;
+  }
+  #addAccountForm #username { flex: 1 1 100%; }
+  #addAccountForm #tag      { flex: 1 1 calc(40% - 5px); }
+  #addAccountForm select    { flex: 1 1 calc(60% - 5px); }
+  #addAccountForm .btn      { width: 100%; }
+
+  /* Accounts list */
+  #accounts li { padding: 10px 14px; }
+  .account-name { font-size: 13px; }
+
+  /* Table: hide # column, shrink level */
+  #output thead th:nth-child(1),
+  #output tbody td:nth-child(1) { display: none; }
+
+  /* columns stay equal thirds on mobile too */
+
+  #output tbody td { padding: 10px 10px; }
+
+  .champion-cell { gap: 8px; font-size: 13px; }
+  .champion-cell img { height: 26px; width: 26px; }
+
+  .mastery-badge { padding: 3px 7px; font-size: 10px; }
+
+  /* Error page */
+  .error-code { font-size: 64px; }
+}

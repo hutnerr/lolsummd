@@ -5,7 +5,7 @@ from werkzeug.exceptions import HTTPException
 from core.riot_api_client import RiotAPIClient
 from util.clogger import Clogger
 from core.mastery_summarizer import summarize_mastery
-from core.endpoint_builder import Region
+from core.endpoint_builder import Region, REGION_TO_DEFAULT_TAG
 from core.ddragon_helper import get_champion_icons_saved
 
 Clogger.debugEnabled = True
@@ -40,6 +40,8 @@ Clogger.info("Flask app initialized")
 # routes
 @app.route("/", methods=["GET", "POST"])
 def home():
+    region_default_tags = {r.value: tag for r, tag in REGION_TO_DEFAULT_TAG.items()}
+
     if 'accounts' not in session:
         session['accounts'] = []
 
@@ -55,7 +57,7 @@ def home():
                 region = Region(region_str)
             except (ValueError, KeyError):
                 Clogger.error(f"Invalid region value received: {region_str}")
-                return render_template("index.html", accounts=session.get('accounts', []), regions=Region, error="Invalid region selected.")
+                return render_template("index.html", accounts=session.get('accounts', []), regions=Region, region_default_tags=region_default_tags, error="Invalid region selected.")
 
             Clogger.debug(f"Received form data - Username: {username}, Tag: {tag}, Region: {region}")
             Clogger.debug("Type of data received from form: typeof(username): {}, typeof(tag): {}, typeof(region): {}".format(
@@ -74,7 +76,7 @@ def home():
                 remove_index = int(request.form.get("remove_index"))
             except (TypeError, ValueError):
                 Clogger.error("Invalid remove_index received.")
-                return render_template("index.html", accounts=session.get('accounts', []), regions=Region, error="Invalid remove index.")
+                return render_template("index.html", accounts=session.get('accounts', []), regions=Region, region_default_tags=region_default_tags, error="Invalid remove index.")
 
             if 0 <= remove_index < len(session['accounts']):
                 session['accounts'].pop(remove_index)
@@ -87,16 +89,16 @@ def home():
         elif action == "submit_all":
             accounts = session['accounts']
             if not accounts:
-                return render_template("index.html", accounts=accounts, regions=Region)
+                return render_template("index.html", accounts=accounts, regions=Region, region_default_tags=region_default_tags)
 
             deserialized_accounts = [(a[0], a[1], Region(a[2])) for a in accounts]
             riot_accounts = client.get_accounts_by_names(deserialized_accounts)
             result = summarize_mastery(riot_accounts, client, True)
             Clogger.debug(result)
 
-            return render_template("index.html", accounts=accounts, result=result, regions=Region)
+            return render_template("index.html", accounts=accounts, result=result, regions=Region, region_default_tags=region_default_tags)
 
-    return render_template("index.html", accounts=session.get('accounts', []), regions=Region)
+    return render_template("index.html", accounts=session.get('accounts', []), regions=Region, region_default_tags=region_default_tags)
 
 
 @app.errorhandler(HTTPException)

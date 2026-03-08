@@ -88,15 +88,14 @@
 <form method="POST" action="/" id="addAccountForm">
   <div class="input-box">
     <input id="username" type="text" name="username" placeholder="Summoner Name" required>
-    <input id="tag" type="text" name="tag" placeholder="TAG" required maxlength="5">
+    <input id="tag" type="text" name="tag" placeholder="" maxlength="5">
 
     <select name="region" id="region" required>
-      <option value="" disabled selected>Select Region</option>
-
       {% for region in regions %}
-        <option value="{{ region.value }}">{{ region.name }}</option>
+        <option value="{{ region.value }}" data-default-tag="{{ region_default_tags[region.value] }}">
+          {{ region.name }}
+        </option>
       {% endfor %}
-
     </select>
   </div>
   <button type="submit" class="btn btn-primary">Add Account</button>
@@ -144,7 +143,7 @@
       <tr>
         <th>#</th>
         <th>Champion</th>
-        <th>Level</th>
+        <th style="text-align:center">Level</th>
         <th style="text-align:right">Points</th>
       </tr>
     </thead>
@@ -152,12 +151,7 @@
       {% for champ_name, mastery_data in result %}
       <tr>
         <td>{{ loop.index }}</td>
-        <td>
-          {% if mastery_data['icon'] %}
-            <img src="{{ mastery_data['icon'] }}" alt="{{ champ_name }}">
-          {% endif %}
-        </td>
-        <td>{{ champ_name }}</td>
+        <td class="champion-cell">{% if mastery_data['icon'] %}<img src="{{ mastery_data['icon'] }}" alt="{{ champ_name }}">{% endif %}{{ champ_name }}</td>
         <td>
           {% if mastery_data['level'] >= 7 %}
             <span class="mastery-badge mastery-level-7">{{ mastery_data['level'] }}</span>
@@ -199,6 +193,7 @@
     <div class="help-section">
       <h3>Instructions</h3>
       <p>Add accounts by entering a username and tag — for example, <span class="inline-code">SummonerName#NA1</span> becomes <span class="inline-code">SummonerName</span> and <span class="inline-code">NA1</span>.</p>
+      <p>The TAG field will default to the standard tag for the selected region if left blank.</p>
       <p>Once you've added your accounts, click <span class="inline-label">Get Combined Mastery</span> to retrieve the aggregated data.</p>
       <p>Remove individual accounts with the <span class="inline-label">Remove</span> button, or wipe the whole list with <span class="inline-label">Clear All</span>.</p>
     </div>
@@ -206,6 +201,26 @@
 </div>
 
 <script>
+  // Tag placeholder + auto-fill logic
+  const tagInput = document.getElementById('tag');
+  const regionSelect = document.getElementById('region');
+
+  function updateTagPlaceholder() {
+    const selected = regionSelect.options[regionSelect.selectedIndex];
+    tagInput.placeholder = selected?.dataset.defaultTag || '';
+  }
+
+  regionSelect.addEventListener('change', updateTagPlaceholder);
+  updateTagPlaceholder();
+
+  document.getElementById('addAccountForm').addEventListener('submit', function () {
+    if (!tagInput.value.trim()) {
+      const selected = regionSelect.options[regionSelect.selectedIndex];
+      tagInput.value = selected?.dataset.defaultTag || '';
+    }
+  });
+
+  // Help modal logic
   function openHelp() {
     document.getElementById('helpModal').classList.add('active');
     document.body.style.overflow = 'hidden';
