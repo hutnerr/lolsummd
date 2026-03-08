@@ -3,7 +3,7 @@
 {% block content %}
 
 <style>
-  /* Help Button */
+  /* ── Help Button ── */
   .help-btn {
     position: fixed;
     bottom: 24px;
@@ -21,30 +21,23 @@
     z-index: 100;
     transition: transform 0.15s ease, opacity 0.15s ease;
   }
-  .help-btn:hover {
-    transform: scale(1.1);
-    opacity: 0.9;
-  }
+  .help-btn:hover { transform: scale(1.1); opacity: 0.9; }
 
-  /* Modal Overlay */
+  /* ── Modal ── */
   .modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0,0,0,0.6);
     z-index: 200;
     align-items: center;
     justify-content: center;
     padding: 20px;
   }
-  .modal-overlay.active {
-    display: flex;
-  }
-
-  /* Modal Box */
+  .modal-overlay.active { display: flex; }
   .modal {
-    background: var(--bg, #1a1a2e);
-    border: 1px solid var(--border, rgba(255,255,255,0.12));
+    background: var(--bg);
+    border: 1px solid var(--bg2);
     border-radius: 12px;
     padding: 32px;
     max-width: 560px;
@@ -56,28 +49,124 @@
   }
   @keyframes modalIn {
     from { opacity: 0; transform: translateY(12px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
   }
-
   .modal-close {
-    position: absolute;
-    top: 14px;
-    right: 16px;
-    background: none;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    opacity: 0.5;
-    line-height: 1;
-    padding: 4px 8px;
-    border-radius: 4px;
+    position: absolute; top: 14px; right: 16px;
+    background: none; border: none; font-size: 22px; cursor: pointer;
+    opacity: 0.5; line-height: 1; padding: 4px 8px; border-radius: 4px;
     transition: opacity 0.15s;
   }
   .modal-close:hover { opacity: 1; }
-
   .modal .page-heading { margin-top: 0; }
   .modal .help-section { margin-bottom: 20px; }
   .modal .divider { margin: 18px 0; }
+
+  /* ── Inline feedback messages ── */
+  .msg {
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .msg.visible { display: block; }
+  .msg-error   { background: #3c1f1e; color: var(--red);   border: 1px solid #7c2828; }
+  .msg-success { background: #1e3020; color: var(--green); border: 1px solid var(--green-d); }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+  /* ── Top 3 Showcase ── */
+  #showcase { display: none; margin-bottom: 0; }
+  #showcase.visible { display: block; }
+
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr 1fr;
+    gap: 10px;
+    align-items: end;
+  }
+
+  .showcase-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--bg2);
+    aspect-ratio: 2/3;
+    background: var(--bg1);
+  }
+  .showcase-card.rank-1 { border-color: var(--yellow-s); box-shadow: 0 0 24px #d7992128; }
+  .showcase-card.rank-2, .showcase-card.rank-3 { border-color: var(--bg3); }
+
+  .showcase-splash {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+    display: block;
+    filter: brightness(0.7);
+    transition: filter 0.3s ease;
+  }
+  .showcase-card:hover .showcase-splash { filter: brightness(0.85); }
+
+  .showcase-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 28px 14px 14px;
+    background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .showcase-rank {
+    font-family: 'Syne', sans-serif; font-size: 11px;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg3);
+  }
+  .showcase-card.rank-1 .showcase-rank { color: var(--yellow); }
+  .showcase-name {
+    font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--fg);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .showcase-card.rank-1 .showcase-name { font-size: 18px; }
+  .showcase-points { font-size: 12px; color: var(--yellow); font-weight: 700; }
+  .showcase-badge { position: absolute; top: 10px; right: 10px; }
+
+  /* ── Sort controls ── */
+  .sort-controls {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .sort-controls span {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--fg3); font-family: 'Syne', sans-serif;
+  }
+  .sort-btn {
+    font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700;
+    padding: 4px 12px; border-radius: 6px; border: 1px solid var(--bg3);
+    background: var(--bg1); color: var(--fg3); cursor: pointer;
+    transition: all 0.15s; display: flex; align-items: center; gap: 4px;
+  }
+  .sort-btn:hover { background: var(--bg2); color: var(--fg); }
+  .sort-btn.active { background: var(--bg2); color: var(--yellow); border-color: var(--yellow-s); }
+  .sort-arrow { font-size: 10px; }
+
+  /* ── Not-found warning ── */
+  .not-found-banner {
+    background: #3a300e; color: var(--yellow);
+    border: 1px solid var(--yellow-s); border-radius: 8px;
+    padding: 10px 16px; font-size: 13px; margin-bottom: 16px;
+  }
+
+  /* ── Loading spinner ── */
+  .spinner {
+    display: inline-block; width: 16px; height: 16px;
+    border: 2px solid var(--bg3); border-top-color: var(--yellow);
+    border-radius: 50%; animation: spin 0.6s linear infinite;
+    vertical-align: middle; margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 600px) {
+    .showcase-grid { grid-template-columns: 1fr 1.1fr 1fr; gap: 6px; }
+    .showcase-name { font-size: 13px; }
+    .showcase-card.rank-1 .showcase-name { font-size: 15px; }
+    .showcase-points { font-size: 11px; }
+  }
 </style>
 
 <div class="page-heading">
@@ -85,12 +174,12 @@
   <p>Combine mastery data across multiple League of Legends accounts</p>
 </div>
 
-<form method="POST" action="/" id="addAccountForm">
+<!-- Add account form -->
+<div id="addAccountForm">
   <div class="input-box">
-    <input id="username" type="text" name="username" placeholder="Summoner Name" required>
-    <input id="tag" type="text" name="tag" placeholder="" maxlength="5">
-
-    <select name="region" id="region" required>
+    <input id="username" type="text" placeholder="Summoner Name">
+    <input id="tag" type="text" placeholder="" maxlength="5">
+    <select id="region">
       {% for region in regions %}
         <option value="{{ region.value }}" data-default-tag="{{ region_default_tags[region.value] }}">
           {{ region.name }}
@@ -98,143 +187,322 @@
       {% endfor %}
     </select>
   </div>
-  <button type="submit" class="btn btn-primary">Add Account</button>
-  <input type="hidden" name="action" value="add">
-</form>
+  <button id="addBtn" class="btn btn-primary">Add Account</button>
+</div>
+<div id="addMsg" class="msg"></div>
 
-<div id="accounts">
-  {% if accounts %}
+<!-- Accounts list -->
+<div id="accounts"></div>
+
+<!-- Top 3 Showcase -->
+<div id="showcase">
   <div class="divider"><span>✦</span></div>
-
-  <div class="centered" style="gap:10px; margin-bottom:18px;">
-    <form method="POST" action="/">
-      <input type="hidden" name="action" value="submit_all">
-      <button type="submit" class="btn btn-primary">Get Combined Mastery</button>
-    </form>
-    <form method="POST" action="/">
-      <input type="hidden" name="action" value="clear">
-      <button type="submit" class="btn btn-secondary">Clear All</button>
-    </form>
-  </div>
-
-  <ul>
-    {% for username, tag, region in accounts %}
-    <li>
-      <span class="account-name">
-        {{ username }}<span class="hash">#</span><span class="tag">{{ tag }}</span><span class="region"> ({{ region }})</span>
-      </span>
-      <form method="POST" action="/">
-        <input type="hidden" name="action" value="remove">
-        <input type="hidden" name="remove_index" value="{{ loop.index0 }}">
-        <button type="submit" class="btn btn-danger">Remove</button>
-      </form>
-    </li>
-    {% endfor %}
-  </ul>
-  {% endif %}
+  <div class="showcase-grid" id="showcaseGrid"></div>
 </div>
 
-{% if result %}
-<div id="output">
-  <div class="divider"><span>✦</span></div>
-  <h3>Combined Mastery</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Champion</th>
-        <th style="text-align:center">Level</th>
-        <th style="text-align:right">Points</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for champ_name, mastery_data in result %}
-      <tr>
-        <td>{{ loop.index }}</td>
-        <td class="champion-cell">{% if mastery_data['icon'] %}<img src="{{ mastery_data['icon'] }}" alt="{{ champ_name }}">{% endif %}{{ champ_name }}</td>
-        <td>
-          {% if mastery_data['level'] >= 7 %}
-            <span class="mastery-badge mastery-level-7">{{ mastery_data['level'] }}</span>
-          {% elif mastery_data['level'] >= 5 %}
-            <span class="mastery-badge mastery-level-5">{{ mastery_data['level'] }}</span>
-          {% else %}
-            <span class="mastery-badge mastery-level-lo">{{ mastery_data['level'] }}</span>
-          {% endif %}
-        </td>
-        <td>{{ "{:,}".format(mastery_data['points']) }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% else %}
+<!-- Results -->
 <div id="output"></div>
-{% endif %}
 
+<!-- Help button -->
 <button class="help-btn btn btn-secondary" onclick="openHelp()" aria-label="Help">?</button>
 
+<!-- Help modal -->
 <div class="modal-overlay" id="helpModal" onclick="closeOnBackdrop(event)">
   <div class="modal" role="dialog" aria-modal="true" aria-label="Help">
     <button class="modal-close" onclick="closeHelp()" aria-label="Close">✕</button>
-
     <div class="page-heading">
       <h2>Help</h2>
       <p>Everything you need to get started</p>
     </div>
-
     <div class="help-section">
       <h3>Overview</h3>
       <p>lolsummd lets you combine the champion mastery data of multiple League of Legends accounts into one unified summary.</p>
       <p>You can add up to 10 accounts at a time from any region.</p>
     </div>
-
     <div class="divider"><span>✦</span></div>
-
     <div class="help-section">
       <h3>Instructions</h3>
       <p>Add accounts by entering a username and tag — for example, <span class="inline-code">SummonerName#NA1</span> becomes <span class="inline-code">SummonerName</span> and <span class="inline-code">NA1</span>.</p>
       <p>The TAG field will default to the standard tag for the selected region if left blank.</p>
       <p>Once you've added your accounts, click <span class="inline-label">Get Combined Mastery</span> to retrieve the aggregated data.</p>
+      <p>Use the sort buttons above the table to sort by Champion name, Level, or Points.</p>
       <p>Remove individual accounts with the <span class="inline-label">Remove</span> button, or wipe the whole list with <span class="inline-label">Clear All</span>.</p>
     </div>
   </div>
 </div>
 
 <script>
-  // Tag placeholder + auto-fill logic
-  const tagInput = document.getElementById('tag');
-  const regionSelect = document.getElementById('region');
+// ── State ──────────────────────────────────────────────────────────────────
+let accounts   = [];
+let resultData = [];
+let sortKey    = 'points';
+let sortAsc    = false;
 
-  function updateTagPlaceholder() {
-    const selected = regionSelect.options[regionSelect.selectedIndex];
-    tagInput.placeholder = selected?.dataset.defaultTag || '';
+const DDRAGON_SPLASH = 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash';
+
+// ── DOM refs ───────────────────────────────────────────────────────────────
+const usernameInput = document.getElementById('username');
+const tagInput      = document.getElementById('tag');
+const regionSelect  = document.getElementById('region');
+const addBtn        = document.getElementById('addBtn');
+const addMsg        = document.getElementById('addMsg');
+
+// ── Tag placeholder ────────────────────────────────────────────────────────
+function updateTagPlaceholder() {
+  const sel = regionSelect.options[regionSelect.selectedIndex];
+  tagInput.placeholder = sel?.dataset.defaultTag || '';
+}
+regionSelect.addEventListener('change', updateTagPlaceholder);
+updateTagPlaceholder();
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showMsg(text, type) {
+  addMsg.textContent = text;
+  addMsg.className = `msg ${type} visible`;
+}
+function clearMsg() { addMsg.className = 'msg'; addMsg.textContent = ''; }
+
+function masteryBadgeHtml(level) {
+  const cls = level >= 7 ? 'mastery-level-7' : level >= 5 ? 'mastery-level-5' : 'mastery-level-lo';
+  return `<span class="mastery-badge ${cls}">${level}</span>`;
+}
+
+function splashUrl(champName) {
+  const key = champName.replace(/[^a-zA-Z0-9]/g, '');
+  return `${DDRAGON_SPLASH}/${key}_0.jpg`;
+}
+
+// ── Render accounts list ───────────────────────────────────────────────────
+function renderAccounts() {
+  const container = document.getElementById('accounts');
+  if (!accounts.length) { container.innerHTML = ''; return; }
+
+  const items = accounts.map((a, i) => `
+    <li>
+      <span class="account-name">
+        ${escHtml(a[0])}<span class="hash">#</span><span class="tag">${escHtml(a[1])}</span><span class="region"> (${escHtml(a[2])})</span>
+      </span>
+      <button class="btn btn-danger" onclick="removeAccount(${i})">Remove</button>
+    </li>
+  `).join('');
+
+  container.innerHTML = `
+    <div class="divider"><span>✦</span></div>
+    <div class="centered" style="gap:10px; margin-bottom:18px; flex-wrap:wrap;">
+      <button class="btn btn-primary" id="submitBtn" onclick="submitAll()">Get Combined Mastery</button>
+      <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+    </div>
+    <ul>${items}</ul>
+  `;
+}
+
+// ── Add account ────────────────────────────────────────────────────────────
+addBtn.addEventListener('click', async () => {
+  let username = usernameInput.value.trim();
+  let tag      = tagInput.value.trim();
+  const region = regionSelect.value;
+
+  if (!username) { showMsg('Please enter a summoner name.', 'msg-error'); return; }
+  if (!tag) {
+    const sel = regionSelect.options[regionSelect.selectedIndex];
+    tag = sel?.dataset.defaultTag || '';
   }
 
-  regionSelect.addEventListener('change', updateTagPlaceholder);
-  updateTagPlaceholder();
+  clearMsg();
+  addBtn.disabled = true;
+  addBtn.innerHTML = '<span class="spinner"></span>Checking…';
 
-  document.getElementById('addAccountForm').addEventListener('submit', function () {
-    if (!tagInput.value.trim()) {
-      const selected = regionSelect.options[regionSelect.selectedIndex];
-      tagInput.value = selected?.dataset.defaultTag || '';
+  try {
+    const res  = await fetch('/api/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, tag, region })
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      showMsg(data.error || 'Something went wrong.', 'msg-error');
+    } else {
+      accounts = data.accounts;
+      renderAccounts();
+      usernameInput.value = '';
+      tagInput.value = '';
+      showMsg(`${username}#${tag} added.`, 'msg-success');
     }
-  });
+  } catch (e) {
+    showMsg('Network error. Please try again.', 'msg-error');
+  } finally {
+    addBtn.disabled = false;
+    addBtn.textContent = 'Add Account';
+  }
+});
 
-  // Help modal logic
-  function openHelp() {
-    document.getElementById('helpModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeHelp() {
-    document.getElementById('helpModal').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-  function closeOnBackdrop(e) {
-    if (e.target === document.getElementById('helpModal')) closeHelp();
-  }
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeHelp();
+[usernameInput, tagInput].forEach(el => {
+  el.addEventListener('keydown', e => { if (e.key === 'Enter') addBtn.click(); });
+});
+
+// ── Remove account ─────────────────────────────────────────────────────────
+async function removeAccount(idx) {
+  const res  = await fetch('/api/remove', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ index: idx })
   });
+  const data = await res.json();
+  accounts = data.accounts;
+  renderAccounts();
+}
+
+// ── Clear all ──────────────────────────────────────────────────────────────
+async function clearAll() {
+  await fetch('/api/clear', { method: 'POST' });
+  accounts = [];
+  resultData = [];
+  renderAccounts();
+  document.getElementById('output').innerHTML = '';
+  document.getElementById('showcase').classList.remove('visible');
+  clearMsg();
+}
+
+// ── Submit all ─────────────────────────────────────────────────────────────
+async function submitAll() {
+  const btn = document.getElementById('submitBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Loading…'; }
+
+  document.getElementById('output').innerHTML = '';
+  document.getElementById('showcase').classList.remove('visible');
+
+  try {
+    const res  = await fetch('/api/submit', { method: 'POST' });
+    const data = await res.json();
+
+    if (!res.ok) {
+      showMsg(data.error || 'Failed to fetch mastery data.', 'msg-error');
+      return;
+    }
+
+    resultData = data.result;
+    renderShowcase(resultData);
+    renderTable(resultData, data.not_found || []);
+
+  } catch (e) {
+    showMsg('Network error. Please try again.', 'msg-error');
+  } finally {
+    const b = document.getElementById('submitBtn');
+    if (b) { b.disabled = false; b.textContent = 'Get Combined Mastery'; }
+  }
+}
+
+// ── Top 3 Showcase ─────────────────────────────────────────────────────────
+function renderShowcase(data) {
+  const top3 = [...data].sort((a, b) => b.points - a.points).slice(0, 3);
+  if (!top3.length) return;
+
+  // Podium order: 2nd left, 1st center, 3rd right
+  const podium = top3.length >= 3 ? [top3[1], top3[0], top3[2]]
+               : top3.length === 2 ? [top3[1], top3[0]]
+               : [top3[0]];
+  const rankLabels  = ['#2', '#1', '#3'];
+  const rankClasses = ['rank-2', 'rank-1', 'rank-3'];
+
+  document.getElementById('showcaseGrid').innerHTML = podium.map((champ, i) => `
+    <div class="showcase-card ${rankClasses[i]}">
+      <img class="showcase-splash"
+           src="${splashUrl(champ.name)}"
+           alt="${escHtml(champ.name)}"
+           onerror="this.style.display='none'">
+      <div class="showcase-badge">${masteryBadgeHtml(champ.level)}</div>
+      <div class="showcase-info">
+        <span class="showcase-rank">${rankLabels[i]}</span>
+        <span class="showcase-name">${escHtml(champ.name)}</span>
+        <span class="showcase-points">${champ.points.toLocaleString()} pts</span>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('showcase').classList.add('visible');
+}
+
+// ── Results table ──────────────────────────────────────────────────────────
+function renderTable(data, notFound = []) {
+  if (!data.length) { document.getElementById('output').innerHTML = ''; return; }
+
+  const notFoundHtml = notFound.length
+    ? `<div class="not-found-banner">⚠ Could not find: ${notFound.map(escHtml).join(', ')}</div>`
+    : '';
+
+  const rows = sortData(data).map((c, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td class="champion-cell">
+        ${c.icon ? `<img src="${escHtml(c.icon)}" alt="${escHtml(c.name)}">` : ''}
+        ${escHtml(c.name)}
+      </td>
+      <td>${masteryBadgeHtml(c.level)}</td>
+      <td>${c.points.toLocaleString()}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('output').innerHTML = `
+    <div class="divider"><span>✦</span></div>
+    <h3>Combined Mastery</h3>
+    ${notFoundHtml}
+    <div class="sort-controls">
+      <span>Sort by</span>
+      ${sortBtnHtml('name',   'Champion')}
+      ${sortBtnHtml('level',  'Level')}
+      ${sortBtnHtml('points', 'Points')}
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Champion</th>
+          <th style="text-align:center">Level</th>
+          <th style="text-align:right">Points</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function sortBtnHtml(key, label) {
+  const active = sortKey === key ? 'active' : '';
+  const arrow  = sortKey === key ? (sortAsc ? '▲' : '▼') : '';
+  return `<button class="sort-btn ${active}" onclick="setSort('${key}')">
+    ${label}<span class="sort-arrow">${arrow}</span>
+  </button>`;
+}
+
+function setSort(key) {
+  sortKey === key ? (sortAsc = !sortAsc) : (sortKey = key, sortAsc = key === 'name');
+  renderTable(resultData);
+}
+
+function sortData(data) {
+  return [...data].sort((a, b) => {
+    const cmp = sortKey === 'name'   ? a.name.localeCompare(b.name)
+              : sortKey === 'level'  ? a.level  - b.level
+              :                        a.points - b.points;
+    return sortAsc ? cmp : -cmp;
+  });
+}
+
+// ── Help modal ─────────────────────────────────────────────────────────────
+function openHelp() { document.getElementById('helpModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closeHelp() { document.getElementById('helpModal').classList.remove('active'); document.body.style.overflow = ''; }
+function closeOnBackdrop(e) { if (e.target === document.getElementById('helpModal')) closeHelp(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHelp(); });
+
+// ── Init ───────────────────────────────────────────────────────────────────
+renderAccounts();
 </script>
 
 {% endblock %}
