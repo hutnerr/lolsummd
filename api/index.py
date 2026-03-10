@@ -3,7 +3,7 @@ import sys
 from flask import Flask, render_template, request, session, jsonify
 from werkzeug.exceptions import HTTPException
 from core.riot_api_client import RiotAPIClient
-from util.clogger import Clogger
+from pyutils import Clogger
 from core.mastery_summarizer import summarize_mastery
 from core.endpoint_builder import Region, REGION_TO_DEFAULT_TAG
 from core.ddragon_helper import get_champion_icons_saved

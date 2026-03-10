@@ -1,7 +1,8 @@
 import os
 import json
 import requests
-from util.response_helper import *
+from pyutils import check_response
+from pyutils import Clogger
 
 CHAMP_ID_FILEPATH = os.path.join("static", "champ_ids.json")
 CHAMP_ICON_DIRPATH = os.path.join("static", "champion_icons")

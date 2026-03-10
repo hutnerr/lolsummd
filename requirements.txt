@@ -3,4 +3,5 @@ flask
 requests
 redis
 dotenv
+pyutils @ git+https://github.com/hutnerr/python-utils.git
 uv==0.9.22

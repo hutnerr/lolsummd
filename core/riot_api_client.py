@@ -5,8 +5,8 @@ from typing import Optional
 from util.cache.cache_interface import CacheInterface
 from util.time_helper import *
 from util.cache.redis_cache import RedisCache
-from util.clogger import Clogger
-from util.response_helper import check_response
+from pyutils import Clogger, CloggerOverrideFactory
+from pyutils import check_response
 from models.account import Account
 from core.endpoint_builder import Region, ApiPath, build_regional_url, build_platform_url_from_region
 from core.ddragon_helper import get_champion_ids_saved, get_champion_icons_saved
@@ -39,7 +39,7 @@ class RiotAPIClient:
     def get_account_by_summoner_name(self, username: str, tag: str, region: Region) -> Optional[Account]:
         cached_data = self.cache.get_by_name(username, tag, region)
         if cached_data:
-            Clogger.debug(f"Cache hit for {username}#{tag}")
+            Clogger.debug(f"Cache hit for account: {username}#{tag}")
             cached_data['region'] = Region(cached_data['region'])
             return Account(
                 puuid=cached_data["puuid"],
@@ -127,10 +127,17 @@ class RiotAPIClient:
             return cached
 
         url = build_regional_url(account.region, ApiPath.MASTERY_BY_PUUID, puuid=account.puuid)
+        params = {
+            "api_key": self.key,
+        }
+
+        Clogger.debug(f"Fetching mastery data from API for {account.username}#{account.tag} at URL: {url}")
+        # Clogger.debug(f"API params: {params}")
 
         try:
-            response = requests.get(url, params={"api_key": self.key}, timeout=5)
+            response = requests.get(url, params=params, timeout=5)
             if not check_response(response):
+                Clogger.warn(f"Failed to fetch mastery data for {account.username}#{account.tag}")
                 return {}
 
             champions = {

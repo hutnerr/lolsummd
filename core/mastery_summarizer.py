@@ -1,4 +1,4 @@
-from util.clogger import Clogger
+from pyutils import Clogger
 from models.account import Account
 from core.riot_api_client import RiotAPIClient
 
@@ -16,6 +16,7 @@ def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMet
             calculated_mastery[id]["level"] += total_mastery[id]['level']
             calculated_mastery[id]["points"] += total_mastery[id]['points']
 
+    Clogger.debug(f"Calculated mastery for {len(calculated_mastery)} champions across {len(accounts)} accounts.")
 
     if includeMetadata:
         for champ_id in calculated_mastery:
@@ -31,6 +32,8 @@ def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMet
             else:
                 Clogger.warn(f"Could not find champion icon for ID {champ_id}, skipping icon metadata.")
 
+    Clogger.debug("Completed mastery calculation and metadata addition")
+
     # convert champion IDs to names
     calculated_mastery_with_names = {}
     for champ_id in calculated_mastery:
@@ -43,4 +46,7 @@ def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMet
 
     # sort by points
     sorted_mastery = sorted(calculated_mastery_with_names.items(), key=lambda item: item[1]['points'], reverse=True)
+
+    Clogger.debug("Sorted mastery by points")
+
     return sorted_mastery

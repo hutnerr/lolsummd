@@ -2,11 +2,11 @@ import os
 from pprint import pprint
 from core.endpoint_builder import Region
 from util.cache.redis_cache import RedisCache
-from util.clogger import Clogger
+from pyutils import Clogger
 from core.riot_api_client import RiotAPIClient
 from core.mastery_summarizer import summarize_mastery
 from core.ddragon_helper import get_champion_ids, get_champion_images
-from util.env_loader import get_env
+from pyutils import get_env
 
 Clogger.debugEnabled = True
 
