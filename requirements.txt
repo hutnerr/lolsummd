@@ -1,7 +1,6 @@
 colorama
-flask
+Flask
 requests
 redis
-dotenv
+python-dotenv
 pyutils @ git+https://github.com/hutnerr/python-utils.git
-uv==0.9.22
