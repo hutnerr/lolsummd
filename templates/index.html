@@ -21,8 +21,11 @@
     </select>
   </div>
   <button type="submit" class="btn btn-primary">Add Account</button>
-  <div class="toast error" id="addError"></div>
 </form>
+
+<div class="error-bar" id="errorBar">
+  <span id="errorBarMessage"></span>
+</div>
 
 <div id="accounts">
   {% if accounts %}
@@ -51,7 +54,6 @@
   {% endif %}
 </div>
 
-<div id="masteryError" class="toast error" style="margin-top:12px;"></div>
 
 <div id="output">
   {% if result %}

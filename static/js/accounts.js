@@ -40,12 +40,11 @@ regionSelect.addEventListener('change', updateTagPlaceholder);
 updateTagPlaceholder();
 
 // ── Add Account ───────────────────────────────────────────────────────────────
-const addForm    = document.getElementById('addAccountForm');
-const addErrorEl = document.getElementById('addError');
+const addForm = document.getElementById('addAccountForm');
 
 addForm.addEventListener('submit', async function (e) {
   e.preventDefault();
-  clearError(addErrorEl);
+  clearNotif();
 
   if (!tagInput.value.trim()) {
     const selected = regionSelect.options[regionSelect.selectedIndex];
@@ -54,14 +53,20 @@ addForm.addEventListener('submit', async function (e) {
 
   const fd = new FormData(this);
   fd.set('action', 'add');
+  
+  const masteryBtn = document.getElementById('getMasteryBtn');
+  if (masteryBtn) masteryBtn.disabled = true;
 
   try {
     const data = await postForm('/accounts', fd);
     renderAccounts(data.accounts);
+    if (data.message) showMessage(data.message);
     addForm.reset();
     updateTagPlaceholder();
   } catch (err) {
-    showError(addErrorEl, err.message);
+    showError(err.message);
+  } finally {
+    if (masteryBtn) masteryBtn.disabled = false;
   }
 });
 
@@ -77,8 +82,9 @@ document.getElementById('accountList').addEventListener('click', async function 
   try {
     const data = await postForm('/accounts', fd);
     renderAccounts(data.accounts);
+    if (data.message) showMessage(data.message);
   } catch (err) {
-    showError(document.getElementById('masteryError'), err.message);
+    showError(err.message);
   }
 });
 
@@ -91,8 +97,8 @@ document.getElementById('clearAllBtn').addEventListener('click', async function 
     const data = await postForm('/accounts', fd);
     renderAccounts(data.accounts);
     document.getElementById('output').innerHTML = '';
-    clearError(document.getElementById('masteryError'));
+    if (data.message) showMessage(data.message);
   } catch (err) {
-    showError(document.getElementById('masteryError'), err.message);
+    showError(err.message);
   }
 });

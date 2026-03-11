@@ -184,3 +184,19 @@ class RiotAPIClient:
             Clogger.warn(f"Champion icon for ID {champ_id} not found in mapping")
 
         return icon_path
+    
+    def is_same_account(self, acc1: list[str], acc2: list[str]) -> bool:
+        acc1_username, acc1_tag, acc1_region = acc1
+        acc2_username, acc2_tag, acc2_region = acc2
+        
+        if acc1_region != acc2_region:
+            return False
+        
+        if acc1_tag != acc2_tag:
+            return False
+        
+        if acc1_username.lower() != acc2_username.lower():
+            return False
+        
+        Clogger.warn("Duplicate account detected based on username, tag, and region")
+        return True

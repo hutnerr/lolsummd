@@ -2,7 +2,7 @@ import os
 from pprint import pprint
 from core.endpoint_builder import Region
 from util.cache.redis_cache import RedisCache
-from pyutils import Clogger
+from pyutils import Clogger, CloggerSetting
 from core.riot_api_client import RiotAPIClient
 from core.mastery_summarizer import summarize_mastery
 from core.ddragon_helper import get_champion_ids, get_champion_images
@@ -29,9 +29,10 @@ account_info = [
     # ("KC NEXT ADKING", "EUW", Region.EUW1),
     # ("TFBlade", "122", Region.NA1),
     # ("DK ShowMaker", "KR1", Region.KR)
+    # ("Cupic", "Hwei", Region.NA1)
 ]
 
 accounts = client.get_accounts_by_names(account_info)
 summarized_mastery = summarize_mastery(accounts, client)
-pprint(summarized_mastery)
+Clogger.info(summarized_mastery, settings_override={CloggerSetting.PPRINT_ENABLED: True})
 Clogger.info("End of main.py reached")

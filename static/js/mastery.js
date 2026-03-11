@@ -40,11 +40,10 @@ function renderMastery(result) {
 }
 
 // ── Get Combined Mastery ──────────────────────────────────────────────────────
-const getMasteryBtn  = document.getElementById('getMasteryBtn');
-const masteryErrorEl = document.getElementById('masteryError');
+const getMasteryBtn = document.getElementById('getMasteryBtn');
 
 getMasteryBtn.addEventListener('click', async function () {
-  clearError(masteryErrorEl);
+  clearNotif();
 
   getMasteryBtn.disabled = true;
   getMasteryBtn.classList.add('btn-loading');
@@ -60,8 +59,9 @@ getMasteryBtn.addEventListener('click', async function () {
     await new Promise(r => setTimeout(r, 200));
     renderMastery(data.result);
     output.classList.remove('fading');
+    if (data.message) showMessage(data.message);
   } catch (err) {
-    showError(masteryErrorEl, err.message);
+    showError(err.message);
   } finally {
     getMasteryBtn.disabled = false;
     getMasteryBtn.classList.remove('btn-loading');

@@ -3,11 +3,12 @@ import sys
 import logging
 from flask import Flask, render_template, request, session, jsonify
 from werkzeug.exceptions import HTTPException
-from core.riot_api_client import RiotAPIClient
 from pyutils import Clogger, CloggerSetting
+from core.riot_api_client import RiotAPIClient
 from core.mastery_summarizer import summarize_mastery
 from core.endpoint_builder import Region, REGION_TO_DEFAULT_TAG
 from core.ddragon_helper import get_champion_icons_saved
+from models.account import Account
 
 # ===============
 # INIT
@@ -88,8 +89,19 @@ def manage_accounts():
             if account not in session['accounts']:
                 if len(session['accounts']) >= 10:
                     return jsonify({"error": "Maximum of 10 accounts allowed."}), 400
+                
+                a = client.get_account_by_summoner_name(username, tag, region)                
+                if not a:
+                    return jsonify({"error": f"Account {username}#{tag} not found in region {region.value}."}), 404
+                
+                for acc in session['accounts']:
+                    if client.is_same_account(account, acc):
+                        Clogger.warn(f"Account {username}#{tag} already added (duplicate check)")
+                        return jsonify({"error": f"{username}#{tag} has already been added."}), 400
+                
                 session['accounts'].append(account)
                 session.modified = True
+                return jsonify({"accounts": session['accounts'], "message": f"{username}#{tag} added."})
             else:
                 Clogger.warn(f"Account {username}#{tag} already added")
                 return jsonify({"error": f"{username}#{tag} has already been added."}), 400
@@ -106,36 +118,39 @@ def manage_accounts():
         if 0 <= remove_index < len(session['accounts']):
             session['accounts'].pop(remove_index)
             session.modified = True
+            return jsonify({"accounts": session['accounts'], "message": "Account removed."})
         else:
             return jsonify({"error": "Index out of range."}), 400
 
     elif action == "clear":
         session['accounts'] = []
         session.modified = True
+        return jsonify({"accounts": [], "message": "All accounts cleared."})
 
     else:
         return jsonify({"error": "Unknown action."}), 400
 
-    return jsonify({"accounts": session['accounts']})
-
 
 @app.route("/mastery", methods=["POST"])
 def get_mastery():
-    """Runs the mastery lookup and returns JSON."""
     if 'accounts' not in session or not session['accounts']:
         return jsonify({"error": "No accounts in session."}), 400
 
     accounts = session['accounts']
+    Clogger.debug(f"Session accounts ({len(accounts)}): {accounts}")
+
     deserialized_accounts = [(a[0], a[1], Region(a[2])) for a in accounts]
+    Clogger.debug(f"Deserialized ({len(deserialized_accounts)}): {deserialized_accounts}")
 
     try:
         riot_accounts = client.get_accounts_by_names(deserialized_accounts)
+        Clogger.debug(f"Riot accounts returned ({len(riot_accounts)}): {[(a.username, a.tag) for a in riot_accounts]}")
+
         result = summarize_mastery(riot_accounts, client, True)
-        Clogger.debug(result, settings_override={CloggerSetting.PPRINT_ENABLED: True})
     except Exception as e:
         Clogger.error(f"Mastery lookup failed: {e}")
         return jsonify({"error": "Failed to retrieve mastery data. Please try again."}), 500
-
+    
     # result is a list of (champ_name, mastery_data_dict) tuples
     serialized = [
         {
@@ -147,7 +162,7 @@ def get_mastery():
         for champ_name, mastery_data in result
     ]
 
-    return jsonify({"result": serialized})
+    return jsonify({"result": serialized, "message": "Mastery data retrieved successfully."})
 
 
 # ===============
