@@ -17,7 +17,6 @@ from models.account import Account
 key = os.environ.get("RIOT_API_KEY")
 if not key:
     Clogger.error("ENV NOT SET: RiotAPIClient cannot be initialized without API key.")
-    sys.exit(1)
 
 client: RiotAPIClient = None
 try:
