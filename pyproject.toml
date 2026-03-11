@@ -1,6 +1,15 @@
 [project]
 name = "lolsummd"
 version = "1.0.0"
+requires-python = ">=3.12"
 description = "Mastery aggregator for league of legends accounts"
 readme = "README.md"
-requires-python = ">=3.12"
+
+dependencies = [
+    "Flask",
+    "requests",
+    "redis",
+    "colorama",
+    "python-dotenv",
+    "pyutils @ git+https://github.com/hutnerr/python-utils.git"
+]
