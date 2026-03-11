@@ -65,6 +65,36 @@ function refreshTable() {
   updateHeaders();
 }
 
+// ── Build podium (top 3 by points) ───────────────────────────────────────────
+function buildPodium(result) {
+  const top3 = [...result]
+    .sort((a, b) => b.points - a.points)
+    .slice(0, 3);
+
+  if (top3.length < 1) return '';
+
+  function podiumSlot(champ, place) {
+    if (!champ) return `<div class="podium-slot podium-${place} podium-empty"></div>`;
+    const icon = champ.icon
+      ? `<img src="${escHtml(champ.icon)}" alt="${escHtml(champ.name)}" class="podium-icon">`
+      : `<div class="podium-icon podium-icon-fallback">${escHtml(champ.name[0])}</div>`;
+    return `
+      <div class="podium-slot podium-${place}">
+        <div class="podium-rank">${place}</div>
+        ${icon}
+        <div class="podium-name">${escHtml(champ.name)}</div>
+        <div class="podium-pts">${champ.points.toLocaleString()}</div>
+      </div>`;
+  }
+
+  return `
+    <div class="podium">
+      ${podiumSlot(top3[1] || null, 2)}
+      ${podiumSlot(top3[0],         1)}
+      ${podiumSlot(top3[2] || null, 3)}
+    </div>`;
+}
+
 // ── Full render (first load or new fetch) ─────────────────────────────────────
 function renderMastery(result) {
   const output = document.getElementById('output');
@@ -81,6 +111,7 @@ function renderMastery(result) {
   output.innerHTML = `
     <div class="divider"><span>✦</span></div>
     <h3>Combined Mastery</h3>
+    ${buildPodium(result)}
     <table>
       <thead>
         <tr>
