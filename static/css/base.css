@@ -109,6 +109,7 @@ main { flex: 1; }
 .btn-secondary:hover { background: var(--bg3); color: var(--fg); }
 .btn-danger    { background: transparent; color: var(--fg3); border-color: var(--bg2); font-size: 12px; padding: 5px 12px; }
 .btn-danger:hover { background: #3c1f1e; color: var(--red); border-color: #7c2828; }
+.remove-btn { background: var(--bg); color: var(--fg); }
 
 /* ── Inline text helpers ─────────────────────────────────────────────────── */
 .inline-code  { font-family: monospace; font-size: 13px; background: var(--bg2); color: var(--aqua);   padding: 2px 8px; border-radius: 6px; border: 1px solid var(--bg3); }
