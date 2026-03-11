@@ -8,6 +8,13 @@
   text-transform: uppercase;
   text-align: center;
   color: var(--yellow);
+  margin-bottom: 0;
+}
+
+.output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
 }
 

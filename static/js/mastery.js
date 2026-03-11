@@ -110,7 +110,10 @@ function renderMastery(result) {
 
   output.innerHTML = `
     <div class="divider"><span>✦</span></div>
-    <h3>Combined Mastery</h3>
+    <div class="output-header">
+      <h3>Combined Mastery</h3>
+      <button class="btn btn-secondary" id="exportBtn">Export JSON</button>
+    </div>
     ${buildPodium(result)}
     <table>
       <thead>
@@ -130,6 +133,22 @@ function renderMastery(result) {
   document.getElementById('thName').addEventListener('click',   () => onSort('name'));
   document.getElementById('thLevel').addEventListener('click',  () => onSort('level'));
   document.getElementById('thPoints').addEventListener('click', () => onSort('points'));
+  document.getElementById('exportBtn').addEventListener('click', exportJSON);
+}
+
+// ── Export ────────────────────────────────────────────────────────────────────
+function exportJSON() {
+  const payload = [...masteryData]
+    .sort((a, b) => b.points - a.points)
+    .map(({ name, level, points }) => ({ name, level, points }));
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'mastery.json';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 // ── Sort click handler ────────────────────────────────────────────────────────
