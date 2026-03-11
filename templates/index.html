@@ -2,94 +2,16 @@
 {% block title %}lolsummd{% endblock %}
 {% block content %}
 
-<style>
-  /* Help Button */
-  .help-btn {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    transition: transform 0.15s ease, opacity 0.15s ease;
-  }
-  .help-btn:hover {
-    transform: scale(1.1);
-    opacity: 0.9;
-  }
-
-  /* Modal Overlay */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .modal-overlay.active {
-    display: flex;
-  }
-
-  /* Modal Box */
-  .modal {
-    background: var(--bg, #1a1a2e);
-    border: 1px solid var(--border, rgba(255,255,255,0.12));
-    border-radius: 12px;
-    padding: 32px;
-    max-width: 560px;
-    width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
-    position: relative;
-    animation: modalIn 0.2s ease;
-  }
-  @keyframes modalIn {
-    from { opacity: 0; transform: translateY(12px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  .modal-close {
-    position: absolute;
-    top: 14px;
-    right: 16px;
-    background: none;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    opacity: 0.5;
-    line-height: 1;
-    padding: 4px 8px;
-    border-radius: 4px;
-    transition: opacity 0.15s;
-  }
-  .modal-close:hover { opacity: 1; }
-
-  .modal .page-heading { margin-top: 0; }
-  .modal .help-section { margin-bottom: 20px; }
-  .modal .divider { margin: 18px 0; }
-</style>
-
 <div class="page-heading">
   <h2>lolsummd</h2>
   <p>Combine mastery data across multiple League of Legends accounts</p>
 </div>
 
-<form method="POST" action="/" id="addAccountForm">
+<!-- Add Account Form -->
+<form id="addAccountForm">
   <div class="input-box">
-    <input id="username" type="text" name="username" placeholder="Summoner Name" required>
-    <input id="tag" type="text" name="tag" placeholder="" maxlength="5">
-
+    <input id="username" type="text" name="username" placeholder="Summoner Name" required autocomplete="off">
+    <input id="tag" type="text" name="tag" placeholder="" maxlength="5" autocomplete="off">
     <select name="region" id="region" required>
       {% for region in regions %}
         <option value="{{ region.value }}" data-default-tag="{{ region_default_tags[region.value] }}">
@@ -99,43 +21,40 @@
     </select>
   </div>
   <button type="submit" class="btn btn-primary">Add Account</button>
-  <input type="hidden" name="action" value="add">
+  <div class="toast error" id="addError"></div>
 </form>
 
 <div id="accounts">
   {% if accounts %}
-  <div class="divider"><span>✦</span></div>
-
-  <div class="centered" style="gap:10px; margin-bottom:18px;">
-    <form method="POST" action="/">
-      <input type="hidden" name="action" value="submit_all">
-      <button type="submit" class="btn btn-primary">Get Combined Mastery</button>
-    </form>
-    <form method="POST" action="/">
-      <input type="hidden" name="action" value="clear">
-      <button type="submit" class="btn btn-secondary">Clear All</button>
-    </form>
+  <div class="divider" id="accountDivider"><span>✦</span></div>
+  <div class="centered" style="gap:10px; margin-bottom:18px;" id="actionButtons">
+    <button class="btn btn-primary" id="getMasteryBtn">Get Combined Mastery</button>
+    <button class="btn btn-secondary" id="clearAllBtn">Clear All</button>
   </div>
-
-  <ul>
+  <ul id="accountList">
     {% for username, tag, region in accounts %}
     <li>
       <span class="account-name">
         {{ username }}<span class="hash">#</span><span class="tag">{{ tag }}</span><span class="region"> ({{ region }})</span>
       </span>
-      <form method="POST" action="/">
-        <input type="hidden" name="action" value="remove">
-        <input type="hidden" name="remove_index" value="{{ loop.index0 }}">
-        <button type="submit" class="btn btn-danger">Remove</button>
-      </form>
+      <button class="btn btn-danger remove-btn" data-index="{{ loop.index0 }}">Remove</button>
     </li>
     {% endfor %}
   </ul>
+  {% else %}
+  <div class="divider" id="accountDivider" style="display:none"><span>✦</span></div>
+  <div class="centered" style="gap:10px; margin-bottom:18px; display:none;" id="actionButtons">
+    <button class="btn btn-primary" id="getMasteryBtn">Get Combined Mastery</button>
+    <button class="btn btn-secondary" id="clearAllBtn">Clear All</button>
+  </div>
+  <ul id="accountList"></ul>
   {% endif %}
 </div>
 
-{% if result %}
+<div id="masteryError" class="toast error" style="margin-top:12px;"></div>
+
 <div id="output">
+  {% if result %}
   <div class="divider"><span>✦</span></div>
   <h3>Combined Mastery</h3>
   <table>
@@ -147,11 +66,14 @@
         <th style="text-align:right">Points</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="masteryTableBody">
       {% for champ_name, mastery_data in result %}
       <tr>
         <td>{{ loop.index }}</td>
-        <td class="champion-cell">{% if mastery_data['icon'] %}<img src="{{ mastery_data['icon'] }}" alt="{{ champ_name }}">{% endif %}{{ champ_name }}</td>
+        <td class="champion-cell">
+          {% if mastery_data['icon'] %}<img src="{{ mastery_data['icon'] }}" alt="{{ champ_name }}">{% endif %}
+          {{ champ_name }}
+        </td>
         <td>
           {% if mastery_data['level'] >= 7 %}
             <span class="mastery-badge mastery-level-7">{{ mastery_data['level'] }}</span>
@@ -166,30 +88,25 @@
       {% endfor %}
     </tbody>
   </table>
+  {% endif %}
 </div>
-{% else %}
-<div id="output"></div>
-{% endif %}
 
 <button class="help-btn btn btn-secondary" onclick="openHelp()" aria-label="Help">?</button>
 
+<!-- Help Modal -->
 <div class="modal-overlay" id="helpModal" onclick="closeOnBackdrop(event)">
   <div class="modal" role="dialog" aria-modal="true" aria-label="Help">
     <button class="modal-close" onclick="closeHelp()" aria-label="Close">✕</button>
-
     <div class="page-heading">
       <h2>Help</h2>
       <p>Everything you need to get started</p>
     </div>
-
     <div class="help-section">
       <h3>Overview</h3>
       <p>lolsummd lets you combine the champion mastery data of multiple League of Legends accounts into one unified summary.</p>
       <p>You can add up to 10 accounts at a time from any region.</p>
     </div>
-
     <div class="divider"><span>✦</span></div>
-
     <div class="help-section">
       <h3>Instructions</h3>
       <p>Add accounts by entering a username and tag — for example, <span class="inline-code">SummonerName#NA1</span> becomes <span class="inline-code">SummonerName</span> and <span class="inline-code">NA1</span>.</p>
@@ -200,41 +117,9 @@
   </div>
 </div>
 
-<script>
-  // Tag placeholder + auto-fill logic
-  const tagInput = document.getElementById('tag');
-  const regionSelect = document.getElementById('region');
-
-  function updateTagPlaceholder() {
-    const selected = regionSelect.options[regionSelect.selectedIndex];
-    tagInput.placeholder = selected?.dataset.defaultTag || '';
-  }
-
-  regionSelect.addEventListener('change', updateTagPlaceholder);
-  updateTagPlaceholder();
-
-  document.getElementById('addAccountForm').addEventListener('submit', function () {
-    if (!tagInput.value.trim()) {
-      const selected = regionSelect.options[regionSelect.selectedIndex];
-      tagInput.value = selected?.dataset.defaultTag || '';
-    }
-  });
-
-  // Help modal logic
-  function openHelp() {
-    document.getElementById('helpModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeHelp() {
-    document.getElementById('helpModal').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-  function closeOnBackdrop(e) {
-    if (e.target === document.getElementById('helpModal')) closeHelp();
-  }
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeHelp();
-  });
-</script>
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/accounts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/mastery.js') }}"></script>
 
 {% endblock %}

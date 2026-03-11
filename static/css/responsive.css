@@ -1,0 +1,36 @@
+@media (max-width: 600px) {
+  /* ── Nav ─────────────────────────────────────────────────────────────── */
+  nav { padding: 0 16px; height: 54px; }
+  #title a { font-size: 18px; }
+  nav ul { gap: 16px; }
+
+  /* ── Container ───────────────────────────────────────────────────────── */
+  .container { padding: 28px 16px 48px; }
+
+  /* ── Form: stack inputs vertically ──────────────────────────────────── */
+  #addAccountForm {
+    flex-direction: column;
+    padding: 16px;
+  }
+  #addAccountForm .input-box { flex-wrap: wrap; }
+  #addAccountForm #username  { flex: 1 1 100%; }
+  #addAccountForm #tag       { flex: 1 1 calc(40% - 5px); }
+  #addAccountForm select     { flex: 1 1 calc(60% - 5px); }
+  #addAccountForm .btn       { width: 100%; }
+
+  /* ── Accounts list ───────────────────────────────────────────────────── */
+  #accounts li   { padding: 10px 14px; }
+  .account-name  { font-size: 13px; }
+
+  /* ── Table: hide # column ────────────────────────────────────────────── */
+  #output thead th:nth-child(1),
+  #output tbody td:nth-child(1) { display: none; }
+
+  #output tbody td    { padding: 10px; }
+  .champion-cell      { gap: 8px; font-size: 13px; }
+  .champion-cell img  { height: 26px; width: 26px; }
+  .mastery-badge      { padding: 3px 7px; font-size: 10px; }
+
+  /* ── Error page ──────────────────────────────────────────────────────── */
+  .error-code { font-size: 64px; }
+}

@@ -1,0 +1,30 @@
+/* ── Accounts list ───────────────────────────────────────────────────────── */
+#accounts { margin-top: 20px; }
+#accounts > .centered { display: flex; justify-content: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+
+#accounts ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+#accounts li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  background: var(--bg1);
+  border: 1px solid var(--bg2);
+  border-radius: 10px;
+  transition: background 0.15s, box-shadow 0.15s;
+  gap: 10px;
+  animation: slideIn 0.18s ease both;
+}
+#accounts li:hover { background: var(--bg2); box-shadow: 0 2px 8px #0004; }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Account name ────────────────────────────────────────────────────────── */
+.account-name { display: flex; align-items: center; gap: 4px; font-size: 14px; flex-wrap: wrap; }
+.account-name .hash   { color: var(--bg3); font-size: 12px; }
+.account-name .tag    { color: var(--yellow); font-size: 12px; letter-spacing: 0.08em; }
+.account-name .region { color: var(--fg3); font-size: 11px; letter-spacing: 0.06em; margin-left: 2px; }

@@ -1,0 +1,87 @@
+/* ── Output table ────────────────────────────────────────────────────────── */
+#output { margin-top: 36px; transition: opacity 0.25s ease; }
+#output.fading { opacity: 0; }
+
+#output h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--yellow);
+  margin-bottom: 20px;
+}
+
+#output table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 6px;
+  font-size: 14px;
+  table-layout: fixed;
+}
+
+#output thead th {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--fg3);
+  padding: 8px 14px;
+}
+
+/* # column is narrow; champion/level/points each get an equal third of the rest */
+#output thead th:nth-child(1),
+#output tbody td:nth-child(1) { width: 44px; text-align: left; }
+
+#output thead th:nth-child(2),
+#output tbody td:nth-child(2) { width: calc((100% - 44px) / 3); text-align: left; }
+
+#output thead th:nth-child(3),
+#output tbody td:nth-child(3) { width: calc((100% - 44px) / 3); text-align: center; }
+
+#output thead th:nth-child(4),
+#output tbody td:nth-child(4) { width: calc((100% - 44px) / 3); text-align: right; }
+
+#output tbody tr {
+  background: var(--bg1);
+  border-radius: 10px;
+  transition: background 0.1s, box-shadow 0.1s;
+}
+#output tbody tr:hover { background: var(--bg2); box-shadow: 0 2px 8px #0004; }
+
+#output tbody td {
+  padding: 10px 14px;
+  color: var(--fg);
+  vertical-align: middle;
+}
+#output tbody td:first-child {
+  color: var(--fg3);
+  font-style: italic;
+  font-size: 12px;
+  border-radius: 10px 0 0 10px;
+}
+#output tbody td:last-child {
+  color: var(--yellow);
+  border-radius: 0 10px 10px 0;
+}
+
+/* ── Champion cell ───────────────────────────────────────────────────────── */
+.champion-cell { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.champion-cell img {
+  flex-shrink: 0;
+  height: 30px; width: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--bg3);
+}
+
+/* ── Mastery badges ──────────────────────────────────────────────────────── */
+.mastery-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.mastery-level-7  { color: var(--yellow); background: #3c360e; border: 1px solid var(--yellow-s); }
+.mastery-level-5  { color: var(--green);  background: #323520; border: 1px solid var(--green-d);  }
+.mastery-level-lo { color: var(--aqua);   background: #1f2e2e; border: 1px solid #427b58;         }
