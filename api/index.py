@@ -6,7 +6,7 @@ from werkzeug.exceptions import HTTPException
 from pyutils import Clogger, CloggerSetting
 from core.riot_api_client import RiotAPIClient
 from core.mastery_summarizer import summarize_mastery
-from core.endpoint_builder import Region, REGION_TO_DEFAULT_TAG
+from core.endpoint_builder import Region, REGION_TO_DEFAULT_TAG, REGION_TO_NAME
 from core.ddragon_helper import get_champion_icons_saved
 from models.account import Account
 
@@ -48,9 +48,11 @@ Clogger.info("Flask app initialized")
 # Routes
 # ===============
 
+
 @app.route("/", methods=["GET"])
 def home():
     region_default_tags = {r.value: tag for r, tag in REGION_TO_DEFAULT_TAG.items()}
+    region_names = {r.value: name for r, name in REGION_TO_NAME.items()}
 
     if 'accounts' not in session:
         session['accounts'] = []
@@ -59,9 +61,9 @@ def home():
         "index.html",
         accounts=session.get('accounts', []),
         regions=Region,
-        region_default_tags=region_default_tags
+        region_default_tags=region_default_tags,
+        region_names=region_names,
     )
-
 
 @app.route("/accounts", methods=["POST"])
 def manage_accounts():

@@ -36,6 +36,20 @@ function updateTagPlaceholder() {
   tagInput.placeholder = selected?.dataset.defaultTag || '';
 }
 
+// ── Paste handler: split "Summoner#TAG" automatically ────────────────────────
+document.getElementById('username').addEventListener('paste', function (e) {
+  const pasted = (e.clipboardData || window.clipboardData).getData('text');
+  const hash   = pasted.indexOf('#');
+  if (hash === -1) return; // no # — let paste proceed normally
+
+  e.preventDefault();
+  const name = pasted.slice(0, hash).trim();
+  const tag  = pasted.slice(hash + 1).trim().slice(0, 5); // respect maxlength=5
+
+  this.value     = name;
+  tagInput.value = tag;
+});
+
 regionSelect.addEventListener('change', updateTagPlaceholder);
 updateTagPlaceholder();
 
@@ -53,7 +67,12 @@ addForm.addEventListener('submit', async function (e) {
 
   const fd = new FormData(this);
   fd.set('action', 'add');
-  
+
+  // Disable mastery button for the duration of the add request.
+  // The add route may hit the Riot API, which takes ~1s. If the user clicks
+  // "Get Combined Mastery" before the add response (and its updated session
+  // cookie) is received, the browser sends the old cookie and the new account
+  // is missing from the session.
   const masteryBtn = document.getElementById('getMasteryBtn');
   if (masteryBtn) masteryBtn.disabled = true;
 

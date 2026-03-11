@@ -15,7 +15,7 @@
     <select name="region" id="region" required>
       {% for region in regions %}
         <option value="{{ region.value }}" data-default-tag="{{ region_default_tags[region.value] }}">
-          {{ region.name }}
+          {{ region_names[region.value] }}
         </option>
       {% endfor %}
     </select>

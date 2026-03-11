@@ -51,6 +51,25 @@ REGION_TO_PLATFORM: dict[Region, Platform] = {
     Region.VN2:   Platform.SEA,
 }
 
+REGION_TO_NAME: dict[Region, str] = {
+    Region.NA1:   "North America",
+    Region.BR1:   "Brazil",
+    Region.LA1:   "Latin America North",
+    Region.LA2:   "Latin America South",
+    Region.EUW1:  "Europe West",
+    Region.EUNE1: "Europe Nordic & East",
+    Region.TR1:   "Turkey",
+    Region.RU:    "Russia",
+    Region.KR:    "Korea",
+    Region.JP1:   "Japan",
+    Region.OC1:   "Oceania",
+    Region.PH2:   "Philippines",
+    Region.SG2:   "Singapore",
+    Region.TH2:   "Thailand",
+    Region.TW2:   "Taiwan",
+    Region.VN2:   "Vietnam",
+}
+
 # warning: these might be wrong lol
 REGION_TO_DEFAULT_TAG = {
     Region.NA1:   "NA1",
