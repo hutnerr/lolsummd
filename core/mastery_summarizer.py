@@ -1,4 +1,4 @@
-from pyutils import Clogger
+from pyutils import Clogger, CloggerSetting
 from models.account import Account
 from core.riot_api_client import RiotAPIClient
 
@@ -43,6 +43,8 @@ def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMet
         else:
             Clogger.warn(f"Could not find name for champion ID {champ_id}, using ID as key.")
             calculated_mastery_with_names[f"ID_{champ_id}"] = calculated_mastery[champ_id]
+
+    # Clogger.debug(calculated_mastery_with_names, settings_override={CloggerSetting.PPRINT_ENABLED: True})
 
     # sort by points
     sorted_mastery = sorted(calculated_mastery_with_names.items(), key=lambda item: item[1]['points'], reverse=True)

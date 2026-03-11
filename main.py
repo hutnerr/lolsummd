@@ -14,7 +14,7 @@ Clogger.debugEnabled = True
 # get_champion_images(true, true)  # run this if you don't have the icons and splashes
 
 cache = RedisCache()
-# cache.clear()
+cache.clear()
 
 key = get_env("RIOT_API_KEY")
 try:
@@ -25,6 +25,7 @@ except Exception as e:
 account_info = [
     # ("username", "tag", Region.XXX)
     ("wizwizwizz", "1256", Region.NA1),
+    # ("pandadj4", "NA1", Region.NA1),
     # ("the inescapable", "RAT", Region.EUW1),
     # ("KC NEXT ADKING", "EUW", Region.EUW1),
     # ("TFBlade", "122", Region.NA1),
@@ -32,7 +33,7 @@ account_info = [
     # ("Cupic", "Hwei", Region.NA1)
 ]
 
-accounts = client.get_accounts_by_names(account_info)
-summarized_mastery = summarize_mastery(accounts, client)
-Clogger.info(summarized_mastery, settings_override={CloggerSetting.PPRINT_ENABLED: True})
+# accounts = client.get_accounts_by_names(account_info)
+# summarized_mastery = summarize_mastery(accounts, client)
+# Clogger.info(summarized_mastery, settings_override={CloggerSetting.PPRINT_ENABLED: True})
 Clogger.info("End of main.py reached")

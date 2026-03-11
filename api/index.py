@@ -147,6 +147,7 @@ def get_mastery():
         Clogger.debug(f"Riot accounts returned ({len(riot_accounts)}): {[(a.username, a.tag) for a in riot_accounts]}")
 
         result = summarize_mastery(riot_accounts, client, True)
+        # Clogger.debug(result, settings_override={CloggerSetting.PPRINT_ENABLED: True})
     except Exception as e:
         Clogger.error(f"Mastery lookup failed: {e}")
         return jsonify({"error": "Failed to retrieve mastery data. Please try again."}), 500

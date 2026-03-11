@@ -141,7 +141,7 @@ class RiotAPIClient:
                 return {}
 
             champions = {
-                item["championId"]: {
+                str(item["championId"]): {
                     "id":          item.get("championId"),
                     "level":       item.get("championLevel"),
                     "points":      item.get("championPoints"),
@@ -153,6 +153,7 @@ class RiotAPIClient:
 
             cached_account = self.cache.get(account.puuid) or {}
             cached_account["masterydata"] = {"cached_at": get_linux_timestamp(), "champions": champions}
+            Clogger.debug(f"About to write mastery cache. cached_account keys: {list(cached_account.keys())}, username: {cached_account.get('username')}")
             self.cache.set(account.puuid, cached_account)
 
             return champions

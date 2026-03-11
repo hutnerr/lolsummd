@@ -52,6 +52,7 @@ getMasteryBtn.addEventListener('click', async function () {
   try {
     const res  = await fetch('/mastery', { method: 'POST' });
     const data = await res.json();
+    
     if (!res.ok) throw new Error(data.error || 'Something went wrong.');
 
     const output = document.getElementById('output');
