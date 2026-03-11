@@ -1,7 +1,7 @@
 import os
 import sys
 import logging
-from flask import Flask, render_template, request, session, jsonify
+from flask import Flask, render_template, request, session, jsonify, send_from_directory
 from werkzeug.exceptions import HTTPException
 from pyutils import Clogger, CloggerSetting
 from core.riot_api_client import RiotAPIClient
@@ -63,6 +63,10 @@ def home():
         region_default_tags=region_default_tags,
         region_names=region_names,
     )
+    
+@app.route("/riot.txt")
+def riot_file():
+    return send_from_directory(app.static_folder, "riot.txt", mimetype="text/plain")
 
 @app.route("/accounts", methods=["POST"])
 def manage_accounts():
