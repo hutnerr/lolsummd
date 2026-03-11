@@ -1,13 +1,27 @@
-// ── Render mastery table ──────────────────────────────────────────────────────
-function renderMastery(result) {
-  const output = document.getElementById('output');
+// ── Sort state ────────────────────────────────────────────────────────────────
+let masteryData  = [];           // full result array from the last fetch
+let sortKey      = 'points';     // 'points' | 'level' | 'name'
+let sortDir      = 'desc';       // 'asc' | 'desc'
 
-  if (!result || result.length === 0) {
-    output.innerHTML = '';
-    return;
-  }
+function sortedData() {
+  return [...masteryData].sort((a, b) => {
+    let av, bv;
+    if (sortKey === 'name') {
+      av = a.name.toLowerCase();
+      bv = b.name.toLowerCase();
+    } else {
+      av = a[sortKey];
+      bv = b[sortKey];
+    }
+    if (av < bv) return sortDir === 'asc' ? -1 : 1;
+    if (av > bv) return sortDir === 'asc' ?  1 : -1;
+    return 0;
+  });
+}
 
-  const rows = result.map((champ, i) => {
+// ── Build table rows ──────────────────────────────────────────────────────────
+function buildRows(data) {
+  return data.map((champ, i) => {
     const levelClass = champ.level >= 7 ? 'mastery-level-7'
                      : champ.level >= 5 ? 'mastery-level-5'
                      : 'mastery-level-lo';
@@ -22,6 +36,47 @@ function renderMastery(result) {
         <td>${champ.points.toLocaleString()}</td>
       </tr>`;
   }).join('');
+}
+
+// ── Update sort indicators on headers ────────────────────────────────────────
+function updateHeaders() {
+  const headers = {
+    name:   document.getElementById('thName'),
+    level:  document.getElementById('thLevel'),
+    points: document.getElementById('thPoints'),
+  };
+  const arrow = sortDir === 'asc' ? '↑' : '↓';
+  const labels = { name: 'Champion', level: 'Level', points: 'Points' };
+
+  for (const [key, el] of Object.entries(headers)) {
+    if (!el) continue;
+    el.classList.toggle('th-active', key === sortKey);
+    el.innerHTML = key === sortKey
+      ? `${labels[key]} <span class="sort-arrow">${arrow}</span>`
+      : labels[key];
+  }
+}
+
+// ── Re-render tbody only (keeps table structure intact) ───────────────────────
+function refreshTable() {
+  const tbody = document.getElementById('masteryTbody');
+  if (!tbody) return;
+  tbody.innerHTML = buildRows(sortedData());
+  updateHeaders();
+}
+
+// ── Full render (first load or new fetch) ─────────────────────────────────────
+function renderMastery(result) {
+  const output = document.getElementById('output');
+
+  if (!result || result.length === 0) {
+    output.innerHTML = '';
+    return;
+  }
+
+  masteryData = result;
+  sortKey     = 'points';
+  sortDir     = 'desc';
 
   output.innerHTML = `
     <div class="divider"><span>✦</span></div>
@@ -30,13 +85,31 @@ function renderMastery(result) {
       <thead>
         <tr>
           <th>#</th>
-          <th>Champion</th>
-          <th style="text-align:center">Level</th>
-          <th style="text-align:right">Points</th>
+          <th id="thName"   class="th-sortable">Champion</th>
+          <th id="thLevel"  class="th-sortable th-center">Level</th>
+          <th id="thPoints" class="th-sortable th-right th-active">
+            Points <span class="sort-arrow">↓</span>
+          </th>
         </tr>
       </thead>
-      <tbody>${rows}</tbody>
+      <tbody id="masteryTbody">${buildRows(sortedData())}</tbody>
     </table>`;
+
+  // Attach click handlers to sortable headers
+  document.getElementById('thName').addEventListener('click',   () => onSort('name'));
+  document.getElementById('thLevel').addEventListener('click',  () => onSort('level'));
+  document.getElementById('thPoints').addEventListener('click', () => onSort('points'));
+}
+
+// ── Sort click handler ────────────────────────────────────────────────────────
+function onSort(key) {
+  if (sortKey === key) {
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortKey = key;
+    sortDir = key === 'name' ? 'asc' : 'desc';  // default: name A→Z, others high→low
+  }
+  refreshTable();
 }
 
 // ── Get Combined Mastery ──────────────────────────────────────────────────────
@@ -52,7 +125,6 @@ getMasteryBtn.addEventListener('click', async function () {
   try {
     const res  = await fetch('/mastery', { method: 'POST' });
     const data = await res.json();
-    
     if (!res.ok) throw new Error(data.error || 'Something went wrong.');
 
     const output = document.getElementById('output');

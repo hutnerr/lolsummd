@@ -28,6 +28,25 @@
   padding: 8px 14px;
 }
 
+/* ── Sortable headers ────────────────────────────────────────────────────── */
+.th-sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.th-sortable:hover { color: var(--fg1); }
+.th-active { color: var(--yellow) !important; }
+.th-center { text-align: center; }
+.th-right  { text-align: right; }
+
+.sort-arrow {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 10px;
+  opacity: 0.8;
+}
+
 /* # column is narrow; champion/level/points each get an equal third of the rest */
 #output thead th:nth-child(1),
 #output tbody td:nth-child(1) { width: 44px; text-align: left; }
