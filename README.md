@@ -1,7 +1,7 @@
 ## Overview
 A lightweight web app for League of Legends players to aggregate champion mastery points across multiple accounts.
 
-Currently awaitng approval for a production API key. Might be broken due to an expired key...
+View more about the project [here](https://www.hunter-baker.com/pages/projects/lolsummd.html)
 
 ## Setup
 If you wanted to set it up locally, you would have to provide your own Riot API key as well as Redis URL (All ENVs that I used are below). You would also have to `pip install -r requirements.txt`
