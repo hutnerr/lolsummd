@@ -1,6 +1,7 @@
 /* ── Add Account Form ────────────────────────────────────────────────────── */
 #addAccountForm {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1fr) minmax(0, 1.5fr);
   gap: 10px;
   background: var(--bg1);
   border: 1px solid var(--bg2);
@@ -9,9 +10,11 @@
   padding: 20px;
 }
 
-#addAccountForm .input-box { flex: 1; display: flex; gap: 10px; }
+/* make the wrapper transparent so inputs are direct grid children */
+#addAccountForm .input-box { display: contents; }
 
 #addAccountForm input[type="text"] {
+  width: 100%;
   background: var(--bg);
   border: 1px solid var(--bg3);
   border-radius: 8px;
@@ -20,20 +23,26 @@
   font-size: 14px;
   padding: 9px 14px;
   outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  min-width: 0;
+  transition: border-color 0.15s;
 }
 #addAccountForm input[type="text"]::placeholder { color: var(--bg3); font-style: italic; }
-#addAccountForm input[type="text"]:focus {
-  border-color: var(--yellow-d);
-  box-shadow: 0 0 0 3px #d7992130;
-}
+#addAccountForm input[type="text"]:focus { border-color: var(--yellow-d); }
 
-#addAccountForm #username { flex: 3; }
-#addAccountForm #tag      { flex: 1; text-transform: uppercase; letter-spacing: 0.08em; }
+#addAccountForm #tag { text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* button row spans all columns */
+#addAccountForm .form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+#addAccountForm .form-actions [type="submit"] { flex: 7; }
+#addAccountForm .form-actions [type="button"] { flex: 3; }
 
 /* ── Region select ───────────────────────────────────────────────────────── */
 #addAccountForm select {
+  width: 100%;
   appearance: none;
   -webkit-appearance: none;
   background-color: var(--bg);
@@ -48,14 +57,9 @@
   padding: 9px 34px 9px 14px;
   outline: none;
   cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  flex: 1.2;
-  min-width: 0;
+  transition: border-color 0.15s;
 }
-#addAccountForm select:focus {
-  border-color: var(--yellow-d);
-  box-shadow: 0 0 0 3px #d7992130;
-}
+#addAccountForm select:focus { border-color: var(--yellow-d); }
 #addAccountForm select option {
   background-color: var(--bg1);
   color: var(--fg);

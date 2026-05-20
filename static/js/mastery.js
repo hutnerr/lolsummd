@@ -1,10 +1,13 @@
-// ── Sort state ────────────────────────────────────────────────────────────────
+// ── Sort + filter state ───────────────────────────────────────────────────────
 let masteryData  = [];           // full result array from the last fetch
 let sortKey      = 'points';     // 'points' | 'level' | 'name'
 let sortDir      = 'desc';       // 'asc' | 'desc'
+const SHOW_ZERO_KEY = 'lolsummd_show_zero';
+let showZero = localStorage.getItem(SHOW_ZERO_KEY) === 'true';
 
 function sortedData() {
-  return [...masteryData].sort((a, b) => {
+  const base = showZero ? masteryData : masteryData.filter(c => c.points > 0);
+  return [...base].sort((a, b) => {
     let av, bv;
     if (sortKey === 'name') {
       av = a.name.toLowerCase();
@@ -80,7 +83,7 @@ function buildPodium(result) {
       : `<div class="podium-icon podium-icon-fallback">${escHtml(champ.name[0])}</div>`;
     return `
       <div class="podium-slot podium-${place}">
-        <div class="podium-rank">${place}</div>
+        <div class="podium-rank">#${place}</div>
         ${icon}
         <div class="podium-name">${escHtml(champ.name)}</div>
         <div class="podium-pts">${champ.points.toLocaleString()}</div>
@@ -112,7 +115,14 @@ function renderMastery(result) {
     <div class="divider"><span>✦</span></div>
     <div class="output-header">
       <h3>Combined Mastery</h3>
-      <button class="btn btn-secondary" id="exportBtn">Export JSON</button>
+      <div class="output-header-actions">
+        <label class="zero-toggle" title="Include champions with no mastery points">
+          <input type="checkbox" id="showZeroToggle" ${showZero ? 'checked' : ''}>
+          <span class="zero-toggle-track"><span class="zero-toggle-thumb"></span></span>
+          <span class="zero-toggle-label">Show unplayed</span>
+        </label>
+        <button class="btn btn-secondary" id="exportBtn">Export JSON</button>
+      </div>
     </div>
     ${buildPodium(result)}
     <table>
@@ -134,6 +144,11 @@ function renderMastery(result) {
   document.getElementById('thLevel').addEventListener('click',  () => onSort('level'));
   document.getElementById('thPoints').addEventListener('click', () => onSort('points'));
   document.getElementById('exportBtn').addEventListener('click', exportJSON);
+  document.getElementById('showZeroToggle').addEventListener('change', function () {
+    showZero = this.checked;
+    localStorage.setItem(SHOW_ZERO_KEY, showZero);
+    refreshTable();
+  });
 }
 
 // ── Export ────────────────────────────────────────────────────────────────────

@@ -5,7 +5,7 @@
 <div class="page-heading">
   <h2>LOLSUMMD</h2>
   <p>Combine mastery data across multiple League of Legends accounts</p>
-  <p>!! Awaiting Official API Key. Might be broken as I don't have a long term key and the current one is expired. !!</p>
+  <div class="notice notice-warn">Currently running on a development API key until accepted by Riot. Some requests may fail.</div>
 </div>
 
 <!-- Add Account Form -->
@@ -21,7 +21,10 @@
       {% endfor %}
     </select>
   </div>
-  <button type="submit" class="btn btn-primary">Add Account</button>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Add Account</button>
+    <button type="button" class="btn btn-secondary" id="clearFormBtn">Clear</button>
+  </div>
 </form>
 
 <div class="error-bar" id="errorBar">
@@ -112,7 +115,7 @@
     <div class="divider"><span>✦</span></div>
     <div class="help-section">
       <h3>Instructions</h3>
-      <p>Add accounts by entering a username and tag — for example, <span class="inline-code">SummonerName#NA1</span> becomes <span class="inline-code">SummonerName</span> and <span class="inline-code">NA1</span>.</p>
+      <p>Add accounts by entering a username and tag. For example, <span class="inline-code">SummonerName#NA1</span> splits into <span class="inline-code">SummonerName</span> and <span class="inline-code">NA1</span>.</p>
       <p>Alternatively, you can copy paste in something like username#tag and it will split them for you.
       <p>The TAG field will default to the standard tag for the selected region if left blank.</p>
       <p>Once you've added your accounts, click <span class="inline-label">Get Combined Mastery</span> to retrieve the aggregated data.</p>
