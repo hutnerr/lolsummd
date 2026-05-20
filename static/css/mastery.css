@@ -121,7 +121,7 @@
 
 #output tbody tr {
   background: var(--bg1);
-  border-radius: 10px;
+  clip-path: inset(0 round 10px);
   transition: background 0.1s;
 }
 #output tbody tr:hover { background: var(--bg2); }
@@ -135,11 +135,9 @@
   color: var(--fg3);
   font-style: italic;
   font-size: 12px;
-  border-radius: 10px 0 0 10px;
 }
 #output tbody td:last-child {
   color: var(--yellow);
-  border-radius: 0 10px 10px 0;
 }
 
 /* ── Champion cell ───────────────────────────────────────────────────────── */

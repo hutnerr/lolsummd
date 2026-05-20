@@ -22,6 +22,7 @@
   #output thead th:nth-child(1),
   #output tbody td:nth-child(1) { display: none; }
 
+
   #output tbody td    { padding: 10px; }
   .champion-cell      { gap: 8px; font-size: 13px; }
   .champion-cell img  { height: 26px; width: 26px; }
