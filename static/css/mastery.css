@@ -18,6 +18,58 @@
   margin-bottom: 20px;
 }
 
+.output-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── Show-zero pill toggle ────────────────────────────────────────────────── */
+.zero-toggle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  user-select: none;
+}
+.zero-toggle input { display: none; }
+
+.zero-toggle-track {
+  position: relative;
+  width: 34px;
+  height: 18px;
+  border-radius: 99px;
+  background: var(--bg2);
+  border: 1px solid var(--bg3);
+  transition: background 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+.zero-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--fg3);
+  transition: transform 0.2s, background 0.2s;
+}
+.zero-toggle input:checked ~ .zero-toggle-track {
+  background: var(--yellow-d);
+  border-color: var(--yellow-s);
+}
+.zero-toggle input:checked ~ .zero-toggle-track .zero-toggle-thumb {
+  transform: translateX(16px);
+  background: var(--bg);
+}
+.zero-toggle-label {
+  font-size: 12px;
+  color: var(--fg3);
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.zero-toggle:hover .zero-toggle-label { color: var(--fg1); }
+
 #output table {
   width: 100%;
   border-collapse: separate;
@@ -70,9 +122,9 @@
 #output tbody tr {
   background: var(--bg1);
   border-radius: 10px;
-  transition: background 0.1s, box-shadow 0.1s;
+  transition: background 0.1s;
 }
-#output tbody tr:hover { background: var(--bg2); box-shadow: 0 2px 8px #0004; }
+#output tbody tr:hover { background: var(--bg2); }
 
 #output tbody td {
   padding: 10px 14px;
@@ -127,15 +179,14 @@
   letter-spacing: 0.1em;
   color: var(--fg3);
 }
+.podium-1 .podium-rank { color: var(--yellow); }
 
 .podium-icon {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--bg3);
   display: block;
-  transition: transform 0.15s ease;
 }
-.podium-icon:hover { transform: scale(1.06); }
 
 .podium-1 .podium-icon { width: 86px; height: 86px; border: 2px solid var(--yellow-s); }
 .podium-2 .podium-icon { width: 72px; height: 72px; }
@@ -197,7 +248,7 @@
 .mastery-badge {
   display: inline-block;
   padding: 3px 10px;
-  border-radius: 99px;
+  border-radius: 6px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;

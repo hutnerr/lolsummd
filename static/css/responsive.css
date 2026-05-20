@@ -7,16 +7,12 @@
   /* ── Container ───────────────────────────────────────────────────────── */
   .container { padding: 28px 16px 48px; }
 
-  /* ── Form: stack inputs vertically ──────────────────────────────────── */
+  /* ── Form: 2-col grid, username full width, tag+region side by side ── */
   #addAccountForm {
-    flex-direction: column;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     padding: 16px;
   }
-  #addAccountForm .input-box { flex-wrap: wrap; }
-  #addAccountForm #username  { flex: 1 1 100%; }
-  #addAccountForm #tag       { flex: 1 1 calc(40% - 5px); }
-  #addAccountForm select     { flex: 1 1 calc(60% - 5px); }
-  #addAccountForm .btn       { width: 100%; }
+  #addAccountForm #username { grid-column: 1 / -1; }
 
   /* ── Accounts list ───────────────────────────────────────────────────── */
   #accounts li   { padding: 10px 14px; }

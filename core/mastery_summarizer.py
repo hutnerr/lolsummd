@@ -2,7 +2,7 @@ from pyutils import Clogger, CloggerSetting
 from models.account import Account
 from core.riot_api_client import RiotAPIClient
 
-def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMetadata: bool = False) -> list[tuple[str, dict]]:
+def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMetadata: bool = False, include_zeros: bool = False) -> list[tuple[str, dict]]:
 
     # combine the mastery points and levels
     calculated_mastery = {}
@@ -45,6 +45,17 @@ def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMet
             calculated_mastery_with_names[f"ID_{champ_id}"] = calculated_mastery[champ_id]
 
     # Clogger.debug(calculated_mastery_with_names, settings_override={CloggerSetting.PPRINT_ENABLED: True})
+
+    if include_zeros:
+        for champ_id, champ_name in client.championIDs.items():
+            if champ_name not in calculated_mastery_with_names:
+                entry = {"level": 0, "points": 0}
+                if includeMetadata:
+                    entry['title'] = champ_name
+                    icon_path = client.get_champion_icon_by_id(champ_id)
+                    if icon_path:
+                        entry['icon'] = icon_path
+                calculated_mastery_with_names[champ_name] = entry
 
     # sort by points
     sorted_mastery = sorted(calculated_mastery_with_names.items(), key=lambda item: item[1]['points'], reverse=True)

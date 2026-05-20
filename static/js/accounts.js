@@ -40,7 +40,7 @@ function updateTagPlaceholder() {
 document.getElementById('username').addEventListener('paste', function (e) {
   const pasted = (e.clipboardData || window.clipboardData).getData('text');
   const hash   = pasted.indexOf('#');
-  if (hash === -1) return; // no # — let paste proceed normally
+  if (hash === -1) return; // no # found, let paste proceed normally
 
   e.preventDefault();
   const name = pasted.slice(0, hash).trim();
@@ -50,7 +50,18 @@ document.getElementById('username').addEventListener('paste', function (e) {
   tagInput.value = tag;
 });
 
-regionSelect.addEventListener('change', updateTagPlaceholder);
+const REGION_KEY = 'lolsummd_last_region';
+
+const savedRegion = localStorage.getItem(REGION_KEY);
+if (savedRegion) {
+  const match = [...regionSelect.options].find(o => o.value === savedRegion);
+  if (match) regionSelect.value = savedRegion;
+}
+
+regionSelect.addEventListener('change', () => {
+  localStorage.setItem(REGION_KEY, regionSelect.value);
+  updateTagPlaceholder();
+});
 updateTagPlaceholder();
 
 // ── Add Account ───────────────────────────────────────────────────────────────
@@ -87,6 +98,13 @@ addForm.addEventListener('submit', async function (e) {
   } finally {
     if (masteryBtn) masteryBtn.disabled = false;
   }
+});
+
+// ── Clear Form ────────────────────────────────────────────────────────────────
+document.getElementById('clearFormBtn').addEventListener('click', function () {
+  document.getElementById('username').value = '';
+  tagInput.value = '';
+  document.getElementById('username').focus();
 });
 
 // ── Remove Account (delegated) ────────────────────────────────────────────────
