@@ -13,9 +13,8 @@ REDIS_URL=...
 ```
 
 ## Showcase
-<img width="1890" height="889" alt="image" src="https://github.com/user-attachments/assets/1b0dc7b4-07c5-494e-b29b-b0021808cf1c" />
-<img width="1876" height="887" alt="image" src="https://github.com/user-attachments/assets/cc9161e1-a816-414b-b3d9-53436f9720ed" />
-
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/de603970-67de-48e0-b968-b0d5e98bcead" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/2dbee6d7-9de5-4819-99e0-15f9b00bbc72" />
 
 ## Disclaimer
 lolsummd is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties.
