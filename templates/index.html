@@ -36,6 +36,7 @@
   <div class="divider" id="accountDivider"><span>✦</span></div>
   <div class="centered" style="gap:10px; margin-bottom:18px;" id="actionButtons">
     <button class="btn btn-primary" id="getMasteryBtn">Get Combined Mastery</button>
+    <button class="btn btn-secondary" id="shareBtn">Share Link</button>
     <button class="btn btn-secondary" id="clearAllBtn">Clear All</button>
   </div>
   <ul id="accountList">
@@ -52,6 +53,7 @@
   <div class="divider" id="accountDivider" style="display:none"><span>✦</span></div>
   <div class="centered" style="gap:10px; margin-bottom:18px; display:none;" id="actionButtons">
     <button class="btn btn-primary" id="getMasteryBtn">Get Combined Mastery</button>
+    <button class="btn btn-secondary" id="shareBtn">Share Link</button>
     <button class="btn btn-secondary" id="clearAllBtn">Clear All</button>
   </div>
   <ul id="accountList"></ul>
@@ -121,9 +123,16 @@
       <p>Once you've added your accounts, click <span class="inline-label">Get Combined Mastery</span> to retrieve the aggregated data.</p>
       <p>Remove individual accounts with the <span class="inline-label">Remove</span> button, or wipe the whole list with <span class="inline-label">Clear All</span>.</p>
     </div>
+    <div class="divider"><span>✦</span></div>
+    <div class="help-section">
+      <h3>Sharing</h3>
+      <p>Click <span class="inline-label">Share Link</span> to copy a URL that pre-loads your current account list for anyone who opens it.</p>
+      <p>Your accounts are also saved automatically in your browser. When you return to the site, your last used accounts will be restored so you don't need to re-enter them.</p>
+    </div>
   </div>
 </div>
 
+<script>window.__INITIAL_ACCOUNTS__ = {{ accounts | tojson | safe }};</script>
 <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/accounts.js') }}"></script>

@@ -132,6 +132,31 @@ def manage_accounts():
         session.modified = True
         return jsonify({"accounts": [], "message": "All accounts cleared."})
 
+    elif action == "restore":
+        import json as _json
+        try:
+            raw = request.form.get("accounts", "[]")
+            accounts_raw = _json.loads(raw)
+        except Exception:
+            return jsonify({"error": "Invalid accounts data."}), 400
+
+        valid = []
+        for acc in accounts_raw:
+            if isinstance(acc, list) and len(acc) == 3:
+                name = str(acc[0]).strip()
+                tag  = str(acc[1]).strip()
+                region_str = str(acc[2]).strip()
+                try:
+                    region = Region(region_str)
+                    if name and tag:
+                        valid.append([name, tag, region.value])
+                except (ValueError, KeyError):
+                    continue
+
+        session['accounts'] = valid[:10]
+        session.modified = True
+        return jsonify({"accounts": session['accounts']})
+
     else:
         return jsonify({"error": "Unknown action."}), 400
 

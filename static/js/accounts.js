@@ -1,5 +1,70 @@
+// ── State ─────────────────────────────────────────────────────────────────────
+let currentAccounts = [];
+
+// ── Local storage ─────────────────────────────────────────────────────────────
+const ACCOUNTS_STORAGE_KEY = 'lolsummd_accounts';
+
+function saveAccountsToStorage(accounts) {
+  if (accounts.length === 0) {
+    localStorage.removeItem(ACCOUNTS_STORAGE_KEY);
+  } else {
+    localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts));
+  }
+}
+
+function loadAccountsFromStorage() {
+  try {
+    const raw = localStorage.getItem(ACCOUNTS_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+  } catch {}
+  return null;
+}
+
+// ── URL param encoding ────────────────────────────────────────────────────────
+function parseUrlAccounts() {
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get('a');
+  if (!raw) return null;
+  try {
+    const accounts = raw.split(',')
+      .map(s => s.split('~').map(decodeURIComponent))
+      .filter(parts => parts.length === 3 && parts.every(p => p.trim()));
+    return accounts.length > 0 ? accounts : null;
+  } catch {
+    return null;
+  }
+}
+
+function buildShareUrl(accounts) {
+  const encoded = accounts
+    .map(([u, t, r]) => [u, t, r].map(encodeURIComponent).join('~'))
+    .join(',');
+  const url = new URL(window.location.href);
+  url.search = '?a=' + encoded;
+  return url.toString();
+}
+
+// ── Restore accounts via server (no Riot API validation) ──────────────────────
+async function restoreAccounts(accounts) {
+  const fd = new FormData();
+  fd.set('action', 'restore');
+  fd.set('accounts', JSON.stringify(accounts));
+  try {
+    const data = await postForm('/accounts', fd);
+    renderAccounts(data.accounts);
+    return data.accounts;
+  } catch {
+    return [];
+  }
+}
+
 // ── Render account list ───────────────────────────────────────────────────────
 function renderAccounts(accounts) {
+  currentAccounts = accounts;
+  saveAccountsToStorage(accounts);
+
   const list    = document.getElementById('accountList');
   const divider = document.getElementById('accountDivider');
   const actions = document.getElementById('actionButtons');
@@ -40,11 +105,11 @@ function updateTagPlaceholder() {
 document.getElementById('username').addEventListener('paste', function (e) {
   const pasted = (e.clipboardData || window.clipboardData).getData('text');
   const hash   = pasted.indexOf('#');
-  if (hash === -1) return; // no # found, let paste proceed normally
+  if (hash === -1) return;
 
   e.preventDefault();
   const name = pasted.slice(0, hash).trim();
-  const tag  = pasted.slice(hash + 1).trim().slice(0, 5); // respect maxlength=5
+  const tag  = pasted.slice(hash + 1).trim().slice(0, 5);
 
   this.value     = name;
   tagInput.value = tag;
@@ -79,11 +144,6 @@ addForm.addEventListener('submit', async function (e) {
   const fd = new FormData(this);
   fd.set('action', 'add');
 
-  // Disable mastery button for the duration of the add request.
-  // The add route may hit the Riot API, which takes ~1s. If the user clicks
-  // "Get Combined Mastery" before the add response (and its updated session
-  // cookie) is received, the browser sends the old cookie and the new account
-  // is missing from the session.
   const masteryBtn = document.getElementById('getMasteryBtn');
   if (masteryBtn) masteryBtn.disabled = true;
 
@@ -139,3 +199,48 @@ document.getElementById('clearAllBtn').addEventListener('click', async function 
     showError(err.message);
   }
 });
+
+// ── Share Link ────────────────────────────────────────────────────────────────
+document.getElementById('shareBtn').addEventListener('click', async function () {
+  if (currentAccounts.length === 0) return;
+
+  const url = buildShareUrl(currentAccounts);
+  try {
+    await navigator.clipboard.writeText(url);
+    showMessage('Link copied to clipboard!');
+  } catch {
+    // Fallback: select text from a temporary input
+    const input = document.createElement('input');
+    input.value = url;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
+    showMessage('Link copied to clipboard!');
+  }
+});
+
+// ── Page load: restore from URL params or local storage ──────────────────────
+(async function init() {
+  const urlAccounts = parseUrlAccounts();
+  if (urlAccounts) {
+    history.replaceState(null, '', window.location.pathname);
+    await restoreAccounts(urlAccounts);
+    showMessage(`Loaded ${urlAccounts.length} account${urlAccounts.length !== 1 ? 's' : ''} from shared link.`);
+    return;
+  }
+
+  // Seed currentAccounts from server-rendered session
+  currentAccounts = window.__INITIAL_ACCOUNTS__ || [];
+
+  if (currentAccounts.length > 0) {
+    // Session is active — keep local storage in sync
+    saveAccountsToStorage(currentAccounts);
+  } else {
+    // Session is empty — try to restore from local storage
+    const stored = loadAccountsFromStorage();
+    if (stored) {
+      await restoreAccounts(stored);
+    }
+  }
+})();
