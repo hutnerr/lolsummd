@@ -197,6 +197,9 @@ getMasteryBtn.addEventListener('click', async function () {
     await new Promise(r => setTimeout(r, 200));
     renderMastery(data.result);
     output.classList.remove('fading');
+    if (data.result && data.result.length > 0) {
+      output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
     if (data.message) showMessage(data.message);
   } catch (err) {
     showError(err.message);
