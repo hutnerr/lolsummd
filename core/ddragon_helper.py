@@ -4,9 +4,10 @@ import requests
 from pyutils import check_response
 from pyutils import Clogger
 
-CHAMP_ID_FILEPATH = os.path.join("static", "champ_ids.json")
-CHAMP_ICON_DIRPATH = os.path.join("static", "champion_icons")
-CHAMP_SPLASH_DIRPATH = os.path.join("static", "champion_splashes")
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CHAMP_ID_FILEPATH = os.path.join(_PROJECT_ROOT, "static", "champ_ids.json")
+CHAMP_ICON_DIRPATH = os.path.join(_PROJECT_ROOT, "static", "champion_icons")
+CHAMP_SPLASH_DIRPATH = os.path.join(_PROJECT_ROOT, "static", "champion_splashes")
 
 def _get_latest_version() -> str:
     latest_version_response = requests.get("https://ddragon.leagueoflegends.com/api/versions.json")
@@ -62,7 +63,7 @@ def get_champion_icons_saved() -> dict:
     for champ_id, champ_name in ids.items():
         filepath = os.path.join(CHAMP_ICON_DIRPATH, f"{champ_id}.png")
         if os.path.exists(filepath):
-            icons[champ_id] = "/" + filepath
+            icons[champ_id] = "/static/champion_icons/" + champ_id + ".png"
         else:
             Clogger.warn(f"Icon for champion ID {champ_id} not found in {CHAMP_ICON_DIRPATH}")
     return icons

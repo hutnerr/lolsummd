@@ -37,16 +37,19 @@ class RiotAPIClient:
         pass
 
     def get_account_by_summoner_name(self, username: str, tag: str, region: Region) -> Optional[Account]:
-        cached_data = self.cache.get_by_name(username, tag, region)
-        if cached_data:
-            Clogger.debug(f"Cache hit for account: {username}#{tag}")
-            cached_data['region'] = Region(cached_data['region'])
-            return Account(
-                puuid=cached_data["puuid"],
-                username=cached_data["username"],
-                tag=cached_data["tag"],
-                region=cached_data["region"]
-            )
+        try:
+            cached_data = self.cache.get_by_name(username, tag, region)
+            if cached_data:
+                Clogger.debug(f"Cache hit for account: {username}#{tag}")
+                cached_data['region'] = Region(cached_data['region'])
+                return Account(
+                    puuid=cached_data["puuid"],
+                    username=cached_data["username"],
+                    tag=cached_data["tag"],
+                    region=cached_data["region"]
+                )
+        except Exception as e:
+            Clogger.warn(f"Cache unavailable for account lookup {username}#{tag}: {e}")
 
         try:
             url = build_platform_url_from_region(
@@ -102,18 +105,22 @@ class RiotAPIClient:
         return accounts
 
     def _get_cached_mastery(self, puuid: str) -> Optional[dict]:
-        if not self.cache.has(puuid):
-            return None
-        
-        cached_data = self.cache.get(puuid)
-        mastery_cache = (cached_data or {}).get("masterydata", {})
+        try:
+            if not self.cache.has(puuid):
+                return None
 
-        if not mastery_cache.get("cached_at"):
-            return None
-        if not is_cache_valid(mastery_cache["cached_at"], self.masteryCacheDuration):
-            return None
+            cached_data = self.cache.get(puuid)
+            mastery_cache = (cached_data or {}).get("masterydata", {})
 
-        return mastery_cache.get("champions") or None
+            if not mastery_cache.get("cached_at"):
+                return None
+            if not is_cache_valid(mastery_cache["cached_at"], self.masteryCacheDuration):
+                return None
+
+            return mastery_cache.get("champions") or None
+        except Exception as e:
+            Clogger.warn(f"Cache unavailable for mastery lookup {puuid}: {e}")
+            return None
 
 
     def get_mastery_all_champions(self, account: Account) -> dict[int, dict[str, int]]:
@@ -143,18 +150,21 @@ class RiotAPIClient:
             champions = {
                 str(item["championId"]): {
                     "id":          item.get("championId"),
-                    "level":       item.get("championLevel"),
-                    "points":      item.get("championPoints"),
+                    "level":       item.get("championLevel", 0),
+                    "points":      item.get("championPoints", 0),
                     "last_played": item.get("lastPlayTime"),
                 }
                 for item in response.json()
                 if "championId" in item
             }
 
-            cached_account = self.cache.get(account.puuid) or {}
-            cached_account["masterydata"] = {"cached_at": get_linux_timestamp(), "champions": champions}
-            Clogger.debug(f"About to write mastery cache. cached_account keys: {list(cached_account.keys())}, username: {cached_account.get('username')}")
-            self.cache.set(account.puuid, cached_account)
+            try:
+                cached_account = self.cache.get(account.puuid) or {}
+                cached_account["masterydata"] = {"cached_at": get_linux_timestamp(), "champions": champions}
+                Clogger.debug(f"About to write mastery cache. cached_account keys: {list(cached_account.keys())}, username: {cached_account.get('username')}")
+                self.cache.set(account.puuid, cached_account)
+            except Exception as e:
+                Clogger.warn(f"Failed to write mastery cache for {account.username}#{account.tag}: {e}")
 
             return champions
 

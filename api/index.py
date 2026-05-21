@@ -71,6 +71,9 @@ def riot_file():
 @app.route("/accounts", methods=["POST"])
 def manage_accounts():
     """Handles add / remove / clear via fetch — returns JSON."""
+    if not client:
+        return jsonify({"error": "Service unavailable: API client not initialized."}), 503
+
     if 'accounts' not in session:
         session['accounts'] = []
 
@@ -163,6 +166,9 @@ def manage_accounts():
 
 @app.route("/mastery", methods=["POST"])
 def get_mastery():
+    if not client:
+        return jsonify({"error": "Service unavailable: API client not initialized."}), 503
+
     if 'accounts' not in session or not session['accounts']:
         return jsonify({"error": "No accounts in session."}), 400
 

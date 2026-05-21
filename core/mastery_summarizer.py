@@ -18,31 +18,25 @@ def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMet
 
     Clogger.debug(f"Calculated mastery for {len(calculated_mastery)} champions across {len(accounts)} accounts.")
 
-    if includeMetadata:
-        for champ_id in calculated_mastery:
-            champ_name = client.get_champion_name_by_id(champ_id)
-            if champ_name:
-                calculated_mastery[champ_id]['title'] = champ_name
-            else:
-                Clogger.warn(f"Could not find champion info for ID {champ_id}, skipping metadata.")
+    # convert champion IDs to names and attach metadata in one pass
+    calculated_mastery_with_names = {}
+    for champ_id in calculated_mastery:
+        champ_name = client.get_champion_name_by_id(champ_id)
+        if not champ_name:
+            Clogger.warn(f"Could not find name for champion ID {champ_id}, using ID as key.")
+            champ_name = f"ID_{champ_id}"
 
+        if includeMetadata:
+            calculated_mastery[champ_id]['title'] = champ_name
             champ_icon_filepath = client.get_champion_icon_by_id(champ_id)
             if champ_icon_filepath:
                 calculated_mastery[champ_id]['icon'] = champ_icon_filepath
             else:
                 Clogger.warn(f"Could not find champion icon for ID {champ_id}, skipping icon metadata.")
 
-    Clogger.debug("Completed mastery calculation and metadata addition")
+        calculated_mastery_with_names[champ_name] = calculated_mastery[champ_id]
 
-    # convert champion IDs to names
-    calculated_mastery_with_names = {}
-    for champ_id in calculated_mastery:
-        champ_name = client.get_champion_name_by_id(champ_id)
-        if champ_name:
-            calculated_mastery_with_names[f"{champ_name}"] = calculated_mastery[champ_id]
-        else:
-            Clogger.warn(f"Could not find name for champion ID {champ_id}, using ID as key.")
-            calculated_mastery_with_names[f"ID_{champ_id}"] = calculated_mastery[champ_id]
+    Clogger.debug("Completed mastery calculation and metadata addition")
 
     # Clogger.debug(calculated_mastery_with_names, settings_override={CloggerSetting.PPRINT_ENABLED: True})
 
