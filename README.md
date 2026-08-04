@@ -1,3 +1,5 @@
+> Actively waiting on a Riot API key...
+
 ## Overview
 A lightweight web app for League of Legends players to aggregate champion mastery points across multiple accounts.
 
