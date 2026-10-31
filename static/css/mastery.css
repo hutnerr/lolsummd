@@ -315,7 +315,7 @@
   font-weight: 700;
   letter-spacing: 0.04em;
 }
-.mastery-level-50 { color: var(--purple); background: var(--badge-50-bg); border: 1px solid var(--purple-d);         box-shadow: 0 0 8px rgba(211, 134, 155, 0.25); }
+.mastery-level-50 { color: var(--purple); background: var(--badge-50-bg); border: 1px solid var(--purple-d);         }
 .mastery-level-10 { color: var(--orange); background: var(--badge-10-bg); border: 1px solid var(--orange-d);         }
 .mastery-level-7  { color: var(--yellow); background: var(--badge-7-bg);  border: 1px solid var(--yellow-s);         }
 .mastery-level-5  { color: var(--green);  background: var(--badge-5-bg);  border: 1px solid var(--green-d);          }
