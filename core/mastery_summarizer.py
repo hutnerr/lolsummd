@@ -2,6 +2,16 @@ from pyutils import Clogger, CloggerSetting
 from models.account import Account
 from core.riot_api_client import RiotAPIClient
 
+# riot gives "classic" champion variants (alias Jade_<Champ>, e.g. 60001 = classic annie) their own
+# ids starting at 60000. they aren't in ddragon and we don't show them. real champion ids are < 1000.
+CLASSIC_CHAMPION_ID_MIN = 60000
+
+def is_classic_champion(champ_id) -> bool:
+    try:
+        return int(champ_id) >= CLASSIC_CHAMPION_ID_MIN
+    except (TypeError, ValueError):
+        return False
+
 def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMetadata: bool = False, include_zeros: bool = False) -> list[tuple[str, dict]]:
 
     # combine the mastery points and levels
@@ -10,6 +20,9 @@ def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMet
         total_mastery = client.get_mastery_all_champions(acc)
 
         for id in total_mastery:
+            if is_classic_champion(id):
+                continue
+
             if id not in calculated_mastery:
                 calculated_mastery[id] = {"level": 0, "points": 0}
 
@@ -33,6 +46,9 @@ def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMet
                 calculated_mastery[champ_id]['icon'] = champ_icon_filepath
             else:
                 Clogger.warn(f"Could not find champion icon for ID {champ_id}, skipping icon metadata.")
+            champ_splash_filepath = client.get_champion_splash_by_id(champ_id)
+            if champ_splash_filepath:
+                calculated_mastery[champ_id]['splash'] = champ_splash_filepath
 
         calculated_mastery_with_names[champ_name] = calculated_mastery[champ_id]
 
@@ -49,6 +65,9 @@ def summarize_mastery(accounts: list[Account], client: RiotAPIClient, includeMet
                     icon_path = client.get_champion_icon_by_id(champ_id)
                     if icon_path:
                         entry['icon'] = icon_path
+                    splash_path = client.get_champion_splash_by_id(champ_id)
+                    if splash_path:
+                        entry['splash'] = splash_path
                 calculated_mastery_with_names[champ_name] = entry
 
     # sort by points

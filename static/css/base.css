@@ -16,6 +16,10 @@
   --green-d: #98971a;
   --aqua:    #8ec07c;
   --red:     #fb4934;
+  --orange:  #fe8019;
+  --orange-d:#d65d0e;
+  --purple:  #d3869b;
+  --purple-d:#b16286;
   --bg-pattern: #1d2021;
 
   --font-body:    'Inter', system-ui, sans-serif;
@@ -25,6 +29,8 @@
   --badge-7-bg:  #3c360e;
   --badge-5-bg:  #323520;
   --badge-lo-bg: #1f2e2e;
+  --badge-10-bg: #3d2410;
+  --badge-50-bg: #3a2530;
   --badge-lo-border: #427b58;
 }
 
@@ -87,6 +93,16 @@ main { flex: 1; }
 
 /* ── Page heading ────────────────────────────────────────────────────────── */
 .page-heading { text-align: center; margin-bottom: 36px; }
+.page-heading h1 {
+  font-family: var(--font-heading);
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  color: var(--yellow);
+  margin-bottom: 10px;
+}
+.page-heading h1 + p { font-size: 15px; }
 .page-heading h2 {
   font-family: var(--font-heading);
   font-size: 24px;

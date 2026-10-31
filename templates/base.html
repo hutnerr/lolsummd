@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}LOLSUMMD{% endblock %}</title>
+  <meta name="description" content="Combine champion mastery across multiple League of Legends accounts.">
+  <meta name="theme-color" content="#282828">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="LOLSUMMD">
+  <meta property="og:title" content="LOLSUMMD">
+  <meta property="og:description" content="Combine champion mastery across multiple League of Legends accounts.">
+  <meta property="og:url" content="{{ request.url }}">
+  <meta property="og:image" content="{{ url_for('static', filename='lolsum.png', _external=True) }}">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" href="{{ url_for('static', filename='lolsum.png') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">

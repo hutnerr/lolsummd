@@ -10,7 +10,7 @@ from pyutils import Clogger, CloggerOverrideFactory
 from pyutils import check_response
 from models.account import Account
 from core.endpoint_builder import Region, ApiPath, build_regional_url, build_platform_url_from_region
-from core.ddragon_helper import get_champion_ids_saved, get_champion_icons_saved
+from core.ddragon_helper import get_champion_ids_saved, get_champion_icons_saved, get_champion_splashes_saved
 
 class RiotAPIClient:
 
@@ -29,6 +29,7 @@ class RiotAPIClient:
         self.cache: CacheInterface = cache or RedisCache()
         self.championIDs: dict[str, str] = get_champion_ids_saved()
         self.championIDsToIcons: dict[str, str] = get_champion_icons_saved()
+        self.championIDsToSplashes: dict[str, str] = get_champion_splashes_saved()
         self.masteryCacheDuration = TimeUnit.DAY1
 
         Clogger.info("RiotAPIClient initialized")
@@ -202,7 +203,19 @@ class RiotAPIClient:
             Clogger.warn(f"Champion icon for ID {champ_id} not found in mapping")
 
         return icon_path
-    
+
+    def get_champion_splash_by_id(self, champ_id) -> Optional[str]:
+        if champ_id is None:
+            Clogger.error("Champion ID is None")
+            return None
+
+        splash_path = self.championIDsToSplashes.get(str(champ_id))
+
+        if splash_path is None:
+            Clogger.warn(f"Champion splash for ID {champ_id} not found in mapping")
+
+        return splash_path
+
     def is_same_account(self, acc1: list[str], acc2: list[str]) -> bool:
         acc1_username, acc1_tag, acc1_region = acc1
         acc2_username, acc2_tag, acc2_region = acc2

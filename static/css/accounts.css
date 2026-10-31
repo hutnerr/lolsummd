@@ -27,4 +27,17 @@
 .account-name { display: flex; align-items: center; gap: 4px; font-size: 14px; flex-wrap: wrap; }
 .account-name .hash   { color: var(--fg3); font-size: 12px; }
 .account-name .tag    { color: var(--yellow); font-size: 12px; letter-spacing: 0.08em; }
-.account-name .region { color: var(--fg3); font-size: 11px; letter-spacing: 0.06em; margin-left: 2px; }
+.region-pill {
+  margin-left: 6px;
+  padding: 1px 8px;
+  border-radius: 99px;
+  background: var(--bg);
+  border: 1px solid var(--bg3);
+  color: var(--fg3);
+  font-family: var(--font-heading);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: default;
+}

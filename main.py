@@ -11,7 +11,8 @@ from pyutils import get_env
 Clogger.debugEnabled = True
 
 # get_champion_ids() # run this if you don't have data/champ_ids.json
-# get_champion_images(true, true)  # run this if you don't have the icons and splashes
+# get_champion_images(True, True)  # run this if you don't have the icons and splashes
+# get_champion_images(True, True, skip_existing=True)  # run this to grab only new champions
 
 cache = RedisCache()
 cache.clear()

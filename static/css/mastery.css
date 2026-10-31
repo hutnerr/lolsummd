@@ -85,6 +85,12 @@
   text-transform: uppercase;
   color: var(--fg3);
   padding: 8px 14px;
+  /* keep the sort controls in reach on long lists */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg);
+  box-shadow: 0 1px 0 var(--bg2);
 }
 
 /* ── Sortable headers ────────────────────────────────────────────────────── */
@@ -141,8 +147,40 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* ── Points bar (share of the top champion's points) ─────────────────────── */
+.points-bar {
+  display: block;
+  width: var(--pct, 0%);
+  height: 3px;
+  margin: 5px 0 0 auto;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--yellow-s), var(--yellow));
+  opacity: 0.75;
+}
+
+/* ── Loading skeleton ────────────────────────────────────────────────────── */
+.skeleton-wrap { display: flex; flex-direction: column; gap: 6px; }
+
+.skeleton {
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg1) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+.skeleton-hero { height: 180px; border-radius: 12px; margin-bottom: 26px; }
+.skeleton-row  { height: 50px; }
+.skeleton-row:nth-child(n+5) { opacity: 0.6; }
+.skeleton-row:nth-child(n+7) { opacity: 0.3; }
+
+@keyframes shimmer {
+  from { background-position: 100% 0; }
+  to   { background-position: -100% 0; }
+}
+
 /* ── Champion cell ───────────────────────────────────────────────────────── */
-.champion-cell { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+/* flex lives on an inner div so the <td> stays a real table cell and keeps its column width */
+.champion-cell { display: flex; align-items: center; gap: 10px; font-weight: 700; min-width: 0; }
+.champion-cell span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .champion-cell img {
   flex-shrink: 0;
   height: 30px; width: 30px;
@@ -151,12 +189,37 @@
 }
 
 /* ── Podium ───────────────────────────────────────────────────────────────── */
+.podium-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 12px;
+  margin: 8px 0 32px;
+  padding: 28px 0 20px;
+}
+
+/* #1 champion's splash, faded into the page background */
+.podium-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-size: cover;
+  background-position: center 25%;
+  opacity: 0.4;
+  filter: saturate(1.1);
+  /* fade to transparent (not to a color) so the topography shows around it */
+  -webkit-mask-image: radial-gradient(ellipse 50% 55% at center 40%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 55% at center 40%, #000 30%, transparent 100%);
+}
+.podium-hero .podium-name,
+.podium-hero .podium-pts,
+.podium-hero .podium-rank { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8); }
+
 .podium {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   gap: 24px;
-  margin: 8px 0 40px;
 }
 
 .podium-slot {
@@ -252,6 +315,8 @@
   font-weight: 700;
   letter-spacing: 0.04em;
 }
+.mastery-level-50 { color: var(--purple); background: var(--badge-50-bg); border: 1px solid var(--purple-d);         box-shadow: 0 0 8px rgba(211, 134, 155, 0.25); }
+.mastery-level-10 { color: var(--orange); background: var(--badge-10-bg); border: 1px solid var(--orange-d);         }
 .mastery-level-7  { color: var(--yellow); background: var(--badge-7-bg);  border: 1px solid var(--yellow-s);         }
 .mastery-level-5  { color: var(--green);  background: var(--badge-5-bg);  border: 1px solid var(--green-d);          }
 .mastery-level-lo { color: var(--aqua);   background: var(--badge-lo-bg); border: 1px solid var(--badge-lo-border); }

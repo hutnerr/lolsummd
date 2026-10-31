@@ -22,23 +22,47 @@ function sortedData() {
   });
 }
 
+// ── Mastery badge tier (levels are uncapped and summed across accounts) ──────
+function levelClass(level) {
+  return level >= 50 ? 'mastery-level-50'
+       : level >= 10 ? 'mastery-level-10'
+       : level >= 7  ? 'mastery-level-7'
+       : level >= 5  ? 'mastery-level-5'
+       : 'mastery-level-lo';
+}
+
 // ── Build table rows ──────────────────────────────────────────────────────────
 function buildRows(data) {
+  // bars are scaled against the top champion overall, not the current sort
+  const maxPoints = Math.max(1, ...masteryData.map(c => c.points));
+
   return data.map((champ, i) => {
-    const levelClass = champ.level >= 7 ? 'mastery-level-7'
-                     : champ.level >= 5 ? 'mastery-level-5'
-                     : 'mastery-level-lo';
     const icon = champ.icon
       ? `<img src="${escHtml(champ.icon)}" alt="${escHtml(champ.name)}">`
       : '';
+    const pct = champ.points > 0 ? Math.max(1, (champ.points / maxPoints) * 100) : 0;
     return `
       <tr>
         <td>${i + 1}</td>
-        <td class="champion-cell">${icon}${escHtml(champ.name)}</td>
-        <td><span class="mastery-badge ${levelClass}">${champ.level}</span></td>
-        <td>${champ.points.toLocaleString()}</td>
+        <td><div class="champion-cell">${icon}<span>${escHtml(champ.name)}</span></div></td>
+        <td><span class="mastery-badge ${levelClass(champ.level)}">${champ.level}</span></td>
+        <td class="points-cell">
+          ${champ.points.toLocaleString()}
+          <span class="points-bar" style="--pct: ${pct.toFixed(1)}%"></span>
+        </td>
       </tr>`;
   }).join('');
+}
+
+// ── Placeholder shown while the mastery request is in flight ─────────────────
+function buildSkeleton() {
+  const rows = Array.from({ length: 6 }, () => '<div class="skeleton skeleton-row"></div>').join('');
+  return `
+    <div class="divider"><span>✦</span></div>
+    <div class="skeleton-wrap" aria-busy="true" aria-label="Loading mastery">
+      <div class="skeleton skeleton-hero"></div>
+      ${rows}
+    </div>`;
 }
 
 // ── Update sort indicators on headers ────────────────────────────────────────
@@ -90,11 +114,18 @@ function buildPodium(result) {
       </div>`;
   }
 
+  const splash = top3[0].splash
+    ? `<div class="podium-hero-bg" style="background-image: url('${escHtml(top3[0].splash)}')"></div>`
+    : '';
+
   return `
-    <div class="podium">
-      ${podiumSlot(top3[1] || null, 2)}
-      ${podiumSlot(top3[0],         1)}
-      ${podiumSlot(top3[2] || null, 3)}
+    <div class="podium-hero">
+      ${splash}
+      <div class="podium">
+        ${podiumSlot(top3[1] || null, 2)}
+        ${podiumSlot(top3[0],         1)}
+        ${podiumSlot(top3[2] || null, 3)}
+      </div>
     </div>`;
 }
 
@@ -187,12 +218,14 @@ getMasteryBtn.addEventListener('click', async function () {
   getMasteryBtn.classList.add('btn-loading');
   getMasteryBtn.innerHTML = '<span class="spinner"></span>Loading…';
 
+  const output = document.getElementById('output');
+  output.innerHTML = buildSkeleton();
+
   try {
     const res  = await fetch('/mastery', { method: 'POST' });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Something went wrong.');
 
-    const output = document.getElementById('output');
     output.classList.add('fading');
     await new Promise(r => setTimeout(r, 200));
     renderMastery(data.result);
@@ -202,6 +235,9 @@ getMasteryBtn.addEventListener('click', async function () {
     }
     if (data.message) showMessage(data.message);
   } catch (err) {
+    // put back the previous results (if any) instead of leaving the skeleton up
+    if (masteryData.length > 0) renderMastery(masteryData);
+    else output.innerHTML = '';
     showError(err.message);
   } finally {
     getMasteryBtn.disabled = false;

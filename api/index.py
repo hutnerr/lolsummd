@@ -3,6 +3,7 @@ import sys
 import logging
 from flask import Flask, render_template, request, session, jsonify, send_from_directory
 from werkzeug.exceptions import HTTPException
+from werkzeug.middleware.proxy_fix import ProxyFix
 from pyutils import Clogger, CloggerSetting
 from core.riot_api_client import RiotAPIClient
 from core.mastery_summarizer import summarize_mastery
@@ -13,6 +14,8 @@ from models.account import Account
 # ===============
 # INIT
 # ===============
+
+MAX_ACCOUNTS = 15
 
 key = os.environ.get("RIOT_API_KEY")
 if not key:
@@ -32,6 +35,8 @@ app = Flask(
     template_folder=os.path.join(os.path.dirname(__file__), "../templates"),
     static_folder=os.path.join(os.path.dirname(__file__), "../static")
 )
+# trust vercel's forwarded headers so _external urls (og:image etc.) come out as https
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 flask_secret = os.environ.get("FLASK_SECRET_KEY")
 if not flask_secret:
@@ -62,6 +67,7 @@ def home():
         regions=Region,
         region_default_tags=region_default_tags,
         region_names=region_names,
+        max_accounts=MAX_ACCOUNTS,
     )
     
 @app.route("/riot.txt")
@@ -95,8 +101,8 @@ def manage_accounts():
         if username and tag and region:
             account = [username, tag, region.value]
             if account not in session['accounts']:
-                if len(session['accounts']) >= 10:
-                    return jsonify({"error": "Maximum of 10 accounts allowed."}), 400
+                if len(session['accounts']) >= MAX_ACCOUNTS:
+                    return jsonify({"error": f"Maximum of {MAX_ACCOUNTS} accounts allowed."}), 400
                 
                 a = client.get_account_by_summoner_name(username, tag, region)                
                 if not a:
@@ -157,7 +163,7 @@ def manage_accounts():
                 except (ValueError, KeyError):
                     continue
 
-        session['accounts'] = valid[:10]
+        session['accounts'] = valid[:MAX_ACCOUNTS]
         session.modified = True
         return jsonify({"accounts": session['accounts']})
 
@@ -196,6 +202,7 @@ def get_mastery():
             "level": mastery_data["level"],
             "points": mastery_data["points"],
             "icon": mastery_data.get("icon", ""),
+            "splash": mastery_data.get("splash", ""),
         }
         for champ_name, mastery_data in result
     ]

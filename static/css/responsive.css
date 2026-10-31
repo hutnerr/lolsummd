@@ -1,6 +1,7 @@
 @media (max-width: 600px) {
   /* ── Container ───────────────────────────────────────────────────────── */
   .container { padding: 28px 16px 48px; }
+  .page-heading h1 { font-size: 30px; }
 
   /* ── Form: 2-col grid, username full width, tag+region side by side ── */
   #addAccountForm {

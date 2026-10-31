@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="page-heading">
-  <h2>LOLSUMMD</h2>
+  <h1>LOLSUMMD</h1>
   <p>Combine mastery data across multiple League of Legends accounts</p>
   <div class="notice notice-warn">Currently running on a development API key until accepted by Riot. Some requests may fail.</div>
 </div>
@@ -11,9 +11,9 @@
 <!-- Add Account Form -->
 <form id="addAccountForm">
   <div class="input-box">
-    <input id="username" type="text" name="username" placeholder="Summoner Name" required autocomplete="off">
-    <input id="tag" type="text" name="tag" placeholder="" maxlength="5" autocomplete="off">
-    <select name="region" id="region" required>
+    <input id="username" type="text" name="username" placeholder="Summoner Name" aria-label="Summoner name" required autocomplete="off">
+    <input id="tag" type="text" name="tag" placeholder="" aria-label="Tag" maxlength="5" autocomplete="off">
+    <select name="region" id="region" aria-label="Region" required>
       {% for region in regions %}
         <option value="{{ region.value }}" data-default-tag="{{ region_default_tags[region.value] }}">
           {{ region_names[region.value] }}
@@ -42,7 +42,7 @@
     {% for username, tag, region in accounts %}
     <li>
       <span class="account-name">
-        {{ username }}<span class="hash">#</span><span class="tag">{{ tag }}</span><span class="region"> ({{ region }})</span>
+        {{ username }}<span class="hash">#</span><span class="tag">{{ tag }}</span><span class="region-pill" title="{{ region_names[region] }}">{{ region }}</span>
       </span>
       <button class="btn btn-danger remove-btn" data-index="{{ loop.index0 }}">Remove</button>
     </li>
@@ -51,43 +51,7 @@
 </div>
 
 
-<div id="output">
-  {% if result %}
-  <div class="divider"><span>✦</span></div>
-  <h3>Combined Mastery</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Champion</th>
-        <th style="text-align:center">Level</th>
-        <th style="text-align:right">Points</th>
-      </tr>
-    </thead>
-    <tbody id="masteryTableBody">
-      {% for champ_name, mastery_data in result %}
-      <tr>
-        <td>{{ loop.index }}</td>
-        <td class="champion-cell">
-          {% if mastery_data['icon'] %}<img src="{{ mastery_data['icon'] }}" alt="{{ champ_name }}">{% endif %}
-          {{ champ_name }}
-        </td>
-        <td>
-          {% if mastery_data['level'] >= 7 %}
-            <span class="mastery-badge mastery-level-7">{{ mastery_data['level'] }}</span>
-          {% elif mastery_data['level'] >= 5 %}
-            <span class="mastery-badge mastery-level-5">{{ mastery_data['level'] }}</span>
-          {% else %}
-            <span class="mastery-badge mastery-level-lo">{{ mastery_data['level'] }}</span>
-          {% endif %}
-        </td>
-        <td>{{ "{:,}".format(mastery_data['points']) }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% endif %}
-</div>
+<div id="output"></div>
 
 <button class="help-btn btn btn-secondary" onclick="openHelp()" aria-label="Help">?</button>
 
@@ -102,7 +66,7 @@
     <div class="help-section">
       <h3>Overview</h3>
       <p>lolsummd lets you combine the champion mastery data of multiple League of Legends accounts into one unified summary.</p>
-      <p>You can add up to 10 accounts at a time from any region.</p>
+      <p>You can add up to {{ max_accounts }} accounts at a time from any region.</p>
     </div>
     <div class="divider"><span>✦</span></div>
     <div class="help-section">

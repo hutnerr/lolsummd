@@ -60,6 +60,12 @@ async function restoreAccounts(accounts) {
   }
 }
 
+// ── Full region name from the region <select>, e.g. "na1" → "North America" ──
+function regionName(region) {
+  const option = document.querySelector(`#region option[value="${CSS.escape(region)}"]`);
+  return option ? option.textContent.trim() : region;
+}
+
 // ── Render account list ───────────────────────────────────────────────────────
 function renderAccounts(accounts) {
   currentAccounts = accounts;
@@ -79,7 +85,7 @@ function renderAccounts(accounts) {
     const li = document.createElement('li');
     li.innerHTML = `
       <span class="account-name">
-        ${escHtml(username)}<span class="hash">#</span><span class="tag">${escHtml(tag)}</span><span class="region"> (${escHtml(region)})</span>
+        ${escHtml(username)}<span class="hash">#</span><span class="tag">${escHtml(tag)}</span><span class="region-pill" title="${escHtml(regionName(region))}">${escHtml(region)}</span>
       </span>
       <button class="btn btn-danger remove-btn" data-index="${index}">Remove</button>
     `;
