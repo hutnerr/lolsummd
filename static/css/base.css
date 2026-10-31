@@ -102,6 +102,17 @@ main { flex: 1; }
   color: var(--yellow);
   margin-bottom: 10px;
 }
+.page-heading h1:has(.heading-logo) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.heading-logo {
+  height: 1.4em;
+  width: auto;
+  image-rendering: pixelated;
+}
 .page-heading h1 + p { font-size: 15px; }
 .page-heading h2 {
   font-family: var(--font-heading);
