@@ -1,9 +1,4 @@
 @media (max-width: 600px) {
-  /* ── Nav ─────────────────────────────────────────────────────────────── */
-  nav { padding: 0 16px; height: 54px; }
-  #title a { font-size: 18px; }
-  nav ul { gap: 16px; }
-
   /* ── Container ───────────────────────────────────────────────────────── */
   .container { padding: 28px 16px 48px; }
 

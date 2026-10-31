@@ -1,6 +1,6 @@
 /* ── Accounts list ───────────────────────────────────────────────────────── */
 #accounts { margin-top: 20px; }
-#accounts > .centered { display: flex; justify-content: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+#actionButtons { display: flex; justify-content: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
 
 #accounts ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 
@@ -25,6 +25,6 @@
 
 /* ── Account name ────────────────────────────────────────────────────────── */
 .account-name { display: flex; align-items: center; gap: 4px; font-size: 14px; flex-wrap: wrap; }
-.account-name .hash   { color: var(--bg3); font-size: 12px; }
+.account-name .hash   { color: var(--fg3); font-size: 12px; }
 .account-name .tag    { color: var(--yellow); font-size: 12px; letter-spacing: 0.08em; }
 .account-name .region { color: var(--fg3); font-size: 11px; letter-spacing: 0.06em; margin-left: 2px; }

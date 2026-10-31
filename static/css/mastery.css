@@ -3,7 +3,7 @@
 #output.fading { opacity: 0; }
 
 #output h3 {
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-heading);
   font-size: 16px;
   text-transform: uppercase;
   text-align: center;
@@ -79,7 +79,7 @@
 }
 
 #output thead th {
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-heading);
   font-size: 10px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
@@ -138,6 +138,7 @@
 }
 #output tbody td:last-child {
   color: var(--yellow);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Champion cell ───────────────────────────────────────────────────────── */
@@ -171,7 +172,7 @@
 .podium-3 { padding-top: 24px; }
 
 .podium-rank {
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-heading);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -197,7 +198,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-heading);
   font-weight: 700;
   color: var(--fg3);
   font-size: 22px;
@@ -207,7 +208,7 @@
 .podium-3 .podium-icon-fallback { width: 72px; height: 72px; }
 
 .podium-name {
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-heading);
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
@@ -221,7 +222,7 @@
 }
 
 .podium-pts {
-  font-family: 'Nunito', sans-serif;
+  font-family: var(--font-body);
   font-size: 13px;
   color: var(--fg3);
   text-align: center;
@@ -251,6 +252,6 @@
   font-weight: 700;
   letter-spacing: 0.04em;
 }
-.mastery-level-7  { color: var(--yellow); background: #3c360e; border: 1px solid var(--yellow-s); }
-.mastery-level-5  { color: var(--green);  background: #323520; border: 1px solid var(--green-d);  }
-.mastery-level-lo { color: var(--aqua);   background: #1f2e2e; border: 1px solid #427b58;         }
+.mastery-level-7  { color: var(--yellow); background: var(--badge-7-bg);  border: 1px solid var(--yellow-s);         }
+.mastery-level-5  { color: var(--green);  background: var(--badge-5-bg);  border: 1px solid var(--green-d);          }
+.mastery-level-lo { color: var(--aqua);   background: var(--badge-lo-bg); border: 1px solid var(--badge-lo-border); }

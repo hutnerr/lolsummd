@@ -32,9 +32,8 @@
 </div>
 
 <div id="accounts">
-  {% if accounts %}
-  <div class="divider" id="accountDivider"><span>✦</span></div>
-  <div class="centered" style="gap:10px; margin-bottom:18px;" id="actionButtons">
+  <div class="divider" id="accountDivider" {% if not accounts %}hidden{% endif %}><span>✦</span></div>
+  <div class="centered" id="actionButtons" {% if not accounts %}hidden{% endif %}>
     <button class="btn btn-primary" id="getMasteryBtn">Get Combined Mastery</button>
     <button class="btn btn-secondary" id="shareBtn">Share Link</button>
     <button class="btn btn-secondary" id="clearAllBtn">Clear All</button>
@@ -49,15 +48,6 @@
     </li>
     {% endfor %}
   </ul>
-  {% else %}
-  <div class="divider" id="accountDivider" style="display:none"><span>✦</span></div>
-  <div class="centered" style="gap:10px; margin-bottom:18px; display:none;" id="actionButtons">
-    <button class="btn btn-primary" id="getMasteryBtn">Get Combined Mastery</button>
-    <button class="btn btn-secondary" id="shareBtn">Share Link</button>
-    <button class="btn btn-secondary" id="clearAllBtn">Clear All</button>
-  </div>
-  <ul id="accountList"></ul>
-  {% endif %}
 </div>
 
 
@@ -118,7 +108,7 @@
     <div class="help-section">
       <h3>Instructions</h3>
       <p>Add accounts by entering a username and tag. For example, <span class="inline-code">SummonerName#NA1</span> splits into <span class="inline-code">SummonerName</span> and <span class="inline-code">NA1</span>.</p>
-      <p>Alternatively, you can copy paste in something like username#tag and it will split them for you.
+      <p>Alternatively, you can copy paste in something like username#tag and it will split them for you.</p>
       <p>The TAG field will default to the standard tag for the selected region if left blank.</p>
       <p>Once you've added your accounts, click <span class="inline-label">Get Combined Mastery</span> to retrieve the aggregated data.</p>
       <p>Remove individual accounts with the <span class="inline-label">Remove</span> button, or wipe the whole list with <span class="inline-label">Clear All</span>.</p>

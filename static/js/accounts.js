@@ -71,14 +71,9 @@ function renderAccounts(accounts) {
 
   list.innerHTML = '';
 
-  if (accounts.length === 0) {
-    divider.style.display = 'none';
-    actions.style.display = 'none';
-    return;
-  }
-
-  divider.style.display = '';
-  actions.style.display = '';
+  divider.hidden = accounts.length === 0;
+  actions.hidden = accounts.length === 0;
+  if (accounts.length === 0) return;
 
   accounts.forEach(([username, tag, region], index) => {
     const li = document.createElement('li');

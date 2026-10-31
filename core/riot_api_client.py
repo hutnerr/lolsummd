@@ -1,5 +1,6 @@
 import json
 import requests
+from urllib.parse import quote
 
 from typing import Optional
 from util.cache.cache_interface import CacheInterface
@@ -55,8 +56,8 @@ class RiotAPIClient:
             url = build_platform_url_from_region(
                 region,
                 ApiPath.ACCOUNT_BY_ID,
-                username=username,
-                tag=tag
+                username=quote(username, safe=""),
+                tag=quote(tag, safe="")
             )
             resp = requests.get(url, params={"api_key": self.key}, timeout=5)
 
@@ -69,7 +70,13 @@ class RiotAPIClient:
                 Clogger.warn(f"Account not found: {username}#{tag}")
                 return None
 
-            account = Account(puuid=data["puuid"], username=username, tag=tag, region=region)
+            # use riot's canonical casing rather than whatever was typed
+            account = Account(
+                puuid=data["puuid"],
+                username=data.get("gameName", username),
+                tag=data.get("tagLine", tag),
+                region=region
+            )
             self.cache.set(data["puuid"], {**account.__dict__, "region": region.value})
             return account
 
@@ -203,7 +210,7 @@ class RiotAPIClient:
         if acc1_region != acc2_region:
             return False
         
-        if acc1_tag != acc2_tag:
+        if acc1_tag.lower() != acc2_tag.lower():
             return False
         
         if acc1_username.lower() != acc2_username.lower():

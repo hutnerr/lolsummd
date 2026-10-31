@@ -107,6 +107,7 @@ def manage_accounts():
                         Clogger.warn(f"Account {username}#{tag} already added (duplicate check)")
                         return jsonify({"error": f"{username}#{tag} has already been added."}), 400
                 
+                account = [a.username, a.tag, region.value]
                 session['accounts'].append(account)
                 session.modified = True
                 return jsonify({"accounts": session['accounts'], "message": f"{username}#{tag} added."})

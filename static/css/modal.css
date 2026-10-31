@@ -54,6 +54,7 @@
   position: absolute;
   top: 14px; right: 16px;
   background: none; border: none;
+  color: var(--fg);
   font-size: 22px; cursor: pointer;
   opacity: 0.5; line-height: 1;
   padding: 4px 8px; border-radius: 4px;
@@ -66,7 +67,7 @@
 .modal .divider       { margin: 18px 0; }
 
 /* ── Help section text (modal only) ─────────────────────────────────────── */
-.help-section h3 { font-family: 'Syne', sans-serif; font-size: 17px; color: var(--yellow); margin-bottom: 14px; }
+.help-section h3 { font-family: var(--font-heading); font-size: 17px; color: var(--yellow); margin-bottom: 14px; }
 .help-section p  { color: var(--fg1); font-size: 14px; line-height: 1.75; margin-bottom: 10px; }
 .help-section a  { border-bottom: 1px solid var(--yellow-s); }
 .help-section a:hover { border-bottom-color: var(--fg3); }

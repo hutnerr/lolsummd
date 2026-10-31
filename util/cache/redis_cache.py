@@ -40,7 +40,8 @@ class RedisCache(CacheInterface):
             region = region.value
         elif isinstance(region, str) and region.startswith("Region."):
             region = region.split(".")[-1].lower()
-        return f"{self._prefix}name_index:{username}#{tag}#{region}"
+        # riot ids are case-insensitive, so the index should be too
+        return f"{self._prefix}name_index:{username.strip().lower()}#{tag.strip().lower()}#{region}"
 
     def _serialize(self, value: Dict[str, Any]) -> str:
         return json.dumps(value)
